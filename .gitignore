@@ -1,0 +1,44 @@
+# ignore object and class files
+*.class
+*.o
+*.slo
+*.o
+*.obj
+
+# ignore libraries
+*.lib
+*.a
+*.lai
+*.la
+
+# ignore shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# ignore executables
+*.exe
+*.out
+*.app
+
+# ignore metada files
+.metadata
+
+# ignore project files
+.settings
+
+# ignore temporary editor files
+*~
+\#*\#
+.\#*
+
+# ignore Mac OS X specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
