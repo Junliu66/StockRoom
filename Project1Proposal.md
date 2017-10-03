@@ -1,46 +1,33 @@
-###Instructions###
-
-*This is a guide document to help you write the project proposal.*
-
-*You have to remove this "Instructions" section and replace any text between brackets `[` and `]`.*
-
-*NOTE: For readability, individual items in a list are not surrounded by brackets (with the exception of the section titled  "Deliverables and Milestones"). Assume these need also be replaced
-Also, any other text is written as an example.*
-
-*Post questions in the* ***public discussion forum*** *for the current project.*
-
-*Note: As long as your proposal contains the key parts and descriptions you may format this document as you see fit. However, I highly recommend certain sections such as* "Objectives and Deliverables" *be described via a bulleted list.*
-
----
 
 ###Project 1 Proposal###
 
-####[Project Name]####
+####Stockroom Database####
 
 __Team Composition:__<br>
-[Name of Teammates]
-
-[Date]
+Chunlei Li<br>
+Stefano Mauri	<br>
+Christian Wookey<br>
+Junliu Zhang	<br>
+Andre Zhu<br>
+<br>
+10/3/2017<br>
 
 ---
 
-####Table of Contents####
-
-[*This page enables the reader to quickly find relevant parts of the document. Including titles and page numbers of each section.
-Note: The page numbers are for example only. Change these as you see fit.*]
+#### Table of Contents ####
 
 * 1 Project Overview 
-  * 1.1 Abstract…………………………………….………………………Pg 3
-  * 1.2 Target Customer……………….…………………………………Pg 4
-  * 1.3 Search Words……………….……………………………………Pg 4
-  * 1.4 Scope and Objectives….…………………………………………Pg 4, 5
+  * 1.1 Abstract
+  * 1.2 Target Customer
+  * 1.3 Search Words
+  * 1.4 Scope and Objectives
 * 2 Team and Constraints
-  * 2.1 Team Profile…….……………………………………………….…Pg 6
-  * 2.2 Challenges……….……………………………………………….Pg 7
-  * 2.3 Assumptions and Constraints………………………………....Pg 7
+  * 2.1 Team Profile
+  * 2.2 Challenges
+  * 2.3 Assumptions and Constraints
 * 3 Deliverables and Milestones
- * 3.1 Project Deliverables……………………………………………..Pg 8
- * 3.2 Schedule and Budget Summary…..…………………………..Pg 9
+ * 3.1 Project Deliverables
+ * 3.2 Schedule and Budget Summary
 
 
 ---
@@ -48,65 +35,60 @@ Note: The page numbers are for example only. Change these as you see fit.*]
 ## 1.0	Project Overview
 ### 1.1 Abstract
 
-[How would you briefly describe the purpose of your project?]
 
-[Often readers lack sufficient time to read the entire project proposal. Therefore, a short synopsis is necessary to provide motivation and a high level introduction of the project. ]
+*Tracking the lifecycle and quantity of parts used in a manufacturing company.*
 
-* [Give a brief introduction as to ***problem statement***, the ***scope*** and a high level description of the system to be ***delivered***.] 
-*	[Include ***background*** for the project. Motivate the project by describing:
-  * What is the value of the system over the status quo?
-  * How will the final product be used by the target customer?]
+This project will allow a small manufacturing company keep track and maintain their stockroom, by warning them of shortages in their supply or informing them of when their stocks are running low so they can avoid shortages in the future. If your company gets an order for a product to be built, it makes it easier for an employee to kit the necessary parts for manufacturing, warn the Purchasing Department of missing parts for that product that need to be purchased and notify the Shipping and Receiving of where the received parts are needed before the rest gets put in the stockroom. Allows Manufacturers to request the extra parts they need and gain visibility on when they are unable to finish their products. Finally, our project can also give a supervisor an "at a glance" view of the company by showing what parts are coming in, what products are being made, and what is ready to be shipped.
 
 
-### 1.2.	Target Customer [important part]
+### 1.2.	Target Customer 
 
-[Who is the target audience?]
-
-[List the intended user group(s):
-*	Who is  client (direct customer)? 
-*	Who is user (indrect customer)?]
-
-For example, for a patient management software the client may be the dental office and users may be Office Manager, Patient Coordinator, and Receptionist.
-
+Our target customer would be owners of small to medium sized manufacturing companies, or any company that has to maintain and keep track of a stockroom for their business. Our project would like to have custom UIs for the different roles that the users might have within the company, such as a page for purchasing, shipping and receiving, stockroom manager, manufacturers, and supervisors.
 
 ### 1.3.	Search Words 
-[Brief descriptors of your project that you think someone might use to search for your project. The descriptor may be three to five words or short phrases.]
 
+stockroom manager, inventory management, inventory system, inventory management software, inventory control software, inventory, stockroom, manufacturing company software, manufacturing
 
-###1.4.	Scope and Objectives [critical section]
-[What is the scope and goals of your group project?]
+### 1.4.	Scope and Objectives 
 
-[The scope describes the specific software system that your team will be designing and delivering.]
-
-[Reminder:
-
-*	The ideal project will be a software system that will challenge a team of 4 or 5 students to use a broad range of software engineering skills. This includes skills, such as, requirements analysis, software design and architecture,  implementation, testing, to project planning, scheduling, tracking and documentaiton.
-
-*	Each student will each work approximately 10 hours per week for 4 weeks<sup>[1](#footnote_1)</sup>.  As part of the team experience, you will be analyzing what the client would be asking from the developers, list the services and features  to be provided by the proposed system, estimate the efforts for each service or feature, identify the components that have priority and negotiate project services based on time (and budget constraints).<br>
- *<sup><a name="footnote_1">1</a></sup>Note: Rarely does a proposal come in over the top. Instead, more often a proposal is not sufficient in scope and hence not accepted (until modified).*
-
-*	 For every component, state whether you will be working on the implementation<sup>[2](#footnote_2)</sup> that  will support it, or whether you will use existing work. <br>
- *<sup><a name="footnote_2">2</a></sup>Note: The impelementation involves source code.*]
-
+- A MySQL Database
+- A Graphic User Interface
+- Sanitizing and handling user inputs
+- Creating complex and scalable SQL queries
+- Creating individual UIs for Purchasing, Shipping and Receiving, Manufacturers, Kitters, Stockroom and Supervisors
 
 ---
 
 ## 2.0	Team and Constraints
 
-###2.1.	Team profile
-[What are the strengths for each team member?]
+###2.1.	Team profile<br>
 
-[For each member of the team ***describe qualifications and strengths***<sup>[3](#footnote_3)</sup>.
+***Chunlei Li***<br>
+**Qualifications:**: <br>
+**Strengths**: <br>
 
-*<sup><a name="footnote_3">3</a></sup>Note: Every team member is expected to be involved in all project activities. This section only describes individual strengths, and NOT the team member’s sole responsibilites.*]
+***Stefano Mauri***	<br>
+**Qualifications:**: <br>
+**Strengths**: <br>
+
+***Christian Wookey***<br>
+**Qualifications:**: <br>
+**Strengths**: <br>
+
+***Junliu Zhang***	<br>
+**Qualifications:**: <br>
+**Strengths**: <br>
+
+***Andre Zhu***<br>
+**Qualifications:**: <br>
+**Strengths**: <br>
 
 
 ### 2.1.	Challenges
-[What are the challenges you foresee in successfully completing your project?]
 
-[Provide a ***description of challenges*** that your group might face. These are often technical and non-technical aspects that may not be apparent to the reader.]
+- One of the main challenges we will face is creating good scalable SQL queries that will work with larger databases that the customer might use.
 
-For example, if you were creating a software system for a dental office to manage patients, a challenge may be learning the domain, which involves following HIPPA regulations in disclosure of protected health information.
+- Sanitizing inputs so we are not vulnerable to SQL injections.
 
 ### 2.2.	Assumptions and Constraints
 [Under what assumptions and constraints will the team adhere to?]
