@@ -1,7 +1,7 @@
 
-###Project 1 Proposal###
+### Project 1 Proposal ###
 
-####Stockroom Database####
+#### Stockroom Database ####
 
 __Team Composition:__<br>
 Chunlei Li<br>
@@ -61,15 +61,15 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 ## 2.0	Team and Constraints
 
-###2.1.	Team profile<br>
+### 2.1.	Team profile<br>
 
 ***Chunlei Li***<br>
 **Qualifications:**: <br>
 **Strengths**: <br>
 
 ***Stefano Mauri***	<br>
-**Qualifications:**: <br>
-**Strengths**: <br>
+**Qualifications:**: Experience in Java, MySQL and HTML<br>
+**Strengths**: Personal experience working as a stockroom manager and in shipping and receiving for a small business.<br>
 
 ***Christian Wookey***<br>
 **Qualifications:**: <br>
@@ -103,7 +103,7 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 ---
 
-##3.0	Deliverables and Milestones
+## 3.0	Deliverables and Milestones
 
 ### 3.1.	Project Deliverables 
 
@@ -133,7 +133,7 @@ NOTE: Required by final submission of project.
 [Fill in your teams projected milestones. You will be modifying this over the next few weeks.]
 
 
-####Milestones
+#### Milestones
 
 | Item                       | Date             |
 | :--------------------------|:-----------------|
