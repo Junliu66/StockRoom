@@ -72,8 +72,8 @@ stockroom manager, inventory management, inventory system, inventory management 
 **Strengths**: Personal experience working as a stockroom manager and in shipping and receiving for a small business.<br>
 
 ***Christian Wookey***<br>
-**Qualifications:**: <br>
-**Strengths**: <br>
+**Qualifications:**: Programming Experience: Objective-C, C, C++, Python, Lua. Design Experience: Adobe Photoshop, Krita, Adobe Illustrator, iOS design standards.<br>
+**Strengths**: I have experience programming for UI/UX design. I do graphical design on a semi-regular basis. I have experience working in an Amazon Prime warehouse, which uses a virtual inventory system similar to the one we are implementing.<br>
 
 ***Junliu Zhang***	<br>
 **Qualifications:**: <br>
