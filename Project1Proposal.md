@@ -76,8 +76,8 @@ stockroom manager, inventory management, inventory system, inventory management 
 **Strengths**: I have experience programming for UI/UX design. I do graphical design on a semi-regular basis. I have experience working in an Amazon Prime warehouse, which uses a virtual inventory system similar to the one we are implementing.<br>
 
 ***Junliu Zhang***	<br>
-**Qualifications:**: <br>
-**Strengths**: <br>
+**Qualifications:**: I have taken some Java courses before. So I basically know how to use Java for programming. I also learned knowledge about quality assurance, which is quite related to software engineering. Moreover, I had some project experience in the school and company which gave me the idea of how the project works. My accountant experience also let me understand the importance of shipping and tracking products for a company and provided me the insight of how to make  stockroom system better.<br>
+**Strengths**: I’m a quick learner and work well under pressure. I’m responsible to my work and take every small part seriously. Honestly I’m good at working on some small parts and able to find some small mistakes on them. I’m a very gentle and thoughtful person and I believe I can be a good team member as well. <br>
 
 ***Andre Zhu***<br>
 **Qualifications:**: <br>
@@ -96,10 +96,14 @@ stockroom manager, inventory management, inventory system, inventory management 
 [**List any specific assumptions on which the project is based on and imposed constraints** that your team will be working under. Non-technical constraints could be: such as schedule and budget. Technical constraints may be design or implementation metholodogies, tools, operating system(s), hardware or software constraints.
 
 * Non-Technical Constraints:
-  * Such as time limit
-  * add here...
+  * Time Limits: 5 weeks total for the project to be done
+  * Budget: project need to be done under lowest cost
+  * Database: need data of shipping, receiving and inventory from company 
+
 * Techinical Constraints:
-  * add here...]
+  * Tools: MySQL for database of stockroom, IntelliJ
+  * Operating System: version Windows 2000/xp or above
+
 
 ---
 
