@@ -64,8 +64,10 @@ stockroom manager, inventory management, inventory system, inventory management 
 ### 2.1.	Team profile<br>
 
 ***Chunlei Li***<br>
-**Qualifications:**: <br>
-**Strengths**: <br>
+**Qualifications:**:I finished Java 1A classes，also had an experience work at a company that really need some good software to help with their stock managing. That’s why i feel like it will be super helpful if we could create the software that can deal with the similar issue that may happen in any companies. It will definitely save lots of manfully work and lower the miscounting or recording on any similar stocking system of  the companies, such as libraries, community services, manufactories.
+ <br>
+**Strengths**: I believe I have a strong sense of responsibility, especially when we work as a team. Also, great communication skill. I could learn new things efficiently with full of energy. I always have a positive attitude to life and like new challenges, because it feels fantastic when i could figure difficulty problems out.
+<br>
 
 ***Stefano Mauri***	<br>
 **Qualifications:**: Experience in Java, MySQL and HTML<br>
@@ -90,10 +92,14 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 - Sanitizing inputs so we are not vulnerable to SQL injections.
 
-### 2.2.	Assumptions and Constraints
-[Under what assumptions and constraints will the team adhere to?]
+- Ideal goal is find a company could try to use our program do the test.
 
-[**List any specific assumptions on which the project is based on and imposed constraints** that your team will be working under. Non-technical constraints could be: such as schedule and budget. Technical constraints may be design or implementation metholodogies, tools, operating system(s), hardware or software constraints.
+- Time frame seems short, so we have to allocate our team wisely based on our background and strength.
+
+- It is our first time to work together, we need time to have a better understanding of each other also finish the project perfectly.
+
+
+### 2.2.	Assumptions and Constraints
 
 * Non-Technical Constraints:
   * Time Limits: 5 weeks total for the project to be done
@@ -111,20 +117,16 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 ### 3.1.	Project Deliverables 
 
-[What are the specific delivarables by your team?]
-
-[***Provide a list of deliverables***<sup>[4](#footnote_4)</sup> of any project artifacts.]
 
 Deliverables include:
 *	Software System Project Proposal.
 *	[design document]
-*	[user manual and installation instructions]
+*	[user manual instructions]
 *	[presentations]
-*	[any other documents]
-*	[UML overview of different components in your system (see NOTE below)]
+*	[UML overview of different components in your system]
 *	[implementation code]
 *	[unit tests and test suites (see NOTE below)]
-*	[This list may include product deployment activities that are necessary for the successful use of the system your team develops.]
+*	[This list may include product deployment activities that are necessary for the successful use of the system your team develops - we may contact some companies see if they would love to try it.]
 
  *<sup><a name="footnote_4">4</a></sup>Note: This list may be modified over the weeks until the final submission.* 
 
@@ -139,13 +141,13 @@ NOTE: Required by final submission of project.
 
 #### Milestones
 
-| Item                       | Date             |
-| :--------------------------|:-----------------|
-| Project Proposal           | October 4, 2017  |
-| Proposal Presentation      | October 5, 2017  |
-| [feature 1]                | [expected date]  |
-| [feature 2]                | [expected date]  |
-| ...                        | [expected date]  |
-| Sprint 1                   | October 12, 2017 |
-| ...                        | [expected date]  |
-| Demonstration and Delivery | November 2, 2017 |
+| Item                                      | Date             |
+| :-----------------------------------------|:-----------------|
+| Project Proposal                          | October 4, 2017  |
+| Proposal Presentation                     | October 5, 2017  |
+| [MySQL Database & User Interface]         | October 08, 2017 |
+| [User inputs & SQL queries]               | October 15, 2017 |
+| Purchasing, Shipping and Receiving, Manufacturers Components | October 22, 2017 |
+| Creating individual UIs Kitters, Stockroom and Supervisors   | October 29, 2017 |
+| Finalize the details                      | October 31, 2017 | 
+| Demonstration and Delivery                | November 2, 2017 |
