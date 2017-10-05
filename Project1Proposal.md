@@ -117,7 +117,7 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 ### 3.1.	Project Deliverables 
 
-** Deliverables include: **
+__Deliverables include:__
 *	Create a presentation explaining how the software works and the overall plan.
 *	Create and host an SQL database online
 *	Create working SQL Queries to complete the desired functions of the application
