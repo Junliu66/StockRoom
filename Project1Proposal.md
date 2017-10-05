@@ -103,17 +103,17 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 * Non-Technical Constraints:
 
-  * Time Limits: 5 weeks total for the project to be done
+     * Time Limits: 5 weeks total for the project to be done
   
-  * Budget: project need to be done under lowest cost
+     * Budget: project need to be done under lowest cost
   
-  * Database: need data of shipping, receiving and inventory from company 
+     * Database: need data of shipping, receiving and inventory from company 
 
 * Techinical Constraints:
 
-  * Tools: MySQL for database of stockroom, IntelliJ
+     * Tools: MySQL for database of stockroom, IntelliJ
   
-  * Operating System: version Windows 2000/xp or above
+     * Operating System: version Windows 2000/xp or above
 
 
 ---
