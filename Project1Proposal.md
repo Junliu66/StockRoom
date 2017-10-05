@@ -117,27 +117,18 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 ### 3.1.	Project Deliverables 
 
-
-Deliverables include:
-*	Software System Project Proposal.
-*	[design document]
-*	[user manual instructions]
-*	[presentations]
-*	[UML overview of different components in your system]
-*	[implementation code]
-*	[unit tests and test suites (see NOTE below)]
-*	[This list may include product deployment activities that are necessary for the successful use of the system your team develops - we may contact some companies see if they would love to try it.]
-
- *<sup><a name="footnote_4">4</a></sup>Note: This list may be modified over the weeks until the final submission.* 
-
-NOTE: Required by final submission of project.
+** Deliverables include: **
+*	Create a presentation explaining how the software works and the overall plan.
+*	Create and host an SQL database online
+*	Create working SQL Queries to complete the desired functions of the application
+*	Create a working Java command line interface for the different users of the application
+*	Building a Graphic User Interface to attach the program logic to.
+*	Build unit tests
+*	create tools to access and debug the database
+*	add extended features.
 
 
 ### 3.2.	Schedule and Budget Summary [critical section]
-[What are the projected milestones and specific delivarables?]
-
-[Fill in your teams projected milestones. You will be modifying this over the next few weeks.]
-
 
 #### Milestones
 
@@ -145,8 +136,8 @@ NOTE: Required by final submission of project.
 | :-----------------------------------------|:-----------------|
 | Project Proposal                          | October 4, 2017  |
 | Proposal Presentation                     | October 5, 2017  |
-| [MySQL Database & User Interface]         | October 08, 2017 |
-| [User inputs & SQL queries]               | October 15, 2017 |
+| MySQL Database & User Interface           | October 8, 2017  |
+| User inputs & SQL queries                 | October 15, 2017 |
 | Purchasing, Shipping and Receiving, Manufacturers Components | October 22, 2017 |
 | Creating individual UIs Kitters, Stockroom and Supervisors   | October 29, 2017 |
 | Finalize the details                      | October 31, 2017 | 
