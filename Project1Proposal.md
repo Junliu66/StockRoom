@@ -149,7 +149,7 @@ stockroom manager, inventory management, inventory system, inventory management 
 4. Junliu Zhang	
 5. Andre Zhu
 
-***Constraints***<br>
+####Constraints:
 * Non-Technical Constraints:
 
        * Time Limits: 5 weeks total for the project to be done
