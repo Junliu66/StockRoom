@@ -101,7 +101,7 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 ### 2.2.	Assumptions and Constraints
 
-####Assumptions:
+#### Assumptions:
 
 ***Meetings***<br>
  - Team will be meeting twice before and after class.
@@ -149,7 +149,7 @@ stockroom manager, inventory management, inventory system, inventory management 
 4. Junliu Zhang	
 5. Andre Zhu
 
-####Constraints:
+#### Constraints:
 * Non-Technical Constraints:
 
        * Time Limits: 5 weeks total for the project to be done
