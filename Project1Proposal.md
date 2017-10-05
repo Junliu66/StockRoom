@@ -100,7 +100,9 @@ stockroom manager, inventory management, inventory system, inventory management 
 
 
 ### 2.2.	Assumptions and Constraints
+
 ####Assumptions:
+
 ***Meetings***<br>
  - Team will be meeting twice before and after class.
     - Tuesdays, 1:00 - 2:00 PM, Library
