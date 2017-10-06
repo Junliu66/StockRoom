@@ -57,7 +57,6 @@ public class DBHandler {
     private ResultSet select(String query){
         Statement stmt = null;
         ResultSet result = null;
-        query = "select parts_id from stockroomdb.PARTS";
         try{
             stmt = connection.createStatement();
             result = stmt.executeQuery(query);
