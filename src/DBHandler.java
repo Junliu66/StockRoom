@@ -4,9 +4,8 @@ import java.util.ArrayList;
 public class DBHandler {
 
 
-    //Putting this here for now; in the future it will be saved
-    //under some config file or class
-    String url = "jdbc:mysql://stockroomdb.crbhpfgmilql.us-west-2.rds.amazonaws.com:3306";
+    //TODO: Putting this here for now; in the future it will be saved under some config file or class
+    String url = "jdbc:mysql://stockroomdb.crbhpfgmilql.us-west-2.rds.amazonaws.com:3306/stockroomdb";
     String username = "cs40a";
     String password = "DB5u5D4X5z6e";
 
@@ -32,6 +31,9 @@ public class DBHandler {
             e.printStackTrace();
             System.exit(1);
         }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -54,6 +56,11 @@ public class DBHandler {
         return select(query);
     }
 
+    /**
+     * Function for making selections of the database
+     * @param query an SQL-formatted selection string
+     * @return an SQL ResultSet
+     */
     private ResultSet select(String query){
         Statement stmt = null;
         ResultSet result = null;
@@ -62,10 +69,46 @@ public class DBHandler {
             result = stmt.executeQuery(query);
         }
         catch(SQLException e){
-
+            //TODO: handle SQLExceptions
         }
 
         return result;
     }
+
+    /**
+     *
+     * @param tableName: name of new table
+     * @param dataList: ArrayList of sql-formatted strings; ie {"FirstName CHAR(100)", "LastName CHAR(50)"}
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *         or (2) 0 for SQL statements that return nothing
+     */
+    public int createTable(String tableName, ArrayList<String> dataList) {
+        String query = "create table " + tableName + " ";
+        if (!dataList.isEmpty()) {
+            query += "(";
+            for (String data : dataList) {
+                query += data + ", ";
+            }
+            query = query.substring(0, query.length()-2);
+            query += ")";
+        }
+        return createTable(query);
+    }
+
+    private int createTable(String query) {
+        Statement stmt = null;
+        int result = -1;
+        try {
+            stmt = connection.createStatement();
+            result = stmt.executeUpdate(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 
 }
