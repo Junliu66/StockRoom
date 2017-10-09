@@ -6,7 +6,7 @@ public class DBHandlerTest {
 
     public static void main(String[] args){
         DBHandler testDB = new DBHandler();
-        ResultSet result = testDB.select("stockroomdb.PARTS", "parts_id", new ArrayList<String>());
+        ResultSet result = testDB.select("stockroomdb.PARTS", "part_number", new ArrayList<String>());
         try{
             result.beforeFirst();
             int i = 0;
