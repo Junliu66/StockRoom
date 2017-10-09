@@ -1,5 +1,5 @@
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 
 public class DBHandler {
 
@@ -52,7 +52,6 @@ public class DBHandler {
                 query += condition + " and ";
             }
         }
-
         return select(query);
     }
 
@@ -92,10 +91,46 @@ public class DBHandler {
             query = query.substring(0, query.length()-2);
             query += ")";
         }
-        return createTable(query);
+        return update(query);
     }
 
-    private int createTable(String query) {
+    /**
+     *
+     * @param tableName: the name of the new table
+     * @param updates: a HashMap of the updates to be performed, where the column in the key, and the new value in the value
+     * @param searchConditions: an ArrayList of search conditions for the call, formatted in SQL-style, ie "id = '4'"
+     * @return
+     */
+    public int update(String tableName, HashMap<String, String> updates, ArrayList<String> searchConditions) {
+        String query = "update " + tableName + " set ";
+
+        Set updateSet = updates.entrySet();
+        Iterator it = updateSet.iterator();
+        while (it.hasNext()) {
+            Map.Entry me = (Map.Entry) it.next();
+            query += me.getKey() + " = '" + me.getValue() + "', ";
+        }
+        query = query.substring(0, query.lastIndexOf(", "));
+
+        if (!searchConditions.isEmpty()) {
+            query += " where ";
+            for (String condition : searchConditions) {
+                query += condition + " and ";
+            }
+            query = query.substring(0, query.lastIndexOf(" and "));
+        }
+
+        System.out.println("update query : \"" + query + "\"");
+
+        return update(query);
+    }
+
+    /**
+     * update calls a properly-formatted update SQL query
+     * @param query
+     * @return
+     */
+    private int update(String query) {
         Statement stmt = null;
         int result = -1;
         try {
@@ -108,7 +143,5 @@ public class DBHandler {
         }
         return result;
     }
-
-
 
 }

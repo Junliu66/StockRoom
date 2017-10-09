@@ -1,6 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DBHandlerTest {
 
@@ -32,6 +33,14 @@ public class DBHandlerTest {
             System.out.println("Success.");
         else
             System.out.println("Failed.");
+
+        HashMap testUpdate = new HashMap();
+        testUpdate.put("id", "19");
+        testUpdate.put("description", "new description");
+        testUpdate.put("count", "20");
+        ArrayList<String> testConditions = new ArrayList<String>();
+        testConditions.add("row = '4'");
+        int result3 = testDB.update("testTable", testUpdate, testConditions);
 
     }
 }
