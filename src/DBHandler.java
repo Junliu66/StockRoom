@@ -1,3 +1,4 @@
+import javax.management.Query;
 import java.sql.*;
 import java.util.*;
 
@@ -82,7 +83,7 @@ public class DBHandler {
      *         or (2) 0 for SQL statements that return nothing
      */
     public int createTable(String tableName, ArrayList<String> dataList) {
-        String query = "create table " + tableName + " ";
+        String query = "CREATE TABLE " + tableName + " ";
         if (!dataList.isEmpty()) {
             query += "(";
             for (String data : dataList) {
@@ -102,7 +103,7 @@ public class DBHandler {
      * @return
      */
     public int update(String tableName, HashMap<String, String> updates, ArrayList<String> searchConditions) {
-        String query = "update " + tableName + " set ";
+        String query = "UPDATE " + tableName + " SET ";
 
         Set updateSet = updates.entrySet();
         Iterator it = updateSet.iterator();
@@ -113,14 +114,12 @@ public class DBHandler {
         query = query.substring(0, query.lastIndexOf(", "));
 
         if (!searchConditions.isEmpty()) {
-            query += " where ";
+            query += " WHERE ";
             for (String condition : searchConditions) {
-                query += condition + " and ";
+                query += condition + " AND ";
             }
-            query = query.substring(0, query.lastIndexOf(" and "));
+            query = query.substring(0, query.lastIndexOf(" AND "));
         }
-
-        System.out.println("update query : \"" + query + "\"");
 
         return update(query);
     }
@@ -139,6 +138,64 @@ public class DBHandler {
         } catch(SQLException e) {
             e.printStackTrace();
         } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int insert(String tableName, ArrayList<String> values) {
+        return insert(tableName, new ArrayList<String>(), values);
+    }
+
+    /**
+     * insert: allows adding a row to a table
+     * @param tableName: name of the table to add a row to
+     * @param columns: columns to be added (optional)
+     * @param values: values to add
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *         or (2) 0 for SQL statements that return nothing
+     */
+    public int insert(String tableName, ArrayList<String> columns, ArrayList<String> values) {
+        String query = "INSERT INTO " + tableName;
+        if (columns == null)
+            columns = new ArrayList<String>();
+        if (columns.size() == values.size()) {
+            // using columns and values
+            query += " (";
+            for (String column : columns)
+                query += column + ", ";
+            query = query.substring(0, query.lastIndexOf(", "));
+            query += ") VALUES (";
+            for (String value : values)
+                query += "'" + value + "'" + ", ";
+            query = query.substring(0, query.lastIndexOf(", "));
+            query += ")";
+        } else if(columns.size() == 0) {
+            // just using values
+            query += " VALUES (";
+            for (String value : values)
+                query += "'" + value + "'" + ", ";
+            query = query.substring(0, query.lastIndexOf(", "));
+            query += ")";
+        }
+        else // number of columns and values don't match, return an error
+            return -1;
+        return insert(query);
+    }
+
+    /**
+     * private helper method for public method insert
+     * @param query: an SQL-formatted INSERT INTO string
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *         or (2) 0 for SQL statements that return nothing
+     */
+    private int insert(String query) {
+        Statement stmt = null;
+        int result = -1;
+        try {
+            stmt = connection.createStatement();
+            result = stmt.executeUpdate(query);
+        } catch(SQLException e) {
             e.printStackTrace();
         }
         return result;
