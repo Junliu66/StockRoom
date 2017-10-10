@@ -54,7 +54,7 @@ public class Inventory {
                 System.out.println("part_id\t " + "part_number\t " + "quantity");
                 System.out.println(listOfInventories.get(part_id - 1).displayInventoty());
             }
-            
+
         }
         catch(SQLException e){
             e.printStackTrace();
