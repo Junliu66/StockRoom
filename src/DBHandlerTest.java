@@ -7,12 +7,12 @@ public class DBHandlerTest {
 
     public static void main(String[] args){
         DBHandler testDB = new DBHandler();
-        ResultSet result = testDB.select("stockroomdb.PARTS", "*", new ArrayList<String>());
+        ResultSet result = testDB.select("stockroomdb.PARTS", "part_number", new ArrayList<String>());
         try{
             result.beforeFirst();
             int i = 0;
-            while(result.next()) {
-                System.out.println("Row " + i + " part_id: " + result.getInt(1) + " " + result.getString(2));
+            while(result.next()){
+                System.out.println("Row " + i + " part_id: " + result.getInt(1));
                 i++;
             }
         }
