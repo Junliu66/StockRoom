@@ -21,7 +21,7 @@ public class DBHandlerTest {
         }
 
         ArrayList<String> testArray = new ArrayList<String>();
-        testArray.add("id int");
+        testArray.add("id INT ");
         testArray.add("description char(100)");
         testArray.add("count int");
         testArray.add("weight real");
@@ -42,5 +42,24 @@ public class DBHandlerTest {
         testConditions.add("row = '4'");
         int result3 = testDB.update("testTable", testUpdate, testConditions);
 
-    }
+        System.out.println("Inserting row into testTable...");
+        ArrayList<String> columns = new ArrayList<String>();
+        columns.add("id");
+        columns.add("description");
+        columns.add("count");
+        columns.add("weight");
+        columns.add("row");
+        columns.add("shelf");
+        ArrayList<String> rows = new ArrayList<String>();
+        rows.add("4");
+        rows.add("A diff item");
+        rows.add("12");
+        rows.add("2.13");
+        rows.add("2");
+        rows.add("116");
+//        testDB.insert("testTable", columns, rows);
+        rows.set(0, "6");
+        rows.set(1, "item three");
+        testDB.insert("testTable", null, rows);
+        }
 }
