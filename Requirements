@@ -1,0 +1,17 @@
+1. The main menu will give users (including worker, supervisor, assistant, etc ) the access to the Stockroom App. When users who is not qualify to modify the data on our App, the main menu will give them a warning or notification.
+
+2. Each function on the main menu shall be allocated a number to have an easy access of it, which the user can reference.
+
+3. The inventory will show the table of the inventory (including part id, number and quantity) and let the user to search the list and update the quantity of the part.
+
+4. The work order will let user choose the parts needed for the kit and create the name of the kit. The user will be able to track the the order based on the order number.
+
+5. The database handler will abstract away most queries into functions, so that queries don’t have to be created by hand every time they are needed.
+
+6. The database handler will sanitize inputs, specifically for those that modify the database, so that the database can’t be inadvertently or maliciously tampered with.
+
+7. Work Orders will have to be saved on a table in the database for later use.
+
+8. Work Orders will have a list of all the part numbers needed for a kit and the quantity of each.
+
+9. Work Order names/number will have to be saved on a separate table in the database to keep track of all of them, including different data about them (kitted or not kitted, being built, finished, etc)
