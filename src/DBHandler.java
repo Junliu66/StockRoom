@@ -100,7 +100,7 @@ public class DBHandler {
      * @param query an SQL-formatted selection string
      * @return an SQL ResultSet
      */
-    private ResultSet select(String query){
+    public ResultSet select(String query){
         Statement stmt = null;
         ResultSet result = null;
         try{
