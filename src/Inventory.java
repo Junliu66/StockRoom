@@ -4,11 +4,12 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Inventory {
 
-    public static void main(String[] args){
+    public static void inventoryList(){
         DBHandler testDB = new DBHandler();
         ResultSet result_part_id = testDB.select("stockroomdb.PARTS", "parts_id", new ArrayList<String>());
 
@@ -45,6 +46,16 @@ public class Inventory {
                 System.out.println("Enter a new quantity: ");
                 int newQuantity = reader.nextInt();
                 listOfInventories.get(part_id - 1).setQuantity(newQuantity);
+
+                HashMap testUpdate = new HashMap();
+                testUpdate.put("quantity", newQuantity);
+                ArrayList<String> testConditions = new ArrayList<String>();
+
+                char row_part_id = 5;
+                //System.out.println(str_part_id + "***********");
+                //testConditions.add("parts_id = '2'");
+                int result5 = testDB.update("STOCKROOM", testUpdate, testConditions);
+
                 System.out.println("Quantity has been updated:\n" + "part_id\t " + "part_number\t " + "quantity\n" +
                         listOfInventories.get(part_id - 1).displayInventoty());
             }

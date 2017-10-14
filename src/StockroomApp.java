@@ -10,6 +10,7 @@ import java.util.Scanner;
  * Supervisor can overview all above;
  */
 public class StockroomApp {
+
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
         boolean runProgram = true;
@@ -33,7 +34,7 @@ public class StockroomApp {
                 viewInventory();
                 break;
             case "2":
-                System.out.println("\n[2] Create Orderss\n");
+                System.out.println("\n[2] Create Orders\n");
                 createOrders();
                 break;
             case "3":
@@ -67,16 +68,19 @@ public class StockroomApp {
     // methods we need to work on
     private static void viewInventory() {
         System.out.print("Here is the Invetory of the Sotckroom: \n> ");
+        Inventory.inventoryList();
 
     }
 
     private static void createOrders() {
-        System.out.println("which items you need to use: \n> ");
-        System.out.print("how many of it: \n> ");
+        //System.out.println("which items you need to use: \n> ");
+        //System.out.print("how many of it: \n> ");
+        WorkOrder.workOrder();
     }
 
     private static void purchase() {
         System.out.print("Please fill in the table with the number of items you want to purchase: \n> ");
+        Purchasing.purchasing();
     }
 
     private static void receiveOrders() {
@@ -91,7 +95,4 @@ public class StockroomApp {
     private static void overview() {
         System.out.print("Here is the Stockroom Overview: \n> ");
     }
-}
-
-
 }
