@@ -42,3 +42,7 @@ Icon
 .Spotlight-V100
 .Trashes
 
+# ignore user environment files
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
