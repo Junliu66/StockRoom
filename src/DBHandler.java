@@ -1,4 +1,5 @@
 import javax.management.Query;
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.*;
 
@@ -36,6 +37,30 @@ public class DBHandler {
             e.printStackTrace();
         }
 
+    }
+
+    public int updateQuery(String query) {
+        Statement stmt = null;
+        int result = -1;
+        try {
+            stmt = connection.createStatement();
+            result = stmt.executeUpdate(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public ResultSet query(String query) {
+        Statement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = connection.createStatement();
+            result = stmt.executeQuery(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     /**
