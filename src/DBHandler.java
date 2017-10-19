@@ -64,6 +64,16 @@ public class DBHandler {
     }
 
     /**
+     * helper function for selecting a table without conditions
+     * @param table: name of table to select
+     * @param selection: what to return
+     * @return a ResultSet if the fetch was successful, else null
+     */
+    public ResultSet select(String table, String selection) {
+        return select(table, selection, new ArrayList<String>());
+    }
+
+    /**
      *
      * @param table: name of the table
      * @param selection: what to return
