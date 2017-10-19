@@ -1,3 +1,6 @@
+#ignore workspace
+.idea/workspace.xml
+
 # ignore object and class files
 *.class
 *.o

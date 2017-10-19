@@ -38,6 +38,8 @@ public class DBHandler {
 
     }
 
+
+
     /**
      * helper function for selecting a table without conditions
      * @param table: name of table to select
@@ -64,6 +66,20 @@ public class DBHandler {
             }
         }
         return select(query);
+    }
+
+    public ResultSet executeQuery(String query){
+        Statement stmt = null;
+        ResultSet result = null;
+        try{
+            stmt = connection.createStatement();
+            result = stmt.executeQuery(query);
+        }
+        catch(SQLException e){
+            //TODO: handle SQLExceptions
+        }
+
+        return result;
     }
 
     /**

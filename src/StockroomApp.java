@@ -8,7 +8,9 @@ import java.util.Scanner;
  * Worker can receive orders of shipping;
  * People can check the Shipping
  * Supervisor can overview all above;
+ * @author Chunlei
  */
+
 public class StockroomApp {
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
@@ -92,4 +94,3 @@ public class StockroomApp {
         System.out.print("Here is the Stockroom Overview: \n> ");
     }
 }
-
