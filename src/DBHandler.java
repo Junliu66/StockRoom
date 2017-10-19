@@ -179,14 +179,19 @@ public class DBHandler {
     public int update(String tableName, HashMap<String, Object> updates, ArrayList<Object[]> searchConditions) {
         String query = "UPDATE " + tableName + " SET ";
 
+        // add SETs to query
         Set updateSet = updates.entrySet();
         Iterator it = updateSet.iterator();
         while (it.hasNext()) {
             Map.Entry me = (Map.Entry) it.next();
-            query += me.getKey() + " = '" + me.getValue() + "', ";
+            if (me.getValue() instanceof String)
+                query += me.getKey() + " = '" + sanitizeSnippet((String) me.getValue()) + "', ";
+            else
+                query += me.getKey() + " = " + me.getValue() + ", ";
         }
         query = query.substring(0, query.lastIndexOf(", "));
 
+        // add conditions to query
         if (!searchConditions.isEmpty()) {
             query += " WHERE ";
             for (int i = 0; i < searchConditions.size(); i++) {
@@ -194,11 +199,9 @@ public class DBHandler {
                 query += cond[0] + " " + cond[1] + " ";
                 // handles potential discrepancy with third value in condition arrays
                 if (cond[2] instanceof String) {
-                    query += "'" + cond[2] + "'";
-                } else if (cond[2] instanceof Integer || cond[2] instanceof Double || cond[2] instanceof Float) {
-                    query += cond[2];
+                    query += "'" + sanitizeSnippet((String) cond[2]) + "'";
                 } else
-                    return -1;
+                    query += cond[2];
                 if (i != searchConditions.size()-1)
                     query += " AND ";
             }
@@ -228,6 +231,28 @@ public class DBHandler {
         return result;
     }
 
+    /**
+     * sanitizes String values from SQL queries by adding escape chars when necessary
+     * @param snippet the snippet to be sanitized
+     * @return the sanitized snippet
+     */
+    private String sanitizeSnippet(String snippet) {
+        for (int i = 0; i < snippet.length(); i++) {
+            char c = snippet.charAt(i);
+            if (c == '"' || c == '\'') {
+                if (i == 0) {
+                    // bad char at beginning of snippet, insert escape char before
+                    snippet = "\\" + snippet;
+                }
+                else if (! (snippet.charAt(i-1) == '\\') ) {
+                    // if no escape char before bad char, add one
+                    snippet = snippet.substring(0, i) + "\\" + snippet.substring(i, snippet.length());
+                }
+            }
+        }
+        return snippet;
+    }
+
 //    public int insert(String tableName, ArrayList<String> values) {
 //        return insert(tableName, new ArrayList<String>(), values);
 //    }
@@ -245,33 +270,41 @@ public class DBHandler {
         if (columns == null)
             columns = new ArrayList<String>();
         if (columns.size() == values.size()) {
-        // using columns and values
-        query += " (";
-        for (String column : columns)
-            query += column + ", ";
-        query = query.substring(0, query.lastIndexOf(", "));
-        query += ") VALUES (";
-        for (Object value : values)
-            if (value instanceof String)
-                query += "'" + value + "'" + ", ";
-            else
-                query += value + ", ";
-        query = query.substring(0, query.lastIndexOf(", "));
-        query += ")";
-        } else if(columns.size() == 0) {
-            // just using values
-            query += " VALUES (";
+            // using columns and values
+            query += " (";
+            for (String column : columns)
+                query += column + ", ";
+            query = query.substring(0, query.lastIndexOf(", "));
+            query += ") VALUES (";
             for (Object value : values)
-                if (value instanceof String && value != "NOW()")
+                if (value instanceof String && !isSQLString((String) value))
                     query += "'" + value + "'" + ", ";
                 else
                     query += value + ", ";
             query = query.substring(0, query.lastIndexOf(", "));
             query += ")";
-        }
-        else // number of columns and values don't match, return an error
+        } else if (columns.size() == 0) {
+            // just using values
+            query += " VALUES (";
+            for (Object value : values)
+                if (value instanceof String && !isSQLString((String) value))
+                    query += "'" + value + "'" + ", ";
+                else
+                    query += value + ", ";
+            query = query.substring(0, query.lastIndexOf(", "));
+            query += ")";
+        } else // number of columns and values don't match, return an error
             return -1;
         return insert(query);
+    }
+
+    /**
+     * Checks if a string is a special-case SQL string (ie NOW()), etc
+     * @param str the string to be tested
+     * @return true or false
+     */
+    private boolean isSQLString(String str) {
+        return str.equals("NOW()");
     }
 
     /**
