@@ -1,4 +1,5 @@
 import javax.management.Query;
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.*;
 
@@ -38,16 +39,28 @@ public class DBHandler {
 
     }
 
+    public int updateQuery(String query) {
+        Statement stmt = null;
+        int result = -1;
+        try {
+            stmt = connection.createStatement();
+            result = stmt.executeUpdate(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
-
-    /**
-     * helper function for selecting a table without conditions
-     * @param table: name of table to select
-     * @param selection: what to return
-     * @return a ResultSet if the fetch was successful, else null
-     */
-    public ResultSet select(String table, String selection) {
-        return select(table, selection, new ArrayList<String>());
+    public ResultSet query(String query) {
+        Statement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = connection.createStatement();
+            result = stmt.executeQuery(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     /**

@@ -8,10 +8,10 @@ import java.util.Scanner;
  * Worker can receive orders of shipping;
  * People can check the Shipping
  * Supervisor can overview all above;
- * @author Chunlei
  */
-
 public class StockroomApp {
+
+
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
         boolean runProgram = true;
@@ -21,13 +21,14 @@ public class StockroomApp {
         }
     }
 
+
     /**
      * Display the menu and calls the corresponding method.
      */
 
     public static boolean displayMenu(Scanner console) {
         System.out.println("What would you like to do?\n(Choose a number)");
-        System.out.print("[1] View Inventory\n[2] Create Orders\n[3] Purchase\n[4] Receive Orders\n[5]Shipping\n[6]Overview\n[7] Quit\n> ");
+        System.out.print("[1] View Inventory\n[2] Work Orders\n[3] Purchase\n[4] Receive Orders\n[5]Shipping\n[6]Overview\n[7] Quit\n> ");
         boolean runProgram = true;
         switch (console.nextLine()) {
             case "1":
@@ -35,7 +36,7 @@ public class StockroomApp {
                 viewInventory();
                 break;
             case "2":
-                System.out.println("\n[2] Create Orderss\n");
+                System.out.println("\n[2] Work Orders \n");
                 createOrders();
                 break;
             case "3":
@@ -73,6 +74,8 @@ public class StockroomApp {
     }
 
     private static void createOrders() {
+        WorkOrder workOrder = new WorkOrder();
+        workOrder.viewMenu();
         System.out.println("which items you need to use: \n> ");
         System.out.print("how many of it: \n> ");
     }
@@ -94,3 +97,6 @@ public class StockroomApp {
         System.out.print("Here is the Stockroom Overview: \n> ");
     }
 }
+
+
+
