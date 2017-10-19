@@ -69,10 +69,56 @@ public class DBHandler {
             result = stmt.executeQuery(query);
         }
         catch(SQLException e){
-            //TODO: handle SQLExceptions
+            //TODO: handle SQLException
         }
 
         return result;
+    }
+
+    /**
+     * Adjusts a part quantity by a given amount in the STOCKROOM database
+     * @param partId: the ID of the part, integer
+     * @param adjustment: the amount the quantity should be adjusted, signed integer
+     * @return 0 if no error
+     */
+    public int adjustPartQuantity(int partId, int adjustment)
+    {
+        int currentQuantity;
+        Statement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = connection.createStatement();
+            result = stmt.executeQuery("SELECT quantity FROM stockroomdb.STOCKROOM WHERE parts_id = " + partId);
+            result.next();
+            currentQuantity = result.getInt(1);
+            return setPartQuantity(partId, currentQuantity + adjustment);
+        }
+        catch (SQLException e)
+        {
+            //TODO: handle SQLException
+            e.printStackTrace();
+            return -1;
+        }
+    }
+    /**
+     * set the quantity of a part by an amount
+     * @param partId: id of the part in the STOCKROOM database
+     * @param quantity: quantity to set
+     * @return 0 if no error
+     */
+    public int setPartQuantity(int partId, int quantity)
+    {
+        Statement stmt = null;
+        int result;
+        try {
+            stmt = connection.createStatement();
+            return stmt.executeUpdate("UPDATE stockroomdb.STOCKROOM SET quantity = " + quantity + " WHERE parts_id = " + partId);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     /**
@@ -95,14 +141,16 @@ public class DBHandler {
         return update(query);
     }
 
+
     /**
      *
      * @param tableName: the name of the new table
-     * @param updates: a HashMap of the updates to be performed, where the column in the key, and the new value in the value
-     * @param searchConditions: an ArrayList of search conditions for the call, formatted in SQL-style, ie "id = '4'"
+     * @param updates: a HashMap of the updates to be performed, where the column in the key, and the new value is the value
+     * @param searchConditions: an ArrayList of Object arrays of size 3. Each Object array's first two indices contain Strings representing first the column identifier to compare and second, the SQL comparator.
+     *                        The third index contains the value to search for. This could be a String, a double, on an int.
      * @return
      */
-    public int update(String tableName, HashMap<String, String> updates, ArrayList<String> searchConditions) {
+    public int update(String tableName, HashMap<String, Object> updates, ArrayList<Object[]> searchConditions) {
         String query = "UPDATE " + tableName + " SET ";
 
         Set updateSet = updates.entrySet();
@@ -115,10 +163,21 @@ public class DBHandler {
 
         if (!searchConditions.isEmpty()) {
             query += " WHERE ";
-            for (String condition : searchConditions) {
-                query += condition + " AND ";
+            for (int i = 0; i < searchConditions.size(); i++) {
+                Object[] cond = searchConditions.get(i);
+                query += cond[0] + " " + cond[1] + " ";
+                // handles potential discrepancy with third value in condition arrays
+                if (cond[2] instanceof String) {
+                    query += "'" + cond[2] + "'";
+                } else if (cond[2] instanceof Integer || cond[2] instanceof Double || cond[2] instanceof Float) {
+                    query += cond[2];
+                } else
+                    return -1;
+                if (i != searchConditions.size()-1)
+                    query += " AND ";
             }
-            query = query.substring(0, query.lastIndexOf(" AND "));
+            if (searchConditions.size() > 1)
+                query = query.substring(0, query.lastIndexOf(" AND "));
         }
 
         return update(query);
@@ -143,9 +202,9 @@ public class DBHandler {
         return result;
     }
 
-    public int insert(String tableName, ArrayList<String> values) {
-        return insert(tableName, new ArrayList<String>(), values);
-    }
+//    public int insert(String tableName, ArrayList<String> values) {
+//        return insert(tableName, new ArrayList<String>(), values);
+//    }
 
     /**
      * insert: allows adding a row to a table
@@ -155,26 +214,32 @@ public class DBHandler {
      * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
      *         or (2) 0 for SQL statements that return nothing
      */
-    public int insert(String tableName, ArrayList<String> columns, ArrayList<String> values) {
+    public int insert(String tableName, ArrayList<String> columns, ArrayList<Object> values) {
         String query = "INSERT INTO " + tableName;
         if (columns == null)
             columns = new ArrayList<String>();
         if (columns.size() == values.size()) {
-            // using columns and values
-            query += " (";
-            for (String column : columns)
-                query += column + ", ";
-            query = query.substring(0, query.lastIndexOf(", "));
-            query += ") VALUES (";
-            for (String value : values)
+        // using columns and values
+        query += " (";
+        for (String column : columns)
+            query += column + ", ";
+        query = query.substring(0, query.lastIndexOf(", "));
+        query += ") VALUES (";
+        for (Object value : values)
+            if (value instanceof String)
                 query += "'" + value + "'" + ", ";
-            query = query.substring(0, query.lastIndexOf(", "));
-            query += ")";
+            else
+                query += value + ", ";
+        query = query.substring(0, query.lastIndexOf(", "));
+        query += ")";
         } else if(columns.size() == 0) {
             // just using values
             query += " VALUES (";
-            for (String value : values)
-                query += "'" + value + "'" + ", ";
+            for (Object value : values)
+                if (value instanceof String && value != "NOW()")
+                    query += "'" + value + "'" + ", ";
+                else
+                    query += value + ", ";
             query = query.substring(0, query.lastIndexOf(", "));
             query += ")";
         }
