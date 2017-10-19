@@ -38,6 +38,8 @@ public class DBHandler {
 
     }
 
+
+
     /**
      *
      * @param table: name of the table
@@ -54,6 +56,20 @@ public class DBHandler {
             }
         }
         return select(query);
+    }
+
+    public ResultSet executeQuery(String query){
+        Statement stmt = null;
+        ResultSet result = null;
+        try{
+            stmt = connection.createStatement();
+            result = stmt.executeQuery(query);
+        }
+        catch(SQLException e){
+            //TODO: handle SQLExceptions
+        }
+
+        return result;
     }
 
     /**
