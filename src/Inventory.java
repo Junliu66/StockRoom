@@ -9,6 +9,11 @@ import java.util.Scanner;
 public class Inventory {
 
     public static void main(String[] args){
+        displayInventory();
+
+    }
+
+    public static void displayInventory(){
         DBHandler testDB = new DBHandler();
         ResultSet result_part_id = testDB.select("stockroomdb.PARTS", "parts_id", new ArrayList<String>());
 
