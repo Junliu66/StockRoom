@@ -94,5 +94,6 @@ public class StockroomApp {
 
     private static void overview() {
         System.out.print("Here is the Stockroom Overview: \n> ");
+        Overview.overView();
     }
 }

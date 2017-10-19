@@ -38,8 +38,13 @@ public class DBHandlerTest {
         testUpdate.put("id", "19");
         testUpdate.put("description", "new description");
         testUpdate.put("count", "20");
-        ArrayList<String> testConditions = new ArrayList<String>();
-        testConditions.add("row = '4'");
+        ArrayList<Object[]> testConditions = new ArrayList<Object[]>();
+        Object cond1[] = new Object[3]; // each condition is an array of Objects
+        cond1[0] = "description"; // index 0 is the identifier
+        cond1[1] = "="; // index 1 is the comparator (=, <, >, <>, etc)
+        cond1[2] = 4; // index 2 is the value to compare against
+        // cond1 asks "if row is less than rownum"
+        testConditions.add(cond1);
         int result3 = testDB.update("testTable", testUpdate, testConditions);
 
         System.out.println("Inserting row into testTable...");

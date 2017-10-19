@@ -12,7 +12,6 @@ import java.util.HashMap;
  * Created by zhangJunliu on 10/10/17.
  */
 public class Purchasing {
-    int atRisk = 10;
 
     public static void purchasing() {
 
@@ -38,6 +37,8 @@ public class Purchasing {
         ResultSet result_part_low_quantity = testDB.select("stockroomdb.PARTS", "low_quantity", new ArrayList<String>());
 
 
+
+
         try {
             result_part_id.beforeFirst();
             result_part_number.beforeFirst();
@@ -54,16 +55,19 @@ public class Purchasing {
                     part_id.setPartID(result_part_id.getInt(1));
                     part_id.setPartNumber(result_part_number.getInt(1));
                     part_id.setQuantity(result_stockroom_quantity.getInt(1));
+                    part_id.setLowQuantity(result_part_low_quantity.getInt(1));
+
                     listOfLowQuantity.add(part_id);
+
 
                 }
             }
 
             System.out.println("Parts are in low quantity:");
-            System.out.println("part_id\t " + "part_number\t " + "quantity");
+            System.out.println(String.format("%-15s%-15s%-15s%-15s", "part_id", "part_number", "quantity", "low_quantity"));
 
             for (int j = 0; j < listOfLowQuantity.size(); j++) {
-                System.out.println(listOfLowQuantity.get(j).displayInventoty());
+                System.out.println(listOfLowQuantity.get(j).displayInventoryWithLowQuantity());
 
             }
         }
@@ -114,11 +118,7 @@ public class Purchasing {
      }
      }
      }
-
-
      }
-
-
      }
 
      catch(SQLException e){
@@ -129,22 +129,22 @@ public class Purchasing {
      }
      **/
 
+    /**
+     *
+     * @param listOfLowQuantity
+     * @return
+     */
+
     public static ArrayList<Part> listOfLowQuantityNotWorkOrder(ArrayList<Part> listOfLowQuantity) {
         ArrayList<Part> listOfLowQuantityNotWorkOrder = listOfLowQuantity;
 
         DBHandler testDB = new DBHandler();
 
-        ResultSet orderNames = testDB.select("stockroomdb.workOrders", "kitname", new ArrayList<String>());
-        try {
-            orderNames.beforeFirst();
+        ResultSet order = testDB.select("stockroomdb.ORDER_ITEMS", "id", new ArrayList<String>());
+        try{
+            order.beforeFirst();
 
-            while (orderNames.next()) {
-                String orderName = "stockroomdb.";
-                orderName = orderName + orderNames.getString(1);
-                ResultSet order = testDB.select(orderName, "parts_id", new ArrayList<String>());
-                order.beforeFirst();
-
-                while (order.next()) {
+            while (order.next()) {
                     //System.out.println(order.getInt(1));
                     for (int j = 0; j < listOfLowQuantityNotWorkOrder.size(); j++) {
                         if (order.getInt(1) == (listOfLowQuantityNotWorkOrder.get(j).getPartID())) {
@@ -152,17 +152,17 @@ public class Purchasing {
                         }
                     }
                 }
-            }
+
         }
         catch(SQLException e){
             e.printStackTrace();
         }
 
-        System.out.println("part_id\t " + "part_number\t " + "quantity");
+        System.out.println(String.format("%-15s%-15s%-15s%-15s", "part_id", "part_number", "quantity", "low_quantity"));
 
         for (int j = 0; j < listOfLowQuantityNotWorkOrder.size(); j++) {
             //if (listOfLowQuantity.get(j).getQuantity() == 0)
-            System.out.println(listOfLowQuantityNotWorkOrder.get(j).displayInventoty());
+            System.out.println(listOfLowQuantityNotWorkOrder.get(j).displayInventoryWithLowQuantity());
 
         }
 

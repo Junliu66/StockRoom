@@ -75,6 +75,17 @@ public class DBHandler {
         return result;
     }
 
+    public ResultSet query(String query) {
+        Statement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = connection.createStatement();
+            result = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
     /**
      *
      * @param tableName: name of new table
@@ -102,7 +113,7 @@ public class DBHandler {
      * @param searchConditions: an ArrayList of search conditions for the call, formatted in SQL-style, ie "id = '4'"
      * @return
      */
-    public int update(String tableName, HashMap<String, String> updates, ArrayList<String> searchConditions) {
+    public int update(String tableName, HashMap<String, Object> updates, ArrayList<Object[]> searchConditions) {
         String query = "UPDATE " + tableName + " SET ";
 
         Set updateSet = updates.entrySet();
@@ -115,10 +126,21 @@ public class DBHandler {
 
         if (!searchConditions.isEmpty()) {
             query += " WHERE ";
-            for (String condition : searchConditions) {
-                query += condition + " AND ";
+            for (int i = 0; i < searchConditions.size(); i++) {
+                Object[] cond = searchConditions.get(i);
+                query += cond[0] + " " + cond[1] + " ";
+                // handles pod tential discrepancy with third value in condition arrays
+                if (cond[2] instanceof String) {
+                    query += "'" + cond[2] + "'";
+                } else if (cond[2] instanceof Integer || cond[2] instanceof Double || cond[2] instanceof Float) {
+                    query += cond[2];
+                } else
+                    return -1;
+                if (i != searchConditions.size()-1)
+                    query += " AND ";
             }
-            query = query.substring(0, query.lastIndexOf(" AND "));
+            if (searchConditions.size() > 1)
+                query = query.substring(0, query.lastIndexOf(" AND "));
         }
 
         return update(query);

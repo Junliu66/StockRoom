@@ -31,7 +31,8 @@ public class Inventory {
                 listOfInventories.add(part_id);
             }
 
-            System.out.println("part_id\t " + "part_number\t " + "quantity");
+            System.out.println(String.format("%-10s%-15s%-15s", "part_id", "part_number", "quantity"));
+
 
             for (int j = 0; j < listOfInventories.size(); j++) {
                 System.out.println(listOfInventories.get(j).displayInventoty());
@@ -49,11 +50,13 @@ public class Inventory {
 
                 HashMap testUpdate = new HashMap();
                 testUpdate.put("quantity", newQuantity);
-                ArrayList<String> testConditions = new ArrayList<String>();
+                ArrayList<Object[]> testConditions = new ArrayList<Object[]>();
+                Object cond1[] = new Object[3];
+                cond1[0] = "parts_id";
+                cond1[1] = "=";
+                cond1[2] = part_id;
 
-                char row_part_id = 5;
-                //System.out.println(str_part_id + "***********");
-                //testConditions.add("parts_id = '2'");
+                testConditions.add(cond1);
                 int result5 = testDB.update("STOCKROOM", testUpdate, testConditions);
 
                 System.out.println("Quantity has been updated:\n" + "part_id\t " + "part_number\t " + "quantity\n" +
