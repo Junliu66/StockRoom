@@ -3,6 +3,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -71,7 +72,7 @@ public class MainMenu extends Application{
             }
         });
 
-        StackPane root = new StackPane();
+        HBox root = new HBox();
         root.getChildren().add(inventory);
         root.getChildren().add(orders);
         root.getChildren().add(purchase);
@@ -79,7 +80,7 @@ public class MainMenu extends Application{
         root.getChildren().add(shipping);
         root.getChildren().add(overview);
 
-        stage.setScene(new Scene(root, 500, 500));
+        stage.setScene(new Scene(root, 800, 600));
         stage.show();
     }
 
@@ -89,7 +90,7 @@ public class MainMenu extends Application{
     }
 
     public static void displayOrderForm(){
-        
+
     }
 
     public static void displayPurchaseForm(){
