@@ -33,11 +33,30 @@ public class Purchasing {
         ResultSet result_part_number = testDB.select("stockroomdb.PARTS", "part_number", new ArrayList<String>());
         //ResultSet result2 = testDB.select("stockroomdb.PARTS", "part_description", new ArrayList<String>());
         ResultSet result_stockroom_quantity = testDB.select("stockroomdb.STOCKROOM", "quantity", new ArrayList<String>());
-
         ResultSet result_part_low_quantity = testDB.select("stockroomdb.PARTS", "low_quantity", new ArrayList<String>());
 
+        // ###################################################################################
+        /* Stefano : These are queries I made up for your tables. I realized that you had the two tables switched. */
+        // ###################################################################################
+        /*
 
+        // ###################################################################################
+        // TABLE ONE - (This one shows all the parts that do not have enough inventory to fill the current work orders)
+        // ###################################################################################
+        ResultSet table1_parts_id = testDB.query("SELECT DISTINCT p.parts_id FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
+        ResultSet table1_part_description = testDB.query("SELECT DISTINCT p.part_description FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
+        ResultSet table1_part_vendor = testDB.query("SELECT DISTINCT p.vendor FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
+        ResultSet table1_order_missing_quantity = testDB.query("SELECT s.quantity - SUM(oi.amount_needed - oi.amount_filled) FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
 
+        // ###################################################################################
+        //TABLE TWO - (This one is similar to your original first table, this one shows all the parts who's quantity in the stockroom is less than the part's "low_quantity")
+        // ###################################################################################
+        ResultSet table2_parts_id = testDB.query("SELECT p.parts_id FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id WHERE s.quantity < p.low_quantity;");
+        ResultSet table2_part_description = testDB.query("SELECT p.part_description FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id WHERE s.quantity < p.low_quantity;");
+        ResultSet table2_part_vendor = testDB.query("SELECT p.vendor FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id WHERE s.quantity < p.low_quantity;");
+        ResultSet table2_stockroom_quantity = testDB.query("SELECT s.quantity FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id WHERE s.quantity < p.low_quantity;");
+        ResultSet table2_part_low_quantity = testDB.query("SELECT p.low_quantity FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id WHERE s.quantity < p.low_quantity;");
+        */
 
         try {
             result_part_id.beforeFirst();
@@ -141,6 +160,15 @@ public class Purchasing {
         DBHandler testDB = new DBHandler();
 
         ResultSet order = testDB.select("stockroomdb.ORDER_ITEMS", "id", new ArrayList<String>());
+
+        // ###################################################################################
+        /* Stefano : These are queries I made up for your second table */
+        // ###################################################################################
+        /*
+        ResultSet result_parts_id = testDB.query("SELECT p.parts_id FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id WHERE s.quantity < p.low_quantity;");
+
+        */
+
         try{
             order.beforeFirst();
 
