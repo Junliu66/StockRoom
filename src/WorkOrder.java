@@ -1,123 +1,179 @@
-/**
- * Created by zhangJunliu on 10/14/17.
- */
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.sql.*;
 
-/**
- * Created by zhangJunliu on 10/10/17.
- */
 public class WorkOrder {
-    public static void workOrder(){
 
-        DBHandler testDB = new DBHandler();
+    DBHandler stockroomDB = new DBHandler();
+    Scanner reader = new Scanner(System.in);
 
-        ResultSet result_part_id = testDB.select("stockroomdb.PARTS", "parts_id", new ArrayList<String>());
+    public void viewMenu() {
+        System.out.println("=============================");
+        System.out.println("======== WORK ORDERS ========");
+        System.out.println("=============================\n\n");
+        System.out.println("What would you like to do?");
+        System.out.println("----------------------------------------");
+        System.out.println("[1] View Existing Work Orders");
+        System.out.println("[2] Create New Work Order");
+        System.out.println("[3] Kit Work Order");
+        System.out.println("[4] Start Building Work Order");
+        System.out.println("[5] Finish Building Work Order");
+        System.out.println("[6] Create Bill of Materials for New Product");
+        System.out.print("\n Enter number: ");
+        int option = reader.nextInt();
 
-        ResultSet result1 = testDB.select("stockroomdb.PARTS", "part_number", new ArrayList<String>());
-        //ResultSet result2 = testDB.select("stockroomdb.PARTS", "part_description", new ArrayList<String>());
-        ResultSet result3 = testDB.select("stockroomdb.STOCKROOM", "quantity", new ArrayList<String>());
+        switch (option) {
+            case 1: viewWorkOrders();
+                    break;
+            case 2: createWorkOrder();
+                    break;
+            case 3: kitWorkOrder();
+                    break;
+            case 4: buildWorkOrder();
+                    break;
+            case 5: completeWorkOrder();
+                    break;
+            case 6: newProductBOM();
+                    break;
+            default: System.out.println("Invalid answer.");
+                    break;
+        }
+    }
 
-        ResultSet result4 = testDB.select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA. TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='stockroomdb'");
+    private void viewWorkOrders() {
+        ResultSet orderID = stockroomDB.select("stockroomdb.WORKORDERS", "order_id", new ArrayList<>());
+        ResultSet productName = stockroomDB.select("stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id", "product_name", new ArrayList<>());
+        ResultSet quantity = stockroomDB.select( "stockroomdb.WORKORDERS", "quantity", new ArrayList<>());
+        ResultSet status = stockroomDB.select( "stockroomdb.WORKORDERS", "status", new ArrayList<>());
 
-        try {
-            result_part_id.beforeFirst();
-            result1.beforeFirst();
-            //result2.beforeFirst();
-            result3.beforeFirst();
-            //result4.beforeFirst();
-            while(result4.next()){
-                System.out.println(result4.getString(1));
+        try{
+            orderID.beforeFirst();
+            productName.beforeFirst();
+            quantity.beforeFirst();
+            status.beforeFirst();
+
+            System.out.println("=============================================================================");
+            System.out.printf("||%-8s |%-40s |%-9s |%-10s||", "ORDER ID", "              PRODUCT NAME", " QUANTITY", "  STATUS");
+            System.out.println("\n=============================================================================");
+
+            while(orderID.next()){
+                productName.next();
+                quantity.next();
+                status.next();
+
+                System.out.printf("|%9d |%-40s |%9d |%11s|\n", orderID.getInt(1), productName.getString(1), quantity.getInt(1), status.getString(1));
             }
+            System.out.println("-----------------------------------------------------------------------------");
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
-            ArrayList<Part> listOfInventories = new ArrayList<Part>();
+    private void createWorkOrder() {
+        ResultSet productID = stockroomDB.select("stockroomdb.PRODUCTS", "product_id", new ArrayList<>());
+        ResultSet productName = stockroomDB.select("stockroomdb.PRODUCTS", "product_name", new ArrayList<>());
+        ResultSet productCreated = stockroomDB.select("stockroomdb.PRODUCTS", "date_created", new ArrayList<>());
 
-            while (result_part_id.next() && result1.next() && result3.next()) {
-                Part part_id = new Part();
-                part_id.setPartID(result_part_id.getInt(1));
-                part_id.setPartNumber(result1.getInt(1));
-                part_id.setQuantity(result3.getInt(1));
-                listOfInventories.add(part_id);
+        try{
+            productID.beforeFirst();
+            productName.beforeFirst();
+            productCreated.beforeFirst();
+
+            System.out.println("=============================================================================");
+            System.out.printf("||%-10s |%-40s |%19s||", "Product ID", "              PRODUCT NAME", " Date Created  ");
+            System.out.println("\n=============================================================================");
+
+            while (productID.next()) {
+                productName.next();
+                productCreated.next();
+
+                System.out.printf("|%11d |%-40s |%20tD|\n", productID.getInt(1), productName.getString(1), productCreated.getDate(1));
             }
-/**
- System.out.println("part_id\t " + "part_number\t " + "quantity");
+            System.out.println("-----------------------------------------------------------------------------");
 
- for (int j = 0; j < listOfInventories.size(); j++) {
- System.out.println(listOfInventories.get(j).displayInventoty());
- }
- **/
-            ArrayList<Part> workOrder = new ArrayList<Part>();
-            ArrayList<String> columns = new ArrayList<String>();
+            System.out.println("Select the product ID that you want to order: ");
+            int chosenProductID = reader.nextInt();
 
+            productID.beforeFirst();
+            boolean productFound = false;
 
-
-            Scanner intReader = new Scanner(System.in);
-            String option = "";
-            Scanner strReader = new Scanner(System.in);
-            do {
-
-                Part part  = new Part();
-
-                System.out.println("Choose the part you need for kit: ");
-                System.out.println("part_id: ");
-                int part_id = intReader.nextInt();
-                part.setPartID(part_id);
-
-                int part_number = listOfInventories.get(part_id).getPartNumber();
-                part.setPartNumber(part_number);
-
-                System.out.println("quantity: ");
-                int quantity = intReader.nextInt();
-                part.setQuantity(quantity);
-
-                workOrder.add(part);
-
-                System.out.println("Do you want to add another part? Y or N");
-                option = strReader.nextLine();
-
-            } while (option.equals("Y"));
-
-            System.out.println("part_id\t " + "part_number\t " + "quantity");
-
-            for (int j = 0; j < workOrder.size(); j++) {
-                System.out.println(workOrder.get(j).displayInventoty());
+            while(productID.next()){
+                if (chosenProductID == productID.getInt(1)){
+                    productFound = true;
+                    System.out.println("Product found. Please select a quantity: ");
+                    int chosenQuantity = reader.nextInt();
+                    enterNewWorkOrder(chosenProductID, chosenQuantity);
+                }
             }
-
-            System.out.println("Please give your kit a name: ");
-            String orderName = strReader.nextLine();
-            ArrayList<String> rowForName = new ArrayList<String>();
-            rowForName.add(orderName);
-            rowForName.add("Y");
-            rowForName.add("N");
-            rowForName.add("N");
-            testDB.insert("workOrders", null, rowForName);
-
-
-            columns.add("parts_id INT");
-            columns.add("part_number INT");
-            columns.add("quantity INT");
-
-            int workOrderTable = testDB.createTable(orderName, columns);
-
-            for (int i = 0; i < workOrder.size(); i++) {
-                ArrayList<String> rows = new ArrayList<String>();
-                rows.add(String.valueOf(workOrder.get(i).getPartID()));
-                rows.add(String.valueOf(workOrder.get(i).getPartNumber()));
-                rows.add(String.valueOf(workOrder.get(i).getQuantity()));
-                testDB.insert(orderName, null, rows);
-            }
-
+            if (!productFound)
+                System.out.println("Product ID not found.");
         }
 
-
         catch(SQLException e){
+
             e.printStackTrace();
         }
 
     }
 
+    private void kitWorkOrder() {
+        System.out.println(" kit ");
+    }
 
+    private void buildWorkOrder() {
+        System.out.println(" build ");
+    }
+
+    private void completeWorkOrder() {
+        System.out.println(" finish ");
+    }
+
+    private void newProductBOM() {
+        System.out.println(" new ");
+    }
+
+    private void enterNewWorkOrder(int chosenProductID, int chosenQuantity) {
+        String productID =  "";
+        productID += chosenProductID;
+
+        String quantity = "";
+        quantity += chosenQuantity;
+
+        ArrayList<String> columns = new ArrayList<String>();
+        ArrayList<String> values = new ArrayList<String>();
+
+        columns.add("product_id");
+        columns.add("quantity");
+        columns.add("status");
+        columns.add("date_created");
+
+        values.add(productID);
+        values.add(quantity);
+        values.add("CREATED");
+        values.add("NOW()");
+
+        stockroomDB.updateQuery("INSERT INTO stockroomdb.WORKORDERS (product_id, quantity, status, date_created) " +
+                        "VALUES (" + productID + ", " + quantity + ", 'CREATED', NOW())");
+
+        ResultSet newOrderID = stockroomDB.query("SELECT LAST_INSERT_ID();");
+        String orderID = "";
+        try {
+            newOrderID.first();
+            orderID += newOrderID.getInt(1);
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        int addingWorkOrder = stockroomDB.updateQuery("INSERT INTO stockroomdb.ORDER_ITEMS (parts_id, product_id, order_id, amount_needed) " +
+                "SELECT parts_id, product_id, '" + orderID + "', (quantity * " + quantity + ") " +
+                "FROM stockroomdb.PRODUCT_BOM " +
+                "WHERE product_id = " + chosenProductID + ";");
+
+        System.out.println(addingWorkOrder);
+
+    }
 }
+
