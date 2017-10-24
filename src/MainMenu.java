@@ -96,7 +96,7 @@ public class MainMenu extends Application{
 
     public static void displayInventory(){
         System.out.println("Inventory");
-        Inventory.displayInventory();
+        //Inventory.displayInventory();
     }
 
     public static void displayOrderForm(){

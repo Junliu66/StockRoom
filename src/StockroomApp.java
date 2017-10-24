@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+
 /**
  * Creates an object of Stockroom. User can:
  * Stockroom assistant can View Inventory;
@@ -75,11 +76,11 @@ public class StockroomApp {
     private static void createOrders() {
         //System.out.println("which items you need to use: \n> ");
         //System.out.print("how many of it: \n> ");
-        WorkOrder.workOrder();
+        //WorkOrder.viewMenu();
     }
 
     private static void purchase() {
-        System.out.print("Please fill in the table with the number of items you want to purchase: \n> ");
+        System.out.print("Please fill in the table with the number of items you want to purchase: \n> \n");
         Purchasing.purchasing();
     }
 
