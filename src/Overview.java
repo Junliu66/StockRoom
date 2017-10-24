@@ -1,110 +1,91 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.sql.Time;
+import java.util.Scanner;
 
 /**
  * Created by zhangJunliu on 10/19/17.
  */
 public class Overview {
-    //ArrayList<Part> listOfFinishedOrders = new ArrayList<Part>();
-    //ArrayList<Part> listOfOrdersInProgress = new ArrayList<Part>();
-    ArrayList<Part> listOfPartsInShortage = new ArrayList<Part>();
+
 
     public static void overView() {
-        orderStatus();
+        System.out.println("=============================");
+        System.out.println("======== Over View ========");
+        System.out.println("=============================\n\n");
+        System.out.println("What you want to do?");
+        System.out.println("----------------------------------------");
+        System.out.println("[1] View Completed Orders");
+        System.out.println("[2] View Building Orders");
+        System.out.println("[3] View Parts Are Missing From Work Orders");
 
+        Scanner reader = new Scanner(System.in);
+        int option = reader.nextInt();
+
+        switch (option) {
+            case 1:
+                orderCompleted();
+                break;
+            case 2:
+                buildingOrders();
+                break;
+            case 3:
+                Purchasing.outOfStock();
+        }
     }
 
-    public static void orderStatus() {
-        ArrayList<Part> listOfFinishedOrders = new ArrayList<Part>();
-        ArrayList<Part> listOfOrdersInProgress = new ArrayList<Part>();
+    public static void orderCompleted() {
 
         DBHandler testDB = new DBHandler();
-        ResultSet order_id = testDB.select("stockroomdb.WORKORDERS", "order_id", new ArrayList<String>());
-        ResultSet status = testDB.select("stockroomdb.WORKORDERS", "status", new ArrayList<String>());
-        ResultSet date_completed = testDB.select("stockroomdb.WORKORDERS", "date_completed", new ArrayList<String>());
-
-        // ###################################################################################
-        /* Stefano : These are queries I made up for the overview tables */
-        // ###################################################################################
-        /*
-
-        // ###################################################################################
-        // TABLE ONE - (This one shows all the Work Orders that are completed and ready to ship.)
-        // ###################################################################################
-
-        ResultSet table1_order_id = testDB.query("SELECT order_id FROM stockroomdb.WORKORDERS WHERE status = "COMPLETED";");
-        ResultSet table1_product_name = testDB.query("SELECT p.product_name FROM stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id WHERE status = "COMPLETED";");
-        ResultSet table1_date_completed = testDB.query("SELECT date_completed FROm stockroomdb.WORKORDERS WHERE status = "COMPLETED";");
-
-
-        // ###################################################################################
-        // TABLE TWO - (This one shows all the Work Orders that are currently being built.)
-        // ###################################################################################
-
-        ResultSet table2_order_id = testDB.query("SELECT order_id FROM stockroomdb.WORKORDERS WHERE status = "BUILDING";");
-        ResultSet table2_product_name = testDB.query("SELECT p.product_name FROM stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id WHERE status = "BUILDING";");
-        ResultSet table2_date_building = testDB.query("SELECT date_building FROM stockroomdb.WORKORDERS WHERE status = "BUILDING";");
-
-
-        // ###################################################################################
-        // TABLE THREE - (This one is pretty much the same as the Purchasing table, it says what parts are missing from WorkOrders.)
-        // ###################################################################################
-
-        ResultSet table3_parts_id = testDB.query("SELECT DISTINCT p.parts_id FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
-        ResultSet table3_part_description = testDB.query("SELECT DISTINCT p.part_description FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
-        ResultSet table3_part_vendor = testDB.query("SELECT DISTINCT p.vendor FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
-        ResultSet table3_order_missing_quantity = testDB.query("SELECT s.quantity - SUM(oi.amount_needed - oi.amount_filled) FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
-
-        */
-
-
+        ResultSet table1_order_id = testDB.query("SELECT order_id FROM stockroomdb.WORKORDERS WHERE status = 'COMPLETED';");
+        ResultSet table1_product_name = testDB.query("SELECT p.product_name FROM stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id WHERE status = 'COMPLETED';");
+        ResultSet table1_date_completed = testDB.query("SELECT date_completed FROm stockroomdb.WORKORDERS WHERE status = 'COMPLETED';");
         try {
-            order_id.beforeFirst();
-            status.beforeFirst();
-            date_completed.beforeFirst();
+            table1_order_id.beforeFirst();
+            table1_product_name.beforeFirst();
+            table1_date_completed.beforeFirst();
 
-            while (order_id.next() && status.next() && date_completed.next()) {
-                if (status.getString(1).equals("COMPLETED")) {
-                    Part order = new Part();
-                    order.setOrderID(order_id.getInt(1));
+            System.out.println("=====================================================================================");
+            System.out.printf("||%-10s |%-40s |%-19s||", "Order ID", "              PRODUCT NAME", "       Date Completed       ");
+            System.out.println("\n=====================================================================================");
+            while (table1_order_id.next() && table1_product_name.next() && table1_date_completed.next()) {
 
-                    //order.setDate(date_completed.getDate(1));
-
-                    listOfFinishedOrders.add(order);
-
-                }
-                else if (status.getString(1).equals("KITTED") || status.getString(1).equals("CREATED")) {
-                    Part order = new Part();
-                    order.setOrderID((order_id.getInt(1)));
-                    listOfOrdersInProgress.add(order);
-                }
-
-
+                System.out.printf("|%-11d |%-40s |%20tc|\n", table1_order_id.getInt(1), table1_product_name.getString(1), table1_date_completed.getTimestamp(1));
             }
-
-
+            System.out.println("=====================================================================================");
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        System.out.println(String.format("\n%-10s%-15s", "kit#", "Date Done"));
-        for (int i = 0; i < listOfFinishedOrders.size(); i++) {
-            System.out.println(listOfFinishedOrders.get(i).displayOrderStatus());
-        }
-
-        System.out.println(String.format("%-10s%-15s", "kit#", "Date Started"));
-        for (int i = 0; i < listOfOrdersInProgress.size(); i++) {
-            System.out.println(listOfOrdersInProgress.get(i).displayOrderStatus());
-        }
-
         }
 
 
+        public static void buildingOrders() {
+
+
+            DBHandler testDB = new DBHandler();
+            ResultSet table2_order_id = testDB.query("SELECT order_id FROM stockroomdb.WORKORDERS WHERE status = 'BUILDING';");
+            ResultSet table2_product_name = testDB.query("SELECT p.product_name FROM stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id WHERE status = 'BUILDING';");
+            ResultSet table2_date_building = testDB.query("SELECT date_building FROM stockroomdb.WORKORDERS WHERE status = 'BUILDING';");
+
+            try {
+                table2_order_id.beforeFirst();
+                table2_product_name.beforeFirst();
+                table2_date_building.beforeFirst();
+
+                System.out.println("=====================================================================================");
+                System.out.printf("||%-10s |%-40s |%-19s||", "Order ID", "              PRODUCT NAME", "       Date Building       ");
+                System.out.println("\n=====================================================================================");
+
+                while (table2_order_id.next() && table2_product_name.next() && table2_date_building.next()) {
+                    System.out.printf("|%-11d |%-40s |%20tc|\n", table2_order_id.getInt(1), table2_product_name.getString(1), table2_date_building.getTimestamp(1));
+                }
+                System.out.println("=====================================================================================");
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
 }
+
+
