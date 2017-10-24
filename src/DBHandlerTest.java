@@ -52,17 +52,20 @@ public class DBHandlerTest {
 //        testConditions.add(cond1);
 //        int result3 = testDB.update("testTable", testUpdate, testConditions);
 
-        System.out.println("Inserting row into testTable...");
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("id");
-        columns.add("name");
-        columns.add("time");
-        ArrayList<Object> values = new ArrayList<>();
-        values.add(5);
-        values.add("item with time");
-        values.add("NOW()");
-//        testDB.insert("testTable", columns, values);
-        testDB.insert("testTable", null, values);
-        testDB.adjustPartQuantity(11, -5);
+//        System.out.println("Inserting row into testTable...");
+//        ArrayList<String> columns = new ArrayList<>();
+//        columns.add("id");
+//        columns.add("name");
+//        columns.add("time");
+//        ArrayList<Object> values = new ArrayList<>();
+//        values.add(5);
+//        values.add("item with time");
+//        values.add("NOW()");
+////        testDB.insert("testTable", columns, values);
+//        testDB.insert("testTable", null, values);
+//        testDB.adjustPartQuantity(11, -5);
+
+        Receiving receivingTest = new Receiving();
+        receivingTest.displayReceiving();
     }
 }

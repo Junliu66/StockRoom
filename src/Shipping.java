@@ -3,10 +3,7 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /*
 Create a command line menu for Shipping that shows a list of the available completed work orders
@@ -48,5 +45,15 @@ public class Shipping {
         Scanner user_input = new Scanner(System.in);
         System.out.println("Please enter your Order ID to be shipped: ");
         int orderId = user_input.nextInt();
-    } //TODO: finish the update query for the time-state.
+
+        HashMap<String, Object> updates = new HashMap<>();
+        updates.put("status", "SHIPPED");
+        updates.put("date_shipped", "NOW()");
+        ArrayList<Object[]> searchConditions = new ArrayList<>();
+        Object[] cond1 = {"order_id", "=", orderId};
+        searchConditions.add(cond1);
+        stockroomdb.update("stockroomdb.WORKORDERS", updates, searchConditions);
+
+
+    } //TODO: set order to "shipped" and add time-stamp.
 }

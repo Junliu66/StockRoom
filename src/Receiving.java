@@ -14,7 +14,6 @@ bring up a prompt for user to enter in the part number the quantity.
 
 public class Receiving {
 
-
     public static void main(String[] args) {
         displayReceiving();
     }

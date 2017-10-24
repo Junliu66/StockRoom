@@ -84,11 +84,15 @@ public class DBHandler {
         String query = "select " + selection + " from " + table;
         if(!conditions.isEmpty()){
             query += " where ";
+            int i = 0;
             for (String condition: conditions) {
-                query += condition + " and ";
+                query += condition;
+                i++;
+                if (i < conditions.size()-1)
+                    query += " and ";
             }
         }
-        return select(query.substring(0, query.lastIndexOf(" AND ")));
+        return select(query);
     }
 
     public ResultSet executeQuery(String query){
@@ -207,7 +211,7 @@ public class DBHandler {
         Iterator it = updateSet.iterator();
         while (it.hasNext()) {
             Map.Entry me = (Map.Entry) it.next();
-            if (me.getValue() instanceof String)
+            if (me.getValue() instanceof String && !(isSQLString((String) me.getValue())))
                 query += me.getKey() + " = '" + sanitizeSnippet((String) me.getValue()) + "', ";
             else
                 query += me.getKey() + " = " + me.getValue() + ", ";
