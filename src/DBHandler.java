@@ -88,7 +88,7 @@ public class DBHandler {
                 query += condition + " and ";
             }
         }
-        return select(query);
+        return select(query.substring(0, query.lastIndexOf(" AND ")));
     }
 
     public ResultSet executeQuery(String query){
