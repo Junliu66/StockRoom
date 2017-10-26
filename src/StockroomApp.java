@@ -78,7 +78,7 @@ public class StockroomApp {
         //System.out.println("which items you need to use: \n> ");
         //System.out.print("how many of it: \n> ");
         // TODO WorkOrder need to make createOrder method public
-        // WorkOrder.workOrder();
+         WorkOrder.viewMenu();
     }
 
     private static void purchase() {

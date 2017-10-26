@@ -6,9 +6,9 @@ import java.util.Scanner;
 public class WorkOrder {
 
     DBHandler stockroomDB = new DBHandler();
-    Scanner reader = new Scanner(System.in);
+    //Scanner reader = new Scanner(System.in);
 
-    public void viewMenu() {
+    public static void viewMenu() {
         System.out.println("=============================");
         System.out.println("======== WORK ORDERS ========");
         System.out.println("=============================\n\n");
@@ -21,6 +21,7 @@ public class WorkOrder {
         System.out.println("[5] Finish Building Work Order");
         System.out.println("[6] Create Bill of Materials for New Product");
         System.out.print("\n Enter number: ");
+        Scanner reader = new Scanner(System.in);
         int option = reader.nextInt();
 
         switch (option) {
@@ -41,7 +42,8 @@ public class WorkOrder {
         }
     }
 
-    private void viewWorkOrders() {
+    private static void viewWorkOrders() {
+        DBHandler stockroomDB = new DBHandler();
         ResultSet orderID = stockroomDB.select("stockroomdb.WORKORDERS", "order_id", new ArrayList<>());
         ResultSet productName = stockroomDB.select("stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id", "product_name", new ArrayList<>());
         ResultSet quantity = stockroomDB.select( "stockroomdb.WORKORDERS", "quantity", new ArrayList<>());
@@ -71,7 +73,8 @@ public class WorkOrder {
         }
     }
 
-    private void createWorkOrder() {
+    private static void createWorkOrder() {
+        DBHandler stockroomDB = new DBHandler();
         ResultSet productID = stockroomDB.select("stockroomdb.PRODUCTS", "product_id", new ArrayList<>());
         ResultSet productName = stockroomDB.select("stockroomdb.PRODUCTS", "product_name", new ArrayList<>());
         ResultSet productCreated = stockroomDB.select("stockroomdb.PRODUCTS", "date_created", new ArrayList<>());
@@ -94,6 +97,7 @@ public class WorkOrder {
             System.out.println("-----------------------------------------------------------------------------");
 
             System.out.println("Select the product ID that you want to order: ");
+            Scanner reader = new Scanner(System.in);
             int chosenProductID = reader.nextInt();
 
             productID.beforeFirst();
@@ -118,23 +122,24 @@ public class WorkOrder {
 
     }
 
-    private void kitWorkOrder() {
+    private static void kitWorkOrder() {
         System.out.println(" kit ");
     }
 
-    private void buildWorkOrder() {
+    private static void buildWorkOrder() {
         System.out.println(" build ");
     }
 
-    private void completeWorkOrder() {
+    private static void completeWorkOrder() {
         System.out.println(" finish ");
     }
 
-    private void newProductBOM() {
+    private static void newProductBOM() {
         System.out.println(" new ");
     }
 
-    private void enterNewWorkOrder(int chosenProductID, int chosenQuantity) {
+    private static void enterNewWorkOrder(int chosenProductID, int chosenQuantity) {
+        DBHandler stockroomDB = new DBHandler();
         String productID =  "";
         productID += chosenProductID;
 
