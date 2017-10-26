@@ -61,7 +61,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button purchase = createButton("Purchase", Paths.get("Icons", "Stockroom.png").toString());
+        Button purchase = createButton("Purchase", Paths.get("Icons", "purchasing.png").toString());
         purchase.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
