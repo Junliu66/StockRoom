@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Inventory {
-
+    
     public static void inventoryList(){
         DBHandler testDB = new DBHandler();
         ResultSet result_part_id = testDB.select("stockroomdb.PARTS", "parts_id", new ArrayList<String>());
@@ -73,6 +73,5 @@ public class Inventory {
         catch(SQLException e){
             e.printStackTrace();
         }
-
     }
 }
