@@ -88,7 +88,7 @@ public class DBHandler {
             for (String condition: conditions) {
                 query += condition;
                 i++;
-                if (i < conditions.size()-1)
+                if (i < conditions.size())
                     query += " and ";
             }
         }
