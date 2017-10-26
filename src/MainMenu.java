@@ -20,6 +20,7 @@ import javafx.util.Pair;
 import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Types;
@@ -34,6 +35,9 @@ public class MainMenu extends Application{
     private Stage stage = new Stage();
     private BorderPane root = new BorderPane();
 
+    private static double imageHeight = 50;
+    private static double imageWidth = 50;
+
     @Override
     public void start(Stage stage){
         //sets application title
@@ -41,12 +45,7 @@ public class MainMenu extends Application{
         stage.setTitle("Stockroom Inventory App");
 
         //Inventory
-        Button inventory = new Button();
-        inventory.setText("View Inventory");
-        /*
-        Image inventoryImage = new Image(getClass().getResourceAsStream("\\Icons\\Stockroom.png"));
-        inventory.setGraphic(new ImageView(inventoryImage));
-        */
+        Button inventory = createButton("View Inventory", Paths.get("Icons", "Stockroom.png").toString());
         inventory.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -54,8 +53,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button orders = new Button();
-        orders.setText("Create Order");
+        Button orders = createButton("Create Order", Paths.get("Icons", "Bill Materials.png").toString());
         orders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -63,8 +61,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button purchase = new Button();
-        purchase.setText("Purchase");
+        Button purchase = createButton("Purchase", Paths.get("Icons", "Stockroom.png").toString());
         purchase.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -72,8 +69,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button receiving = new Button();
-        receiving.setText("Received Orders");
+        Button receiving = createButton("Received Orders", Paths.get("Icons", "receving.png").toString());
         receiving.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -81,8 +77,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button shipping = new Button();
-        shipping.setText("Shipped Orders");
+        Button shipping = createButton("Shipped Orders", Paths.get("Icons", "shipping.png").toString());
         shipping.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -90,7 +85,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button overview = new Button();
+        Button overview = createButton("Overview", Paths.get("Icons", "Customer.png").toString());
         overview.setText("Overview");
         overview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -101,21 +96,35 @@ public class MainMenu extends Application{
         BorderPane borderPane = new BorderPane();
 
         HBox hBox = new HBox();
-        hBox.getChildren().add(inventory);
-        hBox.getChildren().add(orders);
-        hBox.getChildren().add(purchase);
-        hBox.getChildren().add(receiving);
-        hBox.getChildren().add(shipping);
-        hBox.getChildren().add(overview);
-
+        hBox.getChildren().addAll(inventory, orders, purchase, receiving, shipping, overview);
         borderPane.setTop(hBox);
         borderPane.setCenter(vBox);
 
         root = borderPane;
 
-        stage.setScene(new Scene(root, 800, 600));
+        stage.setScene(new Scene(root, 1000, 800));
         stage.show();
         this.stage = stage;
+    }
+
+    public Button createButton(String text, String fileName ){
+        Button newButton = new Button();
+        newButton.setText(text);
+        Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(fileName));
+        ImageView scaledImage = new ImageView(buttonImage);
+        //Adjusting the image size to fit the button
+        scaledImage.setFitWidth(imageWidth);
+        scaledImage.setFitHeight(imageHeight);
+        newButton.setGraphic(scaledImage);
+
+        return newButton;
+    }
+
+    public Button createButton(String text, ArrayList<String> path){
+        //ArrayList path should have
+        String first = path.remove(0);
+        String filePath = Paths.get(first, (String[])path.toArray()).toString();
+        return createButton(text, filePath);
     }
 
     public void displayInventory(){
