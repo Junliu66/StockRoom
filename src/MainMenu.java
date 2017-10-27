@@ -23,6 +23,7 @@ import java.awt.*;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 
@@ -149,7 +150,11 @@ public class MainMenu extends Application{
     }
 
     public void displayShipped(){
-
+        Shipping shipping = new Shipping();
+        ResultSet rs = shipping.getCompletedWorkOrders();
+        vBox = displayTable(rs);
+        root.setCenter(vBox);
+        stage.getScene().setRoot(root);
     }
 
     public void displayOverview(){
@@ -178,7 +183,7 @@ public class MainMenu extends Application{
                         }
                     });
                 }
-                else if(type == Types.VARCHAR){
+                else if(type == Types.VARCHAR ){
                     column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TableData, String>, ObservableValue<String>>() {
                         @Override
                         public ObservableValue<String> call(TableColumn.CellDataFeatures<TableData, String> param) {
@@ -186,8 +191,16 @@ public class MainMenu extends Application{
                         }
                     });
                 }
+                else if(type == Types.TIMESTAMP){
+                    column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TableData, Timestamp>, ObservableValue<Timestamp>>() {
+                        @Override
+                        public ObservableValue call(TableColumn.CellDataFeatures<TableData, Timestamp> param) {
+                            return param.getValue().getAt(index);
+                        }
+                    });
+                }
 
-                table.getColumns().add(column);
+              table.getColumns().add(column);
             }
             //Converts the ResultSet into usable data
             ObservableList<TableData> data = FXCollections.observableArrayList();
@@ -202,6 +215,9 @@ public class MainMenu extends Application{
                         tableData.add(queryResult.getInt(i));
                     }
                     else if(type == Types.VARCHAR){
+                        tableData.add(queryResult.getString(i));
+                    }
+                    else if(type == Types.TIMESTAMP){
                         tableData.add(queryResult.getString(i));
                     }
                 }
