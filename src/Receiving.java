@@ -6,8 +6,7 @@ import java.util.Scanner;
 /*
 Create the command line menu for people who receives items.
 bring up a prompt for user to enter in the part number the quantity.
-
-
+Allow them to fill the parts in to kit of specific WORKORDERS.
 */
 
 public class Receiving {
@@ -19,14 +18,16 @@ public class Receiving {
     public static void displayReceiving() {
         DBHandler stockroomdb = new DBHandler();
         Scanner user_input = new Scanner(System.in);
-        System.out.println("How many items did you receive today? Please enter the number: ");
-        int totalItems;
-        totalItems = user_input.nextInt();
+
         int partIDNumber;
         int partQuantityReceived;
-        //TODO: add while loop ask if you want to keep receiving
-        for (int i = 0; i < totalItems; i++) {
 
+        System.out.println("Do you want to record a receiving? y or n");
+        Scanner answer = new Scanner(System.in);
+        boolean theAnswer = true;
+        theAnswer = answer.next().equalsIgnoreCase("y");
+
+        while (theAnswer) {
             System.out.println("Please enter the received item Part ID: ");
             partIDNumber = Integer.parseInt(user_input.next());
 
@@ -59,8 +60,8 @@ public class Receiving {
                     System.out.printf("|%11d |%-40s |%20d|\n", orderId, productName.getString(1), quantityNeededInt);
                     System.out.println("-----------------------------------------------------------------------------");
                     System.out.println("Do you want to fill this kit? y or n");
-                    Scanner console1 = new Scanner(System.in);
-                    if (console1.next().equalsIgnoreCase("y")) {
+                    Scanner console = new Scanner(System.in);
+                    if (console.next().equalsIgnoreCase("y")) {
                         int amountLeftover = partQuantityReceived - quantityNeededInt;
                         if (amountLeftover <= 0) {
                             // receiving less than or equal amount of parts needed in current kit
@@ -88,7 +89,6 @@ public class Receiving {
                         }
                     }
                 }
-
                 // add leftovers to STOCKROOM
                 if (partQuantityReceived > 0)
                     stockroomdb.adjustPartQuantity(partIDNumber, partQuantityReceived);
@@ -96,7 +96,11 @@ public class Receiving {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            System.out.println("Do you want to record a receiving? y or n");
+            if(answer.next().equalsIgnoreCase("y")){
+                theAnswer = true;
+            }else
+                theAnswer = false;
         }
-    }
-
+        }
 }
