@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -6,10 +7,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -153,8 +154,70 @@ public class MainMenu extends Application{
         Shipping shipping = new Shipping();
         ResultSet rs = shipping.getCompletedWorkOrders();
         vBox = displayTable(rs);
+        TableColumn shipButtons = new TableColumn("Ship");
+        shipButtons.setMinWidth(60.0);
+
+        shipButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
+            @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
+                return new AddShipCell(stage, table);
+            }
+        });
+
+        table.getColumns().add(shipButtons);
+
         root.setCenter(vBox);
         stage.getScene().setRoot(root);
+    }
+
+    private class AddShipCell extends TableCell<Object, Boolean> {
+        final Button shipButton = new Button();
+        final StackPane paddedButton = new StackPane();
+        final DoubleProperty buttonY = new SimpleDoubleProperty();
+
+        AddShipCell(final Stage stage, final TableView tableView) {
+            paddedButton.setPadding(new Insets(3));
+            paddedButton.getChildren().add(shipButton);
+            shipButton.setText("Ship");
+            shipButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    buttonY.set(event.getScreenY());
+                }
+            });
+            shipButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    TableData data = (TableData) table.getItems().get(getTableRow().getIndex());
+                    SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
+                    Shipping shipping = new Shipping();
+                    shipping.shipOrder(orderID.intValue());
+                    table.getSelectionModel().select(getTableRow().getIndex());
+                    displayShipped();
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(Boolean item, boolean empty) {
+            super.updateItem(item, empty);
+            if (!empty) {
+                if (getTableRow() != null) {
+                    TableData data = (TableData) table.getItems().get(getTableRow().getIndex());
+                    SimpleStringProperty shipDate = (SimpleStringProperty) data.getAt(9);
+                    if (shipDate.getValue() == null) {
+                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                        setGraphic(paddedButton);
+                    } else {
+                        setGraphic(null);
+                    }
+                } else {
+                    setGraphic(null);
+                }
+            } else {
+                setGraphic(null);
+            }
+        }
+
     }
 
     public void displayOverview(){
