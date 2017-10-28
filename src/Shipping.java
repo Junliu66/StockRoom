@@ -1,3 +1,4 @@
+import javax.xml.transform.Result;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -53,7 +54,25 @@ public class Shipping {
         Object[] cond1 = {"order_id", "=", orderId};
         searchConditions.add(cond1);
         stockroomdb.update("stockroomdb.WORKORDERS", updates, searchConditions);
+    }
 
+    public static ResultSet getCompletedWorkOrders() {
+        DBHandler stockroomdb = new DBHandler();
 
-    } //TODO: set order to "shipped" and add time-stamp.
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("status = 'COMPLETED' OR status = 'SHIPPED'");
+        ResultSet id_and_quantity = stockroomdb.select("stockroomdb.WORKORDERS", "*", conditions);
+        return id_and_quantity;
+    }
+
+    public void shipOrder(int orderId) {
+        DBHandler stockroomdb = new DBHandler();
+        HashMap<String, Object> updates = new HashMap<>();
+        updates.put("status", "SHIPPED");
+        updates.put("date_shipped", "NOW()");
+        ArrayList<Object[]> searchConditions = new ArrayList<>();
+        Object[] cond1 = {"order_id", "=", orderId};
+        searchConditions.add(cond1);
+        stockroomdb.update("stockroomdb.WORKORDERS", updates, searchConditions);
+    }
 }
