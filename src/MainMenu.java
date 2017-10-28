@@ -19,8 +19,8 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import javafx.scene.image.Image;
+import javafx.scene.*;
 
-import java.awt.*;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -75,7 +75,7 @@ public class MainMenu extends Application{
         receiving.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayReceiving();
+                displayReceivingOption();
             }
         });
 
@@ -146,8 +146,63 @@ public class MainMenu extends Application{
 
     }
 
-    public void displayReceiving(){
+    public void submitReceived() {
 
+    }
+
+
+    public void getReceiveingAmount() {
+        System.out.println("Entering received parts");
+        VBox rVBox = new VBox();
+
+        Label label1 = new Label("Enter Part ID: ");
+        TextField pid = new TextField ();
+        HBox hb1 = new HBox();
+        hb1.getChildren().addAll(label1, pid);
+        hb1.setSpacing(10);
+
+        Label label2 = new Label("Enter Quantity: ");
+        TextField qtt = new TextField();
+        HBox hb2 = new HBox();
+        hb2.getChildren().addAll(label2, qtt);
+        hb2.setSpacing(10);
+
+        Button submit = new Button("submit");
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String partId = pid.getText();
+                String quantity = qtt.getText();
+                System.out.println("part id from user: " + partId);
+                System.out.println("quantity from user: " + quantity);
+                // call Receiving class here
+                ReceivingMenu menu = new ReceivingMenu();
+                menu.submit(Integer.parseInt(partId), Integer.parseInt(quantity));
+            }
+        });
+        rVBox.getChildren().addAll(hb1, hb2, submit);
+        root.setCenter(rVBox);
+        stage.getScene().setRoot(root);
+    }
+
+    public void displayReceivingOption(){
+        System.out.println("Do you want to record?");
+        VBox rVBox = new VBox();
+        Label t = new Label();
+        t.setText("Do you want to record?");
+        Button yes = new Button("YES");
+        yes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                getReceiveingAmount();
+            }
+        });
+        Button no = new Button("NO");
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(yes, no);
+        rVBox.getChildren().addAll(t, buttons);
+        root.setCenter(rVBox);
+        stage.getScene().setRoot(root);
     }
 
     public void displayShipped(){
