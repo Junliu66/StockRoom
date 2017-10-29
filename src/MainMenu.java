@@ -32,7 +32,7 @@ public class MainMenu extends Application{
     public static void main(String[] args){
         launch(args);
     }
-    private TableView table = new TableView();
+    private static TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
     private BorderPane root = new BorderPane();
@@ -59,7 +59,8 @@ public class MainMenu extends Application{
         orders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayOrderForm();
+                WorkOrder workOrder = new WorkOrder();
+                workOrder.viewGUI(root, stage, table);
             }
         });
 
@@ -277,6 +278,10 @@ public class MainMenu extends Application{
 
     public void displayOverview(){
 
+    }
+
+    public TableView getTable() {
+        return table;
     }
 
     public VBox displayTable(ResultSet queryResult){
