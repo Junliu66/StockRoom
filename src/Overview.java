@@ -1,5 +1,6 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -33,7 +34,9 @@ public class Overview {
         }
     }
 
-    public static void orderCompleted() {
+    public static ArrayList<Part> orderCompleted() {
+
+        ArrayList<Part> completedOrderList = new ArrayList<Part>();
 
         DBHandler testDB = new DBHandler();
         ResultSet table1_order_id = testDB.query("SELECT order_id FROM stockroomdb.WORKORDERS WHERE status = 'COMPLETED';");
@@ -49,20 +52,30 @@ public class Overview {
             System.out.println("\n=====================================================================================");
             while (table1_order_id.next() && table1_product_name.next() && table1_date_completed.next()) {
 
+                Part completedOrder = new Part();
+                completedOrder.setOrderID(table1_order_id.getInt(1));
+                completedOrder.setProductName(table1_product_name.getString(1));
+                completedOrder.setDate(String.format("%tc", table1_date_completed.getTimestamp(1)));
+                completedOrderList.add(completedOrder);
                 System.out.printf("|%-11d |%-40s |%20tc|\n", table1_order_id.getInt(1), table1_product_name.getString(1), table1_date_completed.getTimestamp(1));
+
+
             }
             System.out.println("=====================================================================================");
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        }
+        return completedOrderList;
+
+    }
 
 
-        public static void buildingOrders() {
+        public static ArrayList<Part> buildingOrders() {
 
-
+            ArrayList<Part> buildingOrderList = new ArrayList<Part>();
             DBHandler testDB = new DBHandler();
+           // ResultSet update = testDB.query("UPDATE stockroomdb.WORKORDERS SET status = 'COMPLETED', date_completed = NOW() WHERE order_id = 6");
             ResultSet table2_order_id = testDB.query("SELECT order_id FROM stockroomdb.WORKORDERS WHERE status = 'BUILDING';");
             ResultSet table2_product_name = testDB.query("SELECT p.product_name FROM stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id WHERE status = 'BUILDING';");
             ResultSet table2_date_building = testDB.query("SELECT date_building FROM stockroomdb.WORKORDERS WHERE status = 'BUILDING';");
@@ -77,6 +90,12 @@ public class Overview {
                 System.out.println("\n=====================================================================================");
 
                 while (table2_order_id.next() && table2_product_name.next() && table2_date_building.next()) {
+                    Part buildingOrder = new Part();
+                    buildingOrder.setOrderID(table2_order_id.getInt(1));
+                    buildingOrder.setProductName(table2_product_name.getString(1));
+                    buildingOrder.setDate(String.format("%tc", table2_date_building.getTimestamp(1)));
+                    buildingOrderList.add(buildingOrder);
+
                     System.out.printf("|%-11d |%-40s |%20tc|\n", table2_order_id.getInt(1), table2_product_name.getString(1), table2_date_building.getTimestamp(1));
                 }
                 System.out.println("=====================================================================================");
@@ -84,6 +103,7 @@ public class Overview {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return buildingOrderList;
 
         }
 }

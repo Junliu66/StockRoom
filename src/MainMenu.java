@@ -9,13 +9,14 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.Pair;
 import javafx.scene.image.Image;
 import javafx.scene.*;
 
@@ -30,7 +31,7 @@ public class MainMenu extends Application{
     public static void main(String[] args){
         launch(args);
     }
-    private TableView table = new TableView();
+    private static TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
     private BorderPane root = new BorderPane();
@@ -53,11 +54,12 @@ public class MainMenu extends Application{
             }
         });
 
-        Button orders = createButton("Create Order", Paths.get("Icons", "Bill Materials.png").toString());
+        Button orders = createButton("Work Orders", Paths.get("Icons", "Bill Materials.png").toString());
         orders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayOrderForm();
+                WorkOrder workOrder = new WorkOrder();
+                workOrder.viewGUI(root, stage, table);
             }
         });
 
@@ -207,9 +209,11 @@ public class MainMenu extends Application{
         Shipping shipping = new Shipping();
         ResultSet rs = shipping.getCompletedWorkOrders();
         vBox = displayTable(rs);
+
+
         TableColumn shipButtons = new TableColumn("Ship");
         shipButtons.setMinWidth(60.0);
-        
+
         // not using this for now
 //        stage.getScene().getStylesheets().add("");
 //        shipButtons.setStyle("-fx-base: #b6e7c9; -fx-fontfill: #000000;");
@@ -281,8 +285,15 @@ public class MainMenu extends Application{
 
     }
 
-    public void displayOverview(){
+    public void displayOverview() {
+        //displayCompletedOrders();
+        //displayBuildingOrders();
+        //displayOutOfStock();
 
+    }
+
+    public TableView getTable() {
+        return table;
     }
 
     public VBox displayTable(ResultSet queryResult){
