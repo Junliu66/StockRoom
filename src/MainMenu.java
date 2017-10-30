@@ -11,10 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
@@ -211,6 +209,10 @@ public class MainMenu extends Application{
         vBox = displayTable(rs);
         TableColumn shipButtons = new TableColumn("Ship");
         shipButtons.setMinWidth(60.0);
+        
+        // not using this for now
+//        stage.getScene().getStylesheets().add("");
+//        shipButtons.setStyle("-fx-base: #b6e7c9; -fx-fontfill: #000000;");
 
         shipButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
             @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
@@ -233,6 +235,10 @@ public class MainMenu extends Application{
             paddedButton.setPadding(new Insets(3));
             paddedButton.getChildren().add(shipButton);
             shipButton.setText("Ship");
+            // change text color
+            shipButton.setTextFill(Color.WHITE);
+            // change button color
+            shipButton.setBackground(new Background(new BackgroundFill(Color.DARKRED, new CornerRadii(3.0), new Insets(0.0))));
             shipButton.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
