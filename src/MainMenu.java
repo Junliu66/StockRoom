@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -15,6 +15,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.scene.image.Image;
@@ -98,15 +101,35 @@ public class MainMenu extends Application{
         BorderPane borderPane = new BorderPane();
 
         HBox hBox = new HBox();
+        hBox.setAlignment(Pos.TOP_CENTER);
         hBox.getChildren().addAll(inventory, orders, purchase, receiving, shipping, overview);
         borderPane.setTop(hBox);
         borderPane.setCenter(vBox);
+
+        showSplash(vBox);
 
         root = borderPane;
 
         stage.setScene(new Scene(root, 1000, 800));
         stage.show();
         this.stage = stage;
+    }
+
+    private void showSplash(VBox vBox) {
+        ImageView logo = new ImageView(new Image("Icons/stockroom-app.png"));
+//        vBox.setBackground(new Background(new BackgroundImage(logo, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0.5, true, Side.TOP, 0.0, true), null)));
+        Text credits = new Text();
+        credits.setTextAlignment(TextAlignment.CENTER);
+        credits.setFont(Font.font(20.0));
+        credits.setText("Created by:\nChunlei Li\nStefano Mauri\nChristian Wookey\nJunliu Zhang\nAndre Zhu");
+        GridPane creditsGrid = new GridPane();
+//        creditsGrid.setGridLinesVisible(true);
+        GridPane.setHalignment(credits, HPos.CENTER);
+        creditsGrid.setAlignment(Pos.CENTER);
+        creditsGrid.add(logo, 0, 1, 1, 1);
+        creditsGrid.add(credits, 0, 3, 1, 1);
+        creditsGrid.setVgap(25.0);
+        vBox.getChildren().add(creditsGrid);
     }
 
     public Button createButton(String text, String fileName ){
@@ -207,83 +230,9 @@ public class MainMenu extends Application{
 
     public void displayShipped(){
         Shipping shipping = new Shipping();
-        ResultSet rs = shipping.getCompletedWorkOrders();
-        vBox = displayTable(rs);
-
-
-        TableColumn shipButtons = new TableColumn("Ship");
-        shipButtons.setMinWidth(60.0);
-
-        // not using this for now
-//        stage.getScene().getStylesheets().add("");
-//        shipButtons.setStyle("-fx-base: #b6e7c9; -fx-fontfill: #000000;");
-
-        shipButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
-            @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
-                return new AddShipCell(stage, table);
-            }
-        });
-
-        table.getColumns().add(shipButtons);
-
-        root.setCenter(vBox);
-        stage.getScene().setRoot(root);
+        shipping.viewGUI(root, stage, table, this);
     }
 
-    private class AddShipCell extends TableCell<Object, Boolean> {
-        final Button shipButton = new Button();
-        final StackPane paddedButton = new StackPane();
-        final DoubleProperty buttonY = new SimpleDoubleProperty();
-
-        AddShipCell(final Stage stage, final TableView tableView) {
-            paddedButton.setPadding(new Insets(3));
-            paddedButton.getChildren().add(shipButton);
-            shipButton.setText("Ship");
-            // change text color
-            shipButton.setTextFill(Color.WHITE);
-            // change button color
-            shipButton.setBackground(new Background(new BackgroundFill(Color.DARKRED, new CornerRadii(3.0), new Insets(0.0))));
-            shipButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    buttonY.set(event.getScreenY());
-                }
-            });
-            shipButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    TableData data = (TableData) table.getItems().get(getTableRow().getIndex());
-                    SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
-                    Shipping shipping = new Shipping();
-                    shipping.shipOrder(orderID.intValue());
-                    table.getSelectionModel().select(getTableRow().getIndex());
-                    displayShipped();
-                }
-            });
-        }
-
-        @Override
-        protected void updateItem(Boolean item, boolean empty) {
-            super.updateItem(item, empty);
-            if (!empty) {
-                if (getTableRow() != null) {
-                    TableData data = (TableData) table.getItems().get(getTableRow().getIndex());
-                    SimpleStringProperty shipDate = (SimpleStringProperty) data.getAt(9);
-                    if (shipDate.getValue() == null) {
-                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        setGraphic(paddedButton);
-                    } else {
-                        setGraphic(null);
-                    }
-                } else {
-                    setGraphic(null);
-                }
-            } else {
-                setGraphic(null);
-            }
-        }
-
-    }
 
     /*****See OverviewUI ********/
     public void displayOverview() {
