@@ -52,7 +52,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button orders = createButton("Create Order", Paths.get("Icons", "Bill Materials.png").toString());
+        Button orders = createButton("Work Orders", Paths.get("Icons", "Bill Materials.png").toString());
         orders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
