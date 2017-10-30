@@ -1,7 +1,6 @@
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,6 +20,7 @@ public class WorkOrder {
 
     DBHandler stockroomDB = new DBHandler();
     Scanner reader = new Scanner(System.in);
+    public static String promptString = "";
 
     public void viewGUI(BorderPane root, Stage stage, TableView table) {
 
@@ -42,7 +42,7 @@ public class WorkOrder {
         create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                createWorkOrderGUI(root, stage, table);
+                createWorkOrderGUI(root, stage, new VBox());
                 //createWorkOrder();
             }
         });
@@ -65,7 +65,7 @@ public class WorkOrder {
             @Override
             public void handle(ActionEvent event) {
                 buildWorkOrderGUI(root, stage);
-                buildWorkOrder();
+
             }
         });
         build.setPadding(new Insets(10, 10, 10, 10));
@@ -76,7 +76,7 @@ public class WorkOrder {
             @Override
             public void handle(ActionEvent event) {
                 completeWorkOrderGUI(root, stage);
-                completeWorkOrder();
+
             }
         });
         complete.setPadding(new Insets(10, 10, 10, 10));
@@ -122,33 +122,35 @@ public class WorkOrder {
         stage.getScene().setRoot(root);
     }
 
-    private void createWorkOrderGUI(BorderPane root, Stage stage, TableView table) {
+    private void createWorkOrderGUI(BorderPane root, Stage stage, VBox window) {
         VBox rVBox = new VBox();
         Label woTitle = new Label ("CREATE WORK ORDERS");
+        woTitle.setScaleX(2.0);
+        woTitle.setScaleY(2.0);
+
+        VBox titleBox = new VBox();
+        titleBox.setPadding(new Insets(30));
+        titleBox.setAlignment(Pos.CENTER);
+        titleBox.getChildren().add(woTitle);
         MainMenu mainMenu = new MainMenu();
         ResultSet products = stockroomDB.query("SELECT product_id AS 'Product ID', product_name AS 'Product Name', date_created AS 'Date Created' FROM stockroomdb.PRODUCTS;");
         VBox productTable = mainMenu.displayTable(products);
-        rVBox.getChildren().addAll(woTitle, productTable);
-        TableColumn numQuantity = new TableColumn("Quantity");
+        productTable.setAlignment(Pos.CENTER);
+        rVBox.getChildren().addAll(titleBox, productTable);
         TableColumn createButtons = new TableColumn("Select One");
-        numQuantity.setMinWidth(60.0);
         createButtons.setMinWidth(60.0);
-
-        numQuantity.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
-            @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
-                return new addCell(stage, mainMenu.getTable(), 1);
-            }
-        });
 
         createButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
             @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
-                return new addCell(stage, mainMenu.getTable(), 0);
+                return new addCell(root, stage, 0);
             }
         });
 
-        mainMenu.getTable().getColumns().add(numQuantity);
         mainMenu.getTable().getColumns().add(createButtons);
+        mainMenu.getTable().setMaxWidth(400);
+        rVBox.getChildren().add(window);
         root.setCenter(rVBox);
+
         stage.getScene().setRoot(root);
     }
     private void kitWorkOrderGUI(BorderPane root, Stage stage) {
@@ -156,8 +158,18 @@ public class WorkOrder {
         Label woTitle = new Label ("KIT WORK ORDERS");
         MainMenu mainMenu = new MainMenu();
         ResultSet workOrders = stockroomDB.query("SELECT wo.order_id, p.product_name, wo.quantity, wo.status FROM stockroomdb.WORKORDERS AS wo JOIN stockroomdb.PRODUCTS AS p ON wo.product_id = p.product_id WHERE status = 'CREATED';");
+        VBox productTable = mainMenu.displayTable(workOrders);
+        rVBox.getChildren().addAll(woTitle, productTable);
+        TableColumn kitButtons = new TableColumn("Select One");
+        kitButtons.setMinWidth(60.0);
 
-        rVBox.getChildren().addAll(woTitle, mainMenu.displayTable(workOrders));
+        kitButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
+            @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
+                return new addCell(root, stage, 1);
+            }
+        });
+
+        mainMenu.getTable().getColumns().add(kitButtons);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
     }
@@ -167,8 +179,18 @@ public class WorkOrder {
         Label woTitle = new Label ("BUILD WORK ORDERS");
         MainMenu mainMenu = new MainMenu();
         ResultSet workOrders = stockroomDB.query("SELECT wo.order_id, p.product_name, wo.quantity, wo.status FROM stockroomdb.WORKORDERS AS wo JOIN stockroomdb.PRODUCTS AS p ON wo.product_id = p.product_id WHERE status = 'KITTED';");
+        VBox orderTable = mainMenu.displayTable(workOrders);
+        rVBox.getChildren().addAll(woTitle, orderTable);
+        TableColumn buildButtons = new TableColumn("Select One");
+        buildButtons.setMinWidth(60.0);
 
-        rVBox.getChildren().addAll(woTitle, mainMenu.displayTable(workOrders));
+        buildButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
+            @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
+                return new addCell(root, stage, 2);
+            }
+        });
+
+        mainMenu.getTable().getColumns().add(buildButtons);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
     }
@@ -178,8 +200,18 @@ public class WorkOrder {
         Label woTitle = new Label ("COMPLETE WORK ORDERS");
         MainMenu mainMenu = new MainMenu();
         ResultSet workOrders = stockroomDB.query("SELECT wo.order_id, p.product_name, wo.quantity, wo.status FROM stockroomdb.WORKORDERS AS wo JOIN stockroomdb.PRODUCTS AS p ON wo.product_id = p.product_id WHERE status = 'BUILDING';");
+        VBox orderTable = mainMenu.displayTable(workOrders);
+        rVBox.getChildren().addAll(woTitle, orderTable);
+        TableColumn completeButtons = new TableColumn("Select One");
+        completeButtons.setMinWidth(60.0);
 
-        rVBox.getChildren().addAll(woTitle, mainMenu.displayTable(workOrders));
+        completeButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
+            @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
+                return new addCell(root, stage, 3);
+            }
+        });
+
+        mainMenu.getTable().getColumns().add(completeButtons);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
     }
@@ -490,53 +522,114 @@ public class WorkOrder {
     }
 
     private class addCell extends TableCell<Object, Boolean> {
-        final Button createButton = new Button();
+        final Button newButton = new Button();
         final TextField createdTextField = new TextField();
         final StackPane paddedButton = new StackPane();
         final DoubleProperty buttonY = new SimpleDoubleProperty();
 
         TableView table = new TableView();
 
-        addCell(final Stage stage, final TableView tableView, final int choice) {
+        addCell(final BorderPane root, final Stage stage, final int choice) {
+            MainMenu mainMenu = new MainMenu();
             paddedButton.setPadding(new Insets(3));
 
             switch (choice) {
                 case 0:
-
-                    paddedButton.getChildren().add(createButton);
-                    createButton.setText("CREATE");
-                    createButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+                    paddedButton.getChildren().add(newButton);
+                    newButton.setText("CREATE");
+                    newButton.setOnMousePressed(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
                             buttonY.set(event.getScreenY());
                         }
                     });
-                    createButton.setOnAction(new EventHandler<ActionEvent>() {
+                    newButton.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
-                            TableData data = (TableData) tableView.getItems().get(getTableRow().getIndex());
-                            SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
-                            //Shipping shipping = new Shipping();
-                            //shipping.shipOrder(orderID.intValue());
-                            tableView.getSelectionModel().select(getTableRow().getIndex());
-                            //displayShipped();
+                            TableData data = (TableData) mainMenu.getTable().getItems().get(getTableRow().getIndex());
+                            SimpleIntegerProperty productID = (SimpleIntegerProperty) data.getAt(1);
+                            int productIDint = productID.getValue();
+                            confirmOrderSelection(root, stage, productIDint);
                         }
                     });
                     break;
                 case 1:
-                    paddedButton.getChildren().add(createdTextField);
+                    paddedButton.getChildren().add(newButton);
+                    newButton.setText("KIT");
+                    newButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            buttonY.set(event.getScreenY());
+                        }
+                    });
+                    newButton.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            TableData data = (TableData) mainMenu.getTable().getItems().get(getTableRow().getIndex());
+                            SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
+                            int orderIDint = orderID.getValue();
+
+                            ResultSet parts = stockroomDB.query("SELECT oi.parts_id, p.part_description, oi.amount_needed, amount_filled FROM stockroomdb.ORDER_ITEMS as oi JOIN stockroomdb.PARTS as p ON oi.parts_id = p.parts_id WHERE order_id = " + orderIDint + " AND amount_needed > amount_filled;");
+                            try {
+                                parts.beforeFirst();
+                            }
+                            catch (SQLException e)
+                            {
+                                e.printStackTrace();
+                            }
+                            kittingGUI(root, stage, parts, orderIDint);
+                        }
+                    });
                     break;
                 case 2:
-                    //createWorkOrder();
+                    paddedButton.getChildren().add(newButton);
+                    newButton.setText("BUILD");
+                    newButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            buttonY.set(event.getScreenY());
+                        }
+                    });
+                    newButton.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            TableData data = (TableData) mainMenu.getTable().getItems().get(getTableRow().getIndex());
+                            SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
+                            int orderIDint = orderID.getValue();
+
+                            stockroomDB.updateQuery("UPDATE stockroomdb.WORKORDERS SET status = 'BUILDING', date_building = NOW() WHERE order_id = " + orderIDint + ";");
+
+                            buildWorkOrderGUI(root, stage);
+                        }
+                    });
                     break;
                 case 3:
-                    kitWorkOrder();
+                    paddedButton.getChildren().add(newButton);
+                    newButton.setText("COMPLETE");
+                    newButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            buttonY.set(event.getScreenY());
+                        }
+                    });
+                    newButton.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            TableData data = (TableData) mainMenu.getTable().getItems().get(getTableRow().getIndex());
+                            SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
+                            int orderIDint = orderID.getValue();
+
+                            stockroomDB.updateQuery("UPDATE stockroomdb.WORKORDERS SET status = 'COMPLETED', date_completed = NOW() WHERE order_id = " + orderIDint + ";");
+
+                            completeWorkOrderGUI(root, stage);
+                        }
+                    });
                     break;
                 case 4:
-                    buildWorkOrder();
+
                     break;
-                case 5:
-                    completeWorkOrder();
+
+
             }
 
 
@@ -565,6 +658,136 @@ public class WorkOrder {
                 setGraphic(null);
             }
         }
+
+    }
+
+    private void kittingGUI(BorderPane root, Stage stage, ResultSet parts, int chosenOrderID) {
+        VBox rVBox = new VBox();
+        Label woTitle = new Label ("KITTING WORK ORDERS");
+        woTitle.setScaleX(2.0);
+        woTitle.setScaleY(2.0);
+
+        VBox titleBox = new VBox();
+        titleBox.setPadding(new Insets(30));
+        titleBox.setAlignment(Pos.CENTER);
+        titleBox.getChildren().add(woTitle);
+
+
+        try {
+            parts.next();
+
+            promptString = "Part Number : [" + parts.getInt(1) + "] \nPart Description : [" + parts.getString(2) + "] \nAmount Needed: [" + parts.getInt(3) + "] \nAmount Filled Already: [" + parts.getInt(4) + "]";
+        }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+        Label prompt = new Label(promptString);
+
+        VBox currentPart = new VBox();
+        currentPart.setAlignment(Pos.CENTER);
+        currentPart.getChildren().add(prompt);
+
+        Button fillFull = new Button("Fill Part");
+        fillFull.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                int parts_id = 0;
+                try { parts_id = parts.getInt(1); } catch (SQLException e) {e.printStackTrace();}
+                stockroomDB.updateQuery("UPDATE stockroomdb.ORDER_ITEMS SET amount_filled = amount_needed WHERE order_id = " + chosenOrderID + " AND parts_id = " + parts_id + ";");
+                kittingGUI(root, stage, parts, chosenOrderID);
+            }
+        });
+        fillFull.setPadding(new Insets(10, 10, 10, 10));
+        fillFull.setMinWidth(200);
+
+        Button fillEmpty = new Button("Can't Fill At All");
+        fillEmpty.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                kittingGUI(root, stage, parts, chosenOrderID);
+            }
+        });
+        fillEmpty.setPadding(new Insets(10));
+        fillEmpty.setMinWidth(200);
+
+        TextField amountToFill = new TextField();
+        amountToFill.setPadding(new Insets(10));
+        amountToFill.setMinWidth(100);
+        amountToFill.setMaxWidth(100);
+
+        Button fillAmount = new Button("Add Custom Amount to Kit");
+        fillAmount.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                int parts_id = 0;
+                try { parts_id = parts.getInt(1); } catch (SQLException e) {e.printStackTrace();}
+                int amountToAdd = Integer.parseInt(amountToFill.getText());
+                stockroomDB.updateQuery("UPDATE stockroomdb.ORDER_ITEMS SET amount_filled = " + amountToAdd + " WHERE order_id = " + chosenOrderID + " AND parts_id = " + parts_id + ";");
+                kittingGUI(root, stage, parts, chosenOrderID);
+            }
+        });
+
+        fillAmount.setPadding(new Insets(10, 10, 10, 10));
+        fillAmount.setMinWidth(200);
+
+        rVBox.setAlignment(Pos.TOP_CENTER);
+        rVBox.setSpacing(10);
+        rVBox.getChildren().addAll(titleBox, currentPart, fillFull, fillEmpty, amountToFill, fillAmount);
+        root.setCenter(rVBox);
+        stage.getScene().setRoot(root);
+    }
+
+    private void confirmOrderSelection(BorderPane root, Stage stage, int productIDint) {
+
+        VBox window = new VBox();
+        window.setPadding(new Insets(30));
+        window.setSpacing(10);
+        window.setAlignment(Pos.CENTER);
+        String text = "You have selected Product ID: [" + productIDint + "] ";
+        Label prompt = new Label(text);
+        Label prompt2 = new Label("Please select the quantity for the order: ");
+        TextField quantityTF = new TextField();
+        HBox quantityPrompt = new HBox();
+        quantityPrompt.getChildren().addAll(prompt2, quantityTF);
+        quantityPrompt.setAlignment(Pos.CENTER);
+
+        Button confirm = new Button("CONFIRM ORDER");
+        confirm.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                int quantity = Integer.parseInt(quantityTF.getText());
+                stockroomDB.updateQuery("INSERT INTO stockroomdb.WORKORDERS (product_id, quantity, status, date_created) " +
+                        "VALUES (" + productIDint + ", " + quantity + ", 'CREATED', NOW())");
+
+                ResultSet newOrderID = stockroomDB.query("SELECT LAST_INSERT_ID();");
+                String orderID = "";
+                try {
+                    newOrderID.first();
+                    orderID += newOrderID.getInt(1);
+                }
+                catch(SQLException e){
+                    e.printStackTrace();
+                }
+
+                int addingWorkOrder = stockroomDB.updateQuery("INSERT INTO stockroomdb.ORDER_ITEMS (parts_id, product_id, order_id, amount_needed) " +
+                        "SELECT parts_id, product_id, '" + orderID + "', (quantity * " + quantity + ") " +
+                        "FROM stockroomdb.PRODUCT_BOM " +
+                        "WHERE product_id = " + productIDint + ";");
+                Label confirmation = new Label ("NEW WORK ORDER ADDED TO DATABASE");
+                confirmation.setScaleX(1.5);
+                confirmation.setScaleY(1.5);
+
+                VBox confirmationBox = new VBox();
+                confirmationBox.setPadding(new Insets(40));
+                confirmationBox.setAlignment(Pos.CENTER);
+                confirmationBox.getChildren().add(confirmation);
+                createWorkOrderGUI(root, stage, confirmationBox);
+            }
+        });
+
+        window.getChildren().addAll(prompt, quantityPrompt, confirm);
+
+        createWorkOrderGUI(root, stage, window);
 
     }
 
