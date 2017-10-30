@@ -28,6 +28,7 @@ public class OverviewUI {
             @Override
             public void handle(ActionEvent event) {
                 displayCompletedOrders(root, stage);
+                Overview.orderCompleted();
             }
         });
         complatedOrders.setPadding(new Insets(10, 10, 10, 10));
@@ -38,6 +39,7 @@ public class OverviewUI {
             @Override
             public void handle(ActionEvent event) {
                 displayBuildingOrders(root, stage);
+                Overview.buildingOrders();
             }
         });
         buildingOrders.setPadding(new Insets(10, 10, 10, 10));
@@ -48,6 +50,7 @@ public class OverviewUI {
             @Override
             public void handle(ActionEvent event) {
                 displayOutOfStock(root, stage);
+                Purchasing.outOfStock();
             }
         });
         missingQuantity.setPadding(new Insets(10, 10, 10, 10));

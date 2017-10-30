@@ -24,31 +24,6 @@ public class Part {
         this.quantity = quantity;
     }
 
-    public void setOrderID(int orderID) {
-        this.orderID = orderID;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
-    }
-
-    public void setMissingQuantity(int missingQuantity) {
-        this.missingQuantity = missingQuantity;
-    }
-
-
     public int getPartID() {
         return partID;
     }
@@ -61,34 +36,9 @@ public class Part {
         return quantity;
     }
 
-    public int getOrderID() {
-        return orderID;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getVendor() {
-        return vendor;
-    }
-
-    public int getMissingQuantity() {
-        return missingQuantity;
-    }
-
     public String displayInventoty() {
         return String.format("%5s%15d%15s", getPartID(), getPartNumber(), getQuantity());
 
     }
-
 
 }

@@ -33,7 +33,7 @@ public class WorkOrder {
             public void handle(ActionEvent event) {
 
                 viewWorkOrdersGUI(root, stage);
-                //viewWorkOrders();
+                viewWorkOrders();
             }
         });
         view.setPadding(new Insets(10, 10, 10, 10));
@@ -43,8 +43,8 @@ public class WorkOrder {
         create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //createWorkOrderGUI(root, stage, new VBox());
-                //createWorkOrder();
+                createWorkOrderGUI(root, stage, new VBox());
+                createWorkOrder();
             }
         });
         create.setPadding(new Insets(10, 10, 10, 10));
@@ -54,8 +54,8 @@ public class WorkOrder {
         kit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //kitWorkOrderGUI(root, stage);
-                //kitWorkOrder();
+                kitWorkOrderGUI(root, stage);
+                kitWorkOrder();
             }
         });
         kit.setPadding(new Insets(10, 10, 10, 10));
@@ -65,7 +65,7 @@ public class WorkOrder {
         build.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //buildWorkOrderGUI(root, stage);
+                buildWorkOrderGUI(root, stage);
 
             }
         });
@@ -76,7 +76,7 @@ public class WorkOrder {
         complete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //completeWorkOrderGUI(root, stage);
+                completeWorkOrderGUI(root, stage);
 
             }
         });
@@ -87,8 +87,8 @@ public class WorkOrder {
         product.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //newProductBOMGUI(root, stage);
-                //createWorkOrder();
+                newProductBOMGUI(root, stage);
+                createWorkOrder();
             }
         });
         product.setPadding(new Insets(10, 10, 10, 10));
@@ -122,7 +122,7 @@ public class WorkOrder {
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
     }
-/**
+
     private void createWorkOrderGUI(BorderPane root, Stage stage, VBox window) {
         VBox rVBox = new VBox();
         Label woTitle = new Label ("CREATE WORK ORDERS");
@@ -791,5 +791,4 @@ public class WorkOrder {
         createWorkOrderGUI(root, stage, window);
 
     }
-**/
 }

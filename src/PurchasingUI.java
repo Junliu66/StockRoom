@@ -26,6 +26,7 @@ public class PurchasingUI {
             @Override
             public void handle(ActionEvent event) {
                 outOfStock(root, stage);
+                Purchasing.outOfStock();
             }
         });
         missingQauntity.setPadding(new Insets(10, 10, 10, 10));
@@ -36,6 +37,7 @@ public class PurchasingUI {
             @Override
             public void handle(ActionEvent event) {
                 lowQuantity(root, stage);
+                Purchasing.lowQuantity();
             }
         });
         lowQuantity.setPadding(new Insets(10, 10, 10, 10));

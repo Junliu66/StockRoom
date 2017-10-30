@@ -28,7 +28,7 @@ public class MainMenu extends Application{
     public static void main(String[] args){
         launch(args);
     }
-    public TableView table = new TableView();
+    public static TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
     private BorderPane root = new BorderPane();
@@ -220,17 +220,13 @@ public class MainMenu extends Application{
 
     }
 
-    /*****See OverviewUI ********/
     public void displayOverview() {
-        //displayCompletedOrders();
-        //displayBuildingOrders();
-        //displayOutOfStock();
 
     }
 
-    //public static TableView getTable() {
-    //    return table;
-    //}
+    public static TableView getTable() {
+        return table;
+    }
 
     public VBox displayTable(ResultSet queryResult){
         table.getColumns().clear();
