@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class WorkOrder {
 
     DBHandler stockroomDB = new DBHandler();
@@ -42,7 +43,7 @@ public class WorkOrder {
         create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                createWorkOrderGUI(root, stage, new VBox());
+                //createWorkOrderGUI(root, stage, new VBox());
                 //createWorkOrder();
             }
         });
@@ -53,7 +54,7 @@ public class WorkOrder {
         kit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                kitWorkOrderGUI(root, stage);
+                //kitWorkOrderGUI(root, stage);
                 //kitWorkOrder();
             }
         });
@@ -64,7 +65,7 @@ public class WorkOrder {
         build.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                buildWorkOrderGUI(root, stage);
+                //buildWorkOrderGUI(root, stage);
 
             }
         });
@@ -75,7 +76,7 @@ public class WorkOrder {
         complete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                completeWorkOrderGUI(root, stage);
+                //completeWorkOrderGUI(root, stage);
 
             }
         });
@@ -86,7 +87,7 @@ public class WorkOrder {
         product.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                newProductBOMGUI(root, stage);
+                //newProductBOMGUI(root, stage);
                 //createWorkOrder();
             }
         });
@@ -121,7 +122,7 @@ public class WorkOrder {
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
     }
-
+/**
     private void createWorkOrderGUI(BorderPane root, Stage stage, VBox window) {
         VBox rVBox = new VBox();
         Label woTitle = new Label ("CREATE WORK ORDERS");
@@ -245,19 +246,19 @@ public class WorkOrder {
 
         switch (option) {
             case 1: viewWorkOrders();
-                    break;
+                break;
             case 2: //createWorkOrder();
-                    break;
+                break;
             case 3: kitWorkOrder();
-                    break;
+                break;
             case 4: buildWorkOrder();
-                    break;
+                break;
             case 5: completeWorkOrder();
-                    break;
+                break;
             case 6: newProductBOM();
-                    break;
+                break;
             default: System.out.println("Invalid answer.");
-                    break;
+                break;
         }
     }
 
@@ -500,7 +501,7 @@ public class WorkOrder {
         values.add("NOW()");
 
         stockroomDB.updateQuery("INSERT INTO stockroomdb.WORKORDERS (product_id, quantity, status, date_created) " +
-                        "VALUES (" + productID + ", " + quantity + ", 'CREATED', NOW())");
+                "VALUES (" + productID + ", " + quantity + ", 'CREATED', NOW())");
 
         ResultSet newOrderID = stockroomDB.query("SELECT LAST_INSERT_ID();");
         String orderID = "";
@@ -790,6 +791,5 @@ public class WorkOrder {
         createWorkOrderGUI(root, stage, window);
 
     }
-
+**/
 }
-

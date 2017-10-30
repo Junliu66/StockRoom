@@ -28,7 +28,7 @@ public class MainMenu extends Application{
     public static void main(String[] args){
         launch(args);
     }
-    public static TableView table = new TableView();
+    public TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
     private BorderPane root = new BorderPane();
@@ -64,7 +64,8 @@ public class MainMenu extends Application{
         purchase.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayPurchaseForm();
+                PurchasingUI purchasingUI = new PurchasingUI();
+                purchasingUI.viewGUI(root, stage, table);
             }
         });
 
@@ -91,7 +92,8 @@ public class MainMenu extends Application{
         overview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayOverview();
+                OverviewUI overView = new OverviewUI();
+                overView.viewGUI(root, stage, table);
             }
         });
         BorderPane borderPane = new BorderPane();
@@ -226,9 +228,9 @@ public class MainMenu extends Application{
 
     }
 
-    public static TableView getTable() {
-        return table;
-    }
+    //public static TableView getTable() {
+    //    return table;
+    //}
 
     public VBox displayTable(ResultSet queryResult){
         table.getColumns().clear();
