@@ -9,15 +9,12 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.Pair;
 import javafx.scene.image.Image;
 
 import java.awt.*;
@@ -154,6 +151,8 @@ public class MainMenu extends Application{
         Shipping shipping = new Shipping();
         ResultSet rs = shipping.getCompletedWorkOrders();
         vBox = displayTable(rs);
+
+
         TableColumn shipButtons = new TableColumn("Ship");
         shipButtons.setMinWidth(60.0);
 
@@ -220,7 +219,10 @@ public class MainMenu extends Application{
 
     }
 
-    public void displayOverview(){
+    public void displayOverview() {
+        //displayCompletedOrders();
+        //displayBuildingOrders();
+        //displayOutOfStock();
 
     }
 

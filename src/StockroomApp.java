@@ -93,6 +93,7 @@ public class StockroomApp {
 
     private static void shipping() {
         System.out.print("Shipping items are: \n> ");
+        Shipping.displayShipping();
     }
 
     private static void overview() {

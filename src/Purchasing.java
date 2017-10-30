@@ -3,6 +3,7 @@
  */
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -32,7 +33,9 @@ public class Purchasing {
         }
     }
 
-    public static void outOfStock() {
+    public static ArrayList<Part> outOfStock() {
+
+        ArrayList<Part> outOfStockList = new ArrayList<>();
         DBHandler testDB = new DBHandler();
 
         ResultSet table1_parts_id = testDB.query("SELECT DISTINCT p.parts_id FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
@@ -46,11 +49,17 @@ public class Purchasing {
             table1_part_vendor.beforeFirst();
             table1_order_missing_quantity.beforeFirst();
 
-
             System.out.println("=====================================================================================================================================================");
             System.out.printf("||%-10s |%-90s |%-20s |%-15s ||", "Part ID", "           Description", "      Vendor ", "  Missing Quantity");
             System.out.println("\n=====================================================================================================================================================");
             while (table1_parts_id.next() && table1_part_description.next() && table1_part_vendor.next() && table1_order_missing_quantity.next()) {
+
+                Part outOfStock = new Part();
+                outOfStock.setPartID(table1_parts_id.getInt(1));
+                outOfStock.setDescription(table1_part_description.getString(1));
+                outOfStock.setVendor(table1_part_vendor.getString(1));
+                outOfStock.setMissingQuantity(table1_order_missing_quantity.getInt(1));
+                outOfStockList.add(outOfStock);
 
                 System.out.printf("||%-10d |%-90s |%-20s |%-15s    ||\n", table1_parts_id.getInt(1), table1_part_description.getString(1), table1_part_vendor.getString(1), table1_order_missing_quantity.getInt(1));
 
@@ -58,6 +67,7 @@ public class Purchasing {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return outOfStockList;
 
     }
 
