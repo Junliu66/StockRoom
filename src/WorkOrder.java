@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class WorkOrder {
 
     DBHandler stockroomDB = new DBHandler();
@@ -32,7 +33,7 @@ public class WorkOrder {
             public void handle(ActionEvent event) {
 
                 viewWorkOrdersGUI(root, stage);
-                //viewWorkOrders();
+                viewWorkOrders();
             }
         });
         view.setPadding(new Insets(10, 10, 10, 10));
@@ -43,7 +44,7 @@ public class WorkOrder {
             @Override
             public void handle(ActionEvent event) {
                 createWorkOrderGUI(root, stage, new VBox());
-                //createWorkOrder();
+                createWorkOrder();
             }
         });
         create.setPadding(new Insets(10, 10, 10, 10));
@@ -54,7 +55,7 @@ public class WorkOrder {
             @Override
             public void handle(ActionEvent event) {
                 kitWorkOrderGUI(root, stage);
-                //kitWorkOrder();
+                kitWorkOrder();
             }
         });
         kit.setPadding(new Insets(10, 10, 10, 10));
@@ -87,7 +88,7 @@ public class WorkOrder {
             @Override
             public void handle(ActionEvent event) {
                 newProductBOMGUI(root, stage);
-                //createWorkOrder();
+                createWorkOrder();
             }
         });
         product.setPadding(new Insets(10, 10, 10, 10));
@@ -245,19 +246,19 @@ public class WorkOrder {
 
         switch (option) {
             case 1: viewWorkOrders();
-                    break;
+                break;
             case 2: //createWorkOrder();
-                    break;
+                break;
             case 3: kitWorkOrder();
-                    break;
+                break;
             case 4: buildWorkOrder();
-                    break;
+                break;
             case 5: completeWorkOrder();
-                    break;
+                break;
             case 6: newProductBOM();
-                    break;
+                break;
             default: System.out.println("Invalid answer.");
-                    break;
+                break;
         }
     }
 
@@ -500,7 +501,7 @@ public class WorkOrder {
         values.add("NOW()");
 
         stockroomDB.updateQuery("INSERT INTO stockroomdb.WORKORDERS (product_id, quantity, status, date_created) " +
-                        "VALUES (" + productID + ", " + quantity + ", 'CREATED', NOW())");
+                "VALUES (" + productID + ", " + quantity + ", 'CREATED', NOW())");
 
         ResultSet newOrderID = stockroomDB.query("SELECT LAST_INSERT_ID();");
         String orderID = "";
@@ -790,6 +791,4 @@ public class WorkOrder {
         createWorkOrderGUI(root, stage, window);
 
     }
-
 }
-

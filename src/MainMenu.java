@@ -21,7 +21,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.scene.image.Image;
-import javafx.scene.*;
 
 import java.nio.file.Paths;
 import java.sql.ResultSet;
@@ -34,7 +33,7 @@ public class MainMenu extends Application{
     public static void main(String[] args){
         launch(args);
     }
-    private static TableView table = new TableView();
+    public static TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
     private BorderPane root = new BorderPane();
@@ -70,7 +69,8 @@ public class MainMenu extends Application{
         purchase.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayPurchaseForm();
+                PurchasingUI purchasingUI = new PurchasingUI();
+                purchasingUI.viewGUI(root, stage, table);
             }
         });
 
@@ -78,8 +78,10 @@ public class MainMenu extends Application{
         receiving.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayReceivingOption();
+               ReceivingGUI Receiving = new ReceivingGUI();
+                Receiving.viewGUI(root, stage, table);
             }
+
         });
 
         Button shipping = createButton("Shipped Orders", Paths.get("Icons", "shipping.png").toString());
@@ -95,7 +97,8 @@ public class MainMenu extends Application{
         overview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayOverview();
+                OverviewUI overView = new OverviewUI();
+                overView.viewGUI(root, stage, table);
             }
         });
         BorderPane borderPane = new BorderPane();
@@ -169,64 +172,6 @@ public class MainMenu extends Application{
 
     }
 
-    public void submitReceived() {
-
-    }
-
-
-    public void getReceiveingAmount() {
-        System.out.println("Entering received parts");
-        VBox rVBox = new VBox();
-
-        Label label1 = new Label("Enter Part ID: ");
-        TextField pid = new TextField ();
-        HBox hb1 = new HBox();
-        hb1.getChildren().addAll(label1, pid);
-        hb1.setSpacing(10);
-
-        Label label2 = new Label("Enter Quantity: ");
-        TextField qtt = new TextField();
-        HBox hb2 = new HBox();
-        hb2.getChildren().addAll(label2, qtt);
-        hb2.setSpacing(10);
-
-        Button submit = new Button("submit");
-        submit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String partId = pid.getText();
-                String quantity = qtt.getText();
-                System.out.println("part id from user: " + partId);
-                System.out.println("quantity from user: " + quantity);
-                // call Receiving class here
-                ReceivingMenu menu = new ReceivingMenu();
-                menu.submit(Integer.parseInt(partId), Integer.parseInt(quantity));
-            }
-        });
-        rVBox.getChildren().addAll(hb1, hb2, submit);
-        root.setCenter(rVBox);
-        stage.getScene().setRoot(root);
-    }
-
-    public void displayReceivingOption(){
-        System.out.println("Do you want to record?");
-        VBox rVBox = new VBox();
-        Label t = new Label();
-        t.setText("Do you want to record?");
-        Button yes = new Button("YES");
-        yes.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                getReceiveingAmount();
-            }
-        });
-        Button no = new Button("NO");
-        HBox buttons = new HBox();
-        buttons.getChildren().addAll(yes, no);
-        rVBox.getChildren().addAll(t, buttons);
-        root.setCenter(rVBox);
-        stage.getScene().setRoot(root);
-    }
 
     public void displayShipped(){
         Shipping shipping = new Shipping();
@@ -234,15 +179,11 @@ public class MainMenu extends Application{
     }
 
 
-    /*****See OverviewUI ********/
     public void displayOverview() {
-        //displayCompletedOrders();
-        //displayBuildingOrders();
-        //displayOutOfStock();
 
     }
 
-    public TableView getTable() {
+    public static TableView getTable() {
         return table;
     }
 
@@ -260,7 +201,7 @@ public class MainMenu extends Application{
                 TableColumn column = new TableColumn(colName);
                 column.setMinWidth((double) size);
                 int type = dbData.getColumnType(i);
-                if(type == Types.INTEGER){
+                if(type == Types.INTEGER || type == Types.BIGINT){
                     column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TableData, Integer>, ObservableValue<Integer>>() {
                         @Override
                         public ObservableValue<Integer> call(TableColumn.CellDataFeatures<TableData, Integer> param) {
@@ -296,7 +237,7 @@ public class MainMenu extends Application{
                 TableData tableData = new TableData();
                 for(int i = 1; i <= dbData.getColumnCount(); i++){
                     int type = dbData.getColumnType(i);
-                    if(type == Types.INTEGER){
+                    if(type == Types.INTEGER || type == Types.BIGINT ){
                         tableData.add(queryResult.getInt(i));
                     }
                     else if(type == Types.VARCHAR){
@@ -304,13 +245,13 @@ public class MainMenu extends Application{
                     }
                     else if(type == Types.TIMESTAMP){
                         tableData.add(queryResult.getString(i));
+                    } else {
+                        System.out.println("does not find type " + type);
                     }
                 }
                 data.add(tableData);
             }
-
             table.setItems(data);
-
         }
         catch (java.sql.SQLException e){
             System.out.println(e);
