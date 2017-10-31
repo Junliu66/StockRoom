@@ -67,7 +67,7 @@ public class OverviewUI {
         title.setAlignment(Pos.CENTER);
 
         rVBox.getChildren().addAll(title, complatedOrders, buildingOrders, missingQuantity);
-        //rVBox.setPadding(new Insets(100, 100, 100, 300));
+        rVBox.setPadding(new Insets(100, 100, 100, 300));
         rVBox.setSpacing(10);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);

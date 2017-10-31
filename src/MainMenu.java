@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -27,6 +28,7 @@ public class MainMenu extends Application{
     public static void main(String[] args){
         launch(args);
     }
+    public static final JFXPanel fxPanel = new JFXPanel();
     public static TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
