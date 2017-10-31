@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -13,10 +13,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.scene.image.Image;
-import javafx.scene.*;
 
 import java.nio.file.Paths;
 import java.sql.ResultSet;
@@ -29,7 +33,7 @@ public class MainMenu extends Application{
     public static void main(String[] args){
         launch(args);
     }
-    private static TableView table = new TableView();
+    public static TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
     private BorderPane root = new BorderPane();
@@ -65,7 +69,8 @@ public class MainMenu extends Application{
         purchase.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayPurchaseForm();
+                PurchasingUI purchasingUI = new PurchasingUI();
+                purchasingUI.viewGUI(root, stage, table);
             }
         });
 
@@ -73,8 +78,10 @@ public class MainMenu extends Application{
         receiving.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayReceivingOption();
+               ReceivingGUI Receiving = new ReceivingGUI();
+                Receiving.viewGUI(root, stage);
             }
+
         });
 
         Button shipping = createButton("Shipped Orders", Paths.get("Icons", "shipping.png").toString());
@@ -90,21 +97,42 @@ public class MainMenu extends Application{
         overview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                displayOverview();
+                OverviewUI overView = new OverviewUI();
+                overView.viewGUI(root, stage, table);
             }
         });
         BorderPane borderPane = new BorderPane();
 
         HBox hBox = new HBox();
+        hBox.setAlignment(Pos.TOP_CENTER);
         hBox.getChildren().addAll(inventory, orders, purchase, receiving, shipping, overview);
         borderPane.setTop(hBox);
         borderPane.setCenter(vBox);
+
+        showSplash(vBox);
 
         root = borderPane;
 
         stage.setScene(new Scene(root, 1000, 800));
         stage.show();
         this.stage = stage;
+    }
+
+    private void showSplash(VBox vBox) {
+        ImageView logo = new ImageView(new Image("Icons/stockroom-app.png"));
+//        vBox.setBackground(new Background(new BackgroundImage(logo, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0.5, true, Side.TOP, 0.0, true), null)));
+        Text credits = new Text();
+        credits.setTextAlignment(TextAlignment.CENTER);
+        credits.setFont(Font.font(20.0));
+        credits.setText("Created by:\nChunlei Li\nStefano Mauri\nChristian Wookey\nJunliu Zhang\nAndre Zhu");
+        GridPane creditsGrid = new GridPane();
+//        creditsGrid.setGridLinesVisible(true);
+        GridPane.setHalignment(credits, HPos.CENTER);
+        creditsGrid.setAlignment(Pos.CENTER);
+        creditsGrid.add(logo, 0, 1, 1, 1);
+        creditsGrid.add(credits, 0, 3, 1, 1);
+        creditsGrid.setVgap(25.0);
+        vBox.getChildren().add(creditsGrid);
     }
 
     public Button createButton(String text, String fileName ){
@@ -144,146 +172,18 @@ public class MainMenu extends Application{
 
     }
 
-    public void submitReceived() {
-
-    }
-
-
-    public void getReceiveingAmount() {
-        System.out.println("Entering received parts");
-        VBox rVBox = new VBox();
-
-        Label label1 = new Label("Enter Part ID: ");
-        TextField pid = new TextField ();
-        HBox hb1 = new HBox();
-        hb1.getChildren().addAll(label1, pid);
-        hb1.setSpacing(10);
-
-        Label label2 = new Label("Enter Quantity: ");
-        TextField qtt = new TextField();
-        HBox hb2 = new HBox();
-        hb2.getChildren().addAll(label2, qtt);
-        hb2.setSpacing(10);
-
-        Button submit = new Button("submit");
-        submit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String partId = pid.getText();
-                String quantity = qtt.getText();
-                System.out.println("part id from user: " + partId);
-                System.out.println("quantity from user: " + quantity);
-                // call Receiving class here
-                ReceivingMenu menu = new ReceivingMenu();
-                menu.submit(Integer.parseInt(partId), Integer.parseInt(quantity));
-            }
-        });
-        rVBox.getChildren().addAll(hb1, hb2, submit);
-        root.setCenter(rVBox);
-        stage.getScene().setRoot(root);
-    }
-
-    public void displayReceivingOption(){
-        System.out.println("Do you want to record?");
-        VBox rVBox = new VBox();
-        Label t = new Label();
-        t.setText("Do you want to record?");
-        Button yes = new Button("YES");
-        yes.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                getReceiveingAmount();
-            }
-        });
-        Button no = new Button("NO");
-        HBox buttons = new HBox();
-        buttons.getChildren().addAll(yes, no);
-        rVBox.getChildren().addAll(t, buttons);
-        root.setCenter(rVBox);
-        stage.getScene().setRoot(root);
-    }
 
     public void displayShipped(){
         Shipping shipping = new Shipping();
-        ResultSet rs = shipping.getCompletedWorkOrders();
-        vBox = displayTable(rs);
-
-
-        TableColumn shipButtons = new TableColumn("Ship");
-        shipButtons.setMinWidth(60.0);
-
-        shipButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
-            @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
-                return new AddShipCell(stage, table);
-            }
-        });
-
-        table.getColumns().add(shipButtons);
-
-        root.setCenter(vBox);
-        stage.getScene().setRoot(root);
+        shipping.viewGUI(root, stage, table, this);
     }
 
-    private class AddShipCell extends TableCell<Object, Boolean> {
-        final Button shipButton = new Button();
-        final StackPane paddedButton = new StackPane();
-        final DoubleProperty buttonY = new SimpleDoubleProperty();
 
-        AddShipCell(final Stage stage, final TableView tableView) {
-            paddedButton.setPadding(new Insets(3));
-            paddedButton.getChildren().add(shipButton);
-            shipButton.setText("Ship");
-            shipButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    buttonY.set(event.getScreenY());
-                }
-            });
-            shipButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    TableData data = (TableData) table.getItems().get(getTableRow().getIndex());
-                    SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
-                    Shipping shipping = new Shipping();
-                    shipping.shipOrder(orderID.intValue());
-                    table.getSelectionModel().select(getTableRow().getIndex());
-                    displayShipped();
-                }
-            });
-        }
-
-        @Override
-        protected void updateItem(Boolean item, boolean empty) {
-            super.updateItem(item, empty);
-            if (!empty) {
-                if (getTableRow() != null) {
-                    TableData data = (TableData) table.getItems().get(getTableRow().getIndex());
-                    SimpleStringProperty shipDate = (SimpleStringProperty) data.getAt(9);
-                    if (shipDate.getValue() == null) {
-                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        setGraphic(paddedButton);
-                    } else {
-                        setGraphic(null);
-                    }
-                } else {
-                    setGraphic(null);
-                }
-            } else {
-                setGraphic(null);
-            }
-        }
-
-    }
-
-    /*****See OverviewUI ********/
     public void displayOverview() {
-        //displayCompletedOrders();
-        //displayBuildingOrders();
-        //displayOutOfStock();
 
     }
 
-    public TableView getTable() {
+    public static TableView getTable() {
         return table;
     }
 
@@ -301,7 +201,7 @@ public class MainMenu extends Application{
                 TableColumn column = new TableColumn(colName);
                 column.setMinWidth((double) size);
                 int type = dbData.getColumnType(i);
-                if(type == Types.INTEGER){
+                if(type == Types.INTEGER || type == Types.BIGINT){
                     column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TableData, Integer>, ObservableValue<Integer>>() {
                         @Override
                         public ObservableValue<Integer> call(TableColumn.CellDataFeatures<TableData, Integer> param) {
@@ -337,7 +237,7 @@ public class MainMenu extends Application{
                 TableData tableData = new TableData();
                 for(int i = 1; i <= dbData.getColumnCount(); i++){
                     int type = dbData.getColumnType(i);
-                    if(type == Types.INTEGER){
+                    if(type == Types.INTEGER || type == Types.BIGINT ){
                         tableData.add(queryResult.getInt(i));
                     }
                     else if(type == Types.VARCHAR){
@@ -345,13 +245,13 @@ public class MainMenu extends Application{
                     }
                     else if(type == Types.TIMESTAMP){
                         tableData.add(queryResult.getString(i));
+                    } else {
+                        System.out.println("does not find type " + type);
                     }
                 }
                 data.add(tableData);
             }
-
             table.setItems(data);
-
         }
         catch (java.sql.SQLException e){
             System.out.println(e);
