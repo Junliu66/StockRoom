@@ -1,6 +1,8 @@
 /**
  * Created by zhangJunliu on 10/8/17.
  */
+import javafx.scene.layout.VBox;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -73,5 +75,12 @@ public class Inventory {
         catch(SQLException e){
             e.printStackTrace();
         }
+    }
+
+    public static VBox getInventoryScene(){
+        DBHandler dbHandler = new DBHandler();
+        String table = "";
+        //ResultSet inventory = dbHandler.select(table, );
+        return null;
     }
 }
