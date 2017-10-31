@@ -20,13 +20,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ReceivingGUI {
     static DBHandler stockroomDB = new DBHandler();
     Scanner reader = new Scanner(System.in);
+    private int partQuantityReceived;
+    private BorderPane boardRoot;
+    private Stage boardStage;
 
-    public void viewGUI(BorderPane root, Stage stage, TableView table) {
+    public void viewGUI(BorderPane root, Stage stage) {
+        boardRoot = root;
+        boardStage = stage;
         VBox rVBox = new VBox();
 
         System.out.println("title");
@@ -90,13 +96,13 @@ public class ReceivingGUI {
         HBox hb2 = new HBox();
         hb2.getChildren().addAll(label2, qtt);
         hb2.setSpacing(10);
-
+        partQuantityReceived = 0;
         Button submit = new Button("submit");
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 String partIDNumber = pid.getText();
-                int partQuantityReceived = Integer.parseInt(qtt.getText());
+                partQuantityReceived = Integer.parseInt(qtt.getText());
                 System.out.println("part id from user: " + partIDNumber);
                 System.out.println("quantity from user: " + partQuantityReceived);
 
@@ -132,12 +138,22 @@ public class ReceivingGUI {
 
                         System.out.printf("|%11d |%-40s |%20d|\n", orderId, productName.getString(1), quantityNeededInt);
                         Button fill = new Button("Fill");
-                        fill.setOnAction(new EventHandler<ActionEvent>(){
+                        fill.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
-                            public void handle(ActionEvent event){
+                            public void handle(ActionEvent event) {
                                 try {
                                     int partLeft = fillKit(partQuantityReceived, quantityNeededInt, uid);
                                     qttReceived.setText(getFillPageHeader(partLeft, partIDNumber));
+                                    partQuantityReceived = partLeft;
+                                    fill.setDisable(true);
+                                    if (partQuantityReceived <= 0) {
+                                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                                        alert.setContentText("The number of parts left is 0.");
+                                        ButtonType receiveMore = new ButtonType("Receiving another part");
+                                        alert.getButtonTypes().setAll(receiveMore);
+                                        Optional<ButtonType> result = alert.showAndWait();
+                                        viewGUI(boardRoot, boardStage);
+                                    }
                                 } catch (SQLException e) {
                                     e.printStackTrace();
                                 }
@@ -150,18 +166,21 @@ public class ReceivingGUI {
                     if (partQuantityReceived > 0) {
                         stockroomDB.adjustPartQuantity(Integer.parseInt(partIDNumber), partQuantityReceived);
                     }
-
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
-
+                Button addRemaining = new Button("Finish and add remaining to stockroom");
+                addRemaining.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        addLeftOverToStockroom(Integer.parseInt(partIDNumber), partQuantityReceived);
+                        partQuantityReceived = 0;
+                        viewGUI(boardRoot, boardStage);
+                    }
+                });
+                all.getChildren().add(addRemaining);
                 root.setCenter(all);
                 stage.getScene().setRoot(root);
-                //Ask to fill the kit
-//                submitGUI(root, stage);
-//                ReceivingMenu menu = new ReceivingMenu();
-//                menu.submit(Integer.parseInt(partId), Integer.parseInt(quantity));
             }
         });
         rVBox.getChildren().addAll(hb1, hb2, submit);
@@ -169,36 +188,41 @@ public class ReceivingGUI {
         stage.getScene().setRoot(root);
     }
 
-    private int fillKit(int partQuantityReceived, int quantityNeededInt, int uid) throws SQLException {
-            int amountLeftover = partQuantityReceived - quantityNeededInt;
-            int quantifyLeft;
-            if (amountLeftover <= 0) {
-                // receiving less than or equal amount of parts needed in current kit
-                HashMap<String, Object> updates = new HashMap<>();
-                updates.put("amount_filled", quantityNeededInt + partQuantityReceived);
-                ArrayList<Object[]> conds = new ArrayList<>();
-                Object[] cond = {"id", "=", uid};
-                conds.add(cond);
-                stockroomDB.update("stockroomdb.ORDER_ITEMS", updates, conds);
-                quantifyLeft = 0;
-                // out of received parts so we break
-            } else {
-                // receiving more parts than needed in current kit, get total quantity needed and set to quantity filled
-                ResultSet quantityNeededTotal = stockroomDB.query("SELECT amount_needed AS amount FROM ORDER_ITEMS WHERE id = " + uid);
-                quantityNeededTotal.next();
-                HashMap<String, Object> updates = new HashMap<>();
-                updates.put("amount_filled", quantityNeededTotal.getInt(1));
-                ArrayList<Object[]> conds = new ArrayList<>();
-                Object[] cond = {"id", "=", uid};
-                conds.add(cond);
-                stockroomDB.update("stockroomdb.ORDER_ITEMS", updates, conds);
-                // remove quantity stored in kit from partQuantityReceived
-                quantifyLeft = partQuantityReceived - quantityNeededInt;
-            }
-            return quantifyLeft;
+    private void addLeftOverToStockroom(int partId, int left) {
+        if (partQuantityReceived > 0) {
+            stockroomDB.adjustPartQuantity(partId, left);
+        }
     }
 
-    private HBox generateVBox(String orderId,  String productName, String quantityNeeded, Button fill) {
+    private int fillKit(int partQuantityReceived, int quantityNeededInt, int uid) throws SQLException {
+        int amountLeftover = partQuantityReceived - quantityNeededInt;
+        int quantifyLeft;
+        if (amountLeftover <= 0) {
+            // receiving less than or equal amount of parts needed in current kit
+            HashMap<String, Object> updates = new HashMap<>();
+            updates.put("amount_filled", quantityNeededInt + partQuantityReceived);
+            ArrayList<Object[]> conds = new ArrayList<>();
+            Object[] cond = {"id", "=", uid};
+            conds.add(cond);
+            stockroomDB.update("stockroomdb.ORDER_ITEMS", updates, conds);
+            quantifyLeft = 0;
+        } else {
+            // receiving more parts than needed in current kit, get total quantity needed and set to quantity filled
+            ResultSet quantityNeededTotal = stockroomDB.query("SELECT amount_needed AS amount FROM ORDER_ITEMS WHERE id = " + uid);
+            quantityNeededTotal.next();
+            HashMap<String, Object> updates = new HashMap<>();
+            updates.put("amount_filled", quantityNeededTotal.getInt(1));
+            ArrayList<Object[]> conds = new ArrayList<>();
+            Object[] cond = {"id", "=", uid};
+            conds.add(cond);
+            stockroomDB.update("stockroomdb.ORDER_ITEMS", updates, conds);
+            // remove quantity stored in kit from partQuantityReceived
+            quantifyLeft = partQuantityReceived - quantityNeededInt;
+        }
+        return quantifyLeft;
+    }
+
+    private HBox generateVBox(String orderId, String productName, String quantityNeeded, Button fill) {
         Label orderIdLabel = new Label(orderId);
         orderIdLabel.setMinWidth(200);
         Label productNameLabel = new Label(productName);
@@ -222,15 +246,6 @@ public class ReceivingGUI {
         return stockroomDB.select("stockroomdb.ORDER_ITEMS", "id, order_id", conditions);
 
     }
-
-
-    //    private static ResultSet getProductNames(String partId) {
-//        return stockroomDB.query("SELECT p.product_name FROM PRODUCTS AS p JOIN ORDER_ITEMS as oi ON p.product_id = oi.product_id WHERE " + partId + " = parts_id AND amount_needed > amount_filled;");
-//    }
-//z
-//    private static ResultSet getQuantities(String partId) {
-//        return stockroomDB.query("SELECT (amount_needed - amount_filled) AS amount FROM ORDER_ITEMS WHERE " + partId + " = parts_id AND amount_needed > amount_filled;");
-//    }
 
     private void displayReceivingGUI(BorderPane root, Stage stage) {
         System.out.println("record a receiving.");
@@ -336,26 +351,6 @@ public class ReceivingGUI {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    private class AddFillCell extends TableCell<Object, Boolean> {
-        final Button shipButton = new Button();
-        final StackPane paddedButton = new StackPane();
-        final DoubleProperty buttonY = new SimpleDoubleProperty();
-
-        AddFillCell(final Stage stage, final TableView tableView) {
-            // paddedButton.setPadding(new Insets(3));
-            paddedButton.getChildren().add(shipButton);
-            shipButton.setText("Fill");
-        }
-
-        @Override
-        protected void updateItem(Boolean item, boolean empty) {
-            super.updateItem(item, empty);
-            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            setGraphic(paddedButton);
         }
     }
 }
