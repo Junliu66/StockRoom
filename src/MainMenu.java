@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,13 +8,8 @@ import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -44,8 +38,9 @@ public class MainMenu extends Application{
     @Override
     public void start(Stage stage){
         //sets application title
-
         stage.setTitle("Stockroom Inventory App");
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setSelectionModel(null);
 
         //Inventory
         Button inventory = createButton("View Inventory", Paths.get("Icons", "Stockroom.png").toString());
@@ -101,16 +96,29 @@ public class MainMenu extends Application{
                 overView.viewGUI(root, stage, table);
             }
         });
+
+        Button quit = createButton("Quit", "");
+        quit.setText("Quit");
+        quit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.close();
+            }
+        });
+
         BorderPane borderPane = new BorderPane();
 
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.TOP_CENTER);
-        hBox.getChildren().addAll(inventory, orders, purchase, receiving, shipping, overview);
+        hBox.getChildren().addAll(inventory, orders, purchase, receiving, shipping, overview, quit);
         borderPane.setTop(hBox);
         borderPane.setCenter(vBox);
+        vBox.setAlignment(Pos.CENTER);
 
         showSplash(vBox);
 
+        borderPane.getStylesheets().clear();
+        borderPane.getStylesheets().add("main.css");
         root = borderPane;
 
         stage.setScene(new Scene(root, 1000, 800));
@@ -123,7 +131,7 @@ public class MainMenu extends Application{
 //        vBox.setBackground(new Background(new BackgroundImage(logo, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0.5, true, Side.TOP, 0.0, true), null)));
         Text credits = new Text();
         credits.setTextAlignment(TextAlignment.CENTER);
-        credits.setFont(Font.font(20.0));
+//        credits.setFont(Font.font(20.0));
         credits.setText("Created by:\nChunlei Li\nStefano Mauri\nChristian Wookey\nJunliu Zhang\nAndre Zhu");
         GridPane creditsGrid = new GridPane();
 //        creditsGrid.setGridLinesVisible(true);
@@ -143,6 +151,7 @@ public class MainMenu extends Application{
         //Adjusting the image size to fit the button
         scaledImage.setFitWidth(imageWidth);
         scaledImage.setFitHeight(imageHeight);
+        newButton.setContentDisplay(ContentDisplay.TOP);
         newButton.setGraphic(scaledImage);
 
         return newButton;
@@ -197,9 +206,7 @@ public class MainMenu extends Application{
             for(int i = 1; i <= dbData.getColumnCount(); i++){
                 final int index = i;
                 String colName = dbData.getColumnName(i);
-                int size = dbData.getColumnDisplaySize(i);
                 TableColumn column = new TableColumn(colName);
-                column.setMinWidth((double) size);
                 int type = dbData.getColumnType(i);
                 if(type == Types.INTEGER || type == Types.BIGINT){
                     column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TableData, Integer>, ObservableValue<Integer>>() {
@@ -226,7 +233,7 @@ public class MainMenu extends Application{
                     });
                 }
 
-              table.getColumns().add(column);
+                table.getColumns().add(column);
             }
             //Converts the ResultSet into usable data
             ObservableList<TableData> data = FXCollections.observableArrayList();
@@ -259,8 +266,9 @@ public class MainMenu extends Application{
 
         VBox vBox = new VBox();
         vBox.setSpacing(5);
-        vBox.setPadding(new Insets(10,0,0,10));
-
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPadding(new Insets(10,10,0,10));
+        vBox.setVgrow(table, Priority.ALWAYS);
         vBox.getChildren().add(table);
 
         return vBox;

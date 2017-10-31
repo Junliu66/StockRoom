@@ -96,12 +96,7 @@ public class Shipping {
             VBox shipVBox = mainMenu.displayTable(rs);
 
             TableColumn shipButtons = new TableColumn("Ship");
-            shipButtons.setMinWidth(60.0);
-
-            // not using this for now
-//        stage.getScene().getStylesheets().add("");
-//        shipButtons.setStyle("-fx-base: #b6e7c9; -fx-fontfill: #000000;");
-
+            shipButtons.setSortable(false);
             shipButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
                 @Override
                 public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
@@ -123,7 +118,7 @@ public class Shipping {
         final DoubleProperty buttonY = new SimpleDoubleProperty();
 
         AddShipCell(final MainMenu mainMenu, final TableView tableView) {
-            paddedButton.setPadding(new Insets(3));
+            paddedButton.setPadding(new Insets(0))  ;
             paddedButton.getChildren().add(shipButton);
             shipButton.setText("Ship");
             // change text color
