@@ -34,6 +34,7 @@ public class MainMenu extends Application{
 
     private static double imageHeight = 50;
     private static double imageWidth = 50;
+    private final boolean USE_WHITE_ICONS = true;
 
     @Override
     public void start(Stage stage){
@@ -43,7 +44,7 @@ public class MainMenu extends Application{
         table.setSelectionModel(null);
 
         //Inventory
-        Button inventory = createButton("View Inventory", Paths.get("Icons", "Stockroom.png").toString());
+        Button inventory = createButton("View Inventory", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "Stockroom.png").toString());
         inventory.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -51,7 +52,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button orders = createButton("Work Orders", Paths.get("Icons", "Bill Materials.png").toString());
+        Button orders = createButton("Work Orders", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "workorders.png").toString());
         orders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -60,7 +61,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button purchase = createButton("Purchase", Paths.get("Icons", "purchasing.png").toString());
+        Button purchase = createButton("Purchase", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "purchasing.png").toString());
         purchase.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -69,7 +70,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button receiving = createButton("Received Orders", Paths.get("Icons", "receving.png").toString());
+        Button receiving = createButton("Received Orders", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "receving.png").toString());
         receiving.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -79,7 +80,7 @@ public class MainMenu extends Application{
 
         });
 
-        Button shipping = createButton("Shipped Orders", Paths.get("Icons", "shipping.png").toString());
+        Button shipping = createButton("Shipped Orders", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "shipping.png").toString());
         shipping.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -87,7 +88,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button overview = createButton("Overview", Paths.get("Icons", "Customer.png").toString());
+        Button overview = createButton("Overview", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "Customer.png").toString());
         overview.setText("Overview");
         overview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -127,7 +128,9 @@ public class MainMenu extends Application{
     }
 
     private void showSplash(VBox vBox) {
-        ImageView logo = new ImageView(new Image("Icons/stockroom-app.png"));
+        ImageView logo = new ImageView(new Image((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black") + "\\stockroom-app.png"));
+        logo.setScaleX(0.5);
+        logo.setScaleY(0.5);
 //        vBox.setBackground(new Background(new BackgroundImage(logo, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0.5, true, Side.TOP, 0.0, true), null)));
         Text credits = new Text();
         credits.setTextAlignment(TextAlignment.CENTER);
@@ -137,9 +140,9 @@ public class MainMenu extends Application{
 //        creditsGrid.setGridLinesVisible(true);
         GridPane.setHalignment(credits, HPos.CENTER);
         creditsGrid.setAlignment(Pos.CENTER);
-        creditsGrid.add(logo, 0, 1, 1, 1);
+        creditsGrid.add(logo, 1, 1, 1, 1);
         creditsGrid.add(credits, 0, 3, 1, 1);
-        creditsGrid.setVgap(25.0);
+        creditsGrid.setVgap(0.0);
         vBox.getChildren().add(creditsGrid);
     }
 
