@@ -79,7 +79,7 @@ public class MainMenu extends Application{
             @Override
             public void handle(ActionEvent event) {
                ReceivingGUI Receiving = new ReceivingGUI();
-                Receiving.viewGUI(root, stage, table);
+                Receiving.viewGUI(root, stage);
             }
 
         });
