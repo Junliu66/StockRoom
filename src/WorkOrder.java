@@ -103,7 +103,8 @@ public class WorkOrder {
         title.setAlignment(Pos.CENTER);
 
         rVBox.getChildren().addAll(title, view, create, kit, build, complete, product);
-        rVBox.setPadding(new Insets(100, 100, 100, 300));
+        rVBox.setAlignment(Pos.CENTER);
+        rVBox.setPadding(new Insets(100));
         rVBox.setSpacing(10);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
