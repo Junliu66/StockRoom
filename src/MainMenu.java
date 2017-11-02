@@ -139,7 +139,8 @@ public class MainMenu extends Application{
     }
 
     private void showSplash(VBox vBox) {
-        ImageView logo = new ImageView(new Image((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black") + "\\stockroom-app.png"));
+        ImageView logo = new ImageView(new Image(Paths.get(USE_WHITE_ICONS? "Icons\\white" : "Icons\\black") + "\\stockroom-app.png"));
+        logo.setSmooth(true);
         logo.setScaleX(0.5);
         logo.setScaleY(0.5);
 //        vBox.setBackground(new Background(new BackgroundImage(logo, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0.5, true, Side.TOP, 0.0, true), null)));
@@ -176,6 +177,7 @@ public class MainMenu extends Application{
         newButton.setText(text);
         Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(fileName));
         ImageView scaledImage = new ImageView(buttonImage);
+        scaledImage.setSmooth(true);
         //Adjusting the image size to fit the button
         scaledImage.setFitWidth(imageWidth);
         scaledImage.setFitHeight(imageHeight);

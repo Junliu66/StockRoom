@@ -21,8 +21,7 @@ import java.sql.*;
 import java.util.*;
 
 /*
-Create a command line menu for Shipping that shows a list of the available completed work orders
-They can type the name (or select the number) of the completed work order, then be prompted to ship? y/n"
+Handles Shipping.
 */
 public class Shipping {
     public static void main(String[] args) {
@@ -105,6 +104,7 @@ public class Shipping {
             });
 
             table.getColumns().add(shipButtons);
+            table.setMaxWidth(Double.MAX_VALUE);
 
             root.setCenter(shipVBox);
             stage.getScene().setRoot(root);
