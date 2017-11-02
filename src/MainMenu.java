@@ -198,7 +198,7 @@ public class MainMenu extends Application{
         return table;
     }
 
-    public VBox displayTable(ResultSet queryResult){
+    public static VBox displayTable(ResultSet queryResult){
         table.getColumns().clear();
         try{
             ResultSetMetaData dbData = queryResult.getMetaData();
@@ -210,7 +210,7 @@ public class MainMenu extends Application{
                 String colName = dbData.getColumnName(i);
                 TableColumn column = new TableColumn(colName);
                 int type = dbData.getColumnType(i);
-                if(type == Types.INTEGER || type == Types.BIGINT){
+                if(type == Types.INTEGER || type == Types.BIGINT || type == Types.DECIMAL){
                     column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TableData, Integer>, ObservableValue<Integer>>() {
                         @Override
                         public ObservableValue<Integer> call(TableColumn.CellDataFeatures<TableData, Integer> param) {
