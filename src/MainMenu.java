@@ -6,6 +6,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -75,7 +76,7 @@ public class MainMenu extends Application{
         receiving.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               ReceivingGUI Receiving = new ReceivingGUI();
+                ReceivingGUI Receiving = new ReceivingGUI();
                 Receiving.viewGUI(root, stage);
             }
 
@@ -167,7 +168,6 @@ public class MainMenu extends Application{
     }
 
     public void displayInventory(){
-        System.out.println("Inventory");
         DBHandler testDB = new DBHandler();
         ResultSet result_part_id = testDB.select("stockroomdb.PARTS", "*", new ArrayList<String>());
         vBox = displayTable(result_part_id);
@@ -196,6 +196,11 @@ public class MainMenu extends Application{
 
     public static TableView getTable() {
         return table;
+    }
+
+    public void setMiddle(Node newDisplay){
+        root.setCenter(newDisplay);
+        stage.getScene().setRoot(root);
     }
 
     public static VBox displayTable(ResultSet queryResult){
@@ -254,7 +259,13 @@ public class MainMenu extends Application{
                     }
                     else if(type == Types.TIMESTAMP){
                         tableData.add(queryResult.getString(i));
-                    } else {
+                    }
+                    else if(type == Types.DECIMAL){
+                        System.out.println("decimal");
+                        System.out.println(queryResult.getBigDecimal(i));
+                        tableData.add(queryResult.getBigDecimal(i).intValue());
+                    }
+                    else {
                         System.out.println("does not find type " + type);
                     }
                 }
