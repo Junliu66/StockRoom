@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
-import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -140,6 +140,7 @@ public class MainMenu extends Application{
         version.setTextAlignment(TextAlignment.LEFT);
         version.setText("Version 1.0\nPublish Date: 10/31/17\nInstructor: Bita Mazloom");
         GridPane creditsGrid = new GridPane();
+//        creditsGrid.setGridLinesVisible(true);
         GridPane.setHalignment(credits, HPos.CENTER);
         creditsGrid.setAlignment(Pos.CENTER);
         creditsGrid.add(logo, 1, 1, 1, 1);
@@ -171,9 +172,9 @@ public class MainMenu extends Application{
     }
 
     public void displayInventory(){
-        System.out.println("Inventory");
         DBHandler testDB = new DBHandler();
-        ResultSet result_part_id = testDB.select("stockroomdb.PARTS", "*", new ArrayList<String>());
+        ResultSet result_part_id = testDB.query("SELECT p.parts_id, p.part_number, p.part_description, p.vendor, s.quantity " +
+                "FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id;");
         vBox = displayTable(result_part_id);
         root.setCenter(vBox);
         stage.getScene().setRoot(root);
@@ -202,7 +203,12 @@ public class MainMenu extends Application{
         return table;
     }
 
-    public VBox displayTable(ResultSet queryResult){
+    public void setMiddle(Node newDisplay){
+        root.setCenter(newDisplay);
+        stage.getScene().setRoot(root);
+    }
+
+    public static VBox displayTable(ResultSet queryResult){
         table.getColumns().clear();
         try{
             ResultSetMetaData dbData = queryResult.getMetaData();
@@ -214,7 +220,7 @@ public class MainMenu extends Application{
                 String colName = dbData.getColumnName(i);
                 TableColumn column = new TableColumn(colName);
                 int type = dbData.getColumnType(i);
-                if(type == Types.INTEGER || type == Types.BIGINT){
+                if(type == Types.INTEGER || type == Types.BIGINT || type == Types.DECIMAL){
                     column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TableData, Integer>, ObservableValue<Integer>>() {
                         @Override
                         public ObservableValue<Integer> call(TableColumn.CellDataFeatures<TableData, Integer> param) {
@@ -258,7 +264,13 @@ public class MainMenu extends Application{
                     }
                     else if(type == Types.TIMESTAMP){
                         tableData.add(queryResult.getString(i));
-                    } else {
+                    }
+                    else if(type == Types.DECIMAL){
+                        System.out.println("decimal");
+                        System.out.println(queryResult.getBigDecimal(i));
+                        tableData.add(queryResult.getBigDecimal(i).intValue());
+                    }
+                    else {
                         System.out.println("does not find type " + type);
                     }
                 }

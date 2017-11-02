@@ -69,6 +69,7 @@ public class ReceivingGUI {
     private static void submitGUI(BorderPane root, Stage stage) {
         System.out.println("In the submitGui");
         VBox rVBox = new VBox();
+        rVBox.setAlignment(Pos.CENTER);
         Label antTitle = new Label("VIEW AMOUNT NEEDED");
         MainMenu mainMenu = new MainMenu();
         ResultSet amountNeeded = stockroomDB.query("SELECT ant.order_id, p.product_name, ant.quantity, ant.status FROM stockroomdb.ORDER_ITEMS AS ant JOIN stockroomdb.PRODUCTS AS p ON ant.product_id = p.product_id;");
@@ -90,14 +91,17 @@ public class ReceivingGUI {
         HBox hb1 = new HBox();
         hb1.getChildren().addAll(label1, pid);
         hb1.setSpacing(10);
+        hb1.setAlignment(Pos.CENTER);
 
         Label label2 = new Label("Enter Quantity: ");
         TextField qtt = new TextField();
         HBox hb2 = new HBox();
         hb2.getChildren().addAll(label2, qtt);
         hb2.setSpacing(10);
+        hb2.setAlignment(Pos.CENTER);
         partQuantityReceived = 0;
         Button submit = new Button("submit");
+        submit.setAlignment(Pos.CENTER);
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -110,8 +114,16 @@ public class ReceivingGUI {
                 ResultSet productName = stockroomDB.query("SELECT p.product_name FROM PRODUCTS AS p JOIN ORDER_ITEMS as oi ON p.product_id = oi.product_id WHERE " + partIDNumber + " = parts_id AND amount_needed > amount_filled;");
                 ResultSet quantityNeeded = stockroomDB.query("SELECT (amount_needed - amount_filled) AS amount FROM ORDER_ITEMS WHERE " + partIDNumber + " = parts_id AND amount_needed > amount_filled;");
                 VBox all = new VBox();
+                all.setPadding(new Insets(10, 50, 50, 150));
                 Label qttReceived = new Label(getFillPageHeader(partQuantityReceived, partIDNumber));
-                all.getChildren().add(qttReceived);
+                qttReceived.setAlignment(Pos.CENTER);
+                qttReceived.setScaleX(2);
+                qttReceived.setScaleY(2);
+                HBox labelRow = new HBox();
+                labelRow.getChildren().add(qttReceived);
+                labelRow.setAlignment(Pos.CENTER);
+                labelRow.setPadding(new Insets(30, 30, 60, 30));
+                all.getChildren().add(labelRow);
                 try {
                     orderID.beforeFirst();
                     productName.beforeFirst();
@@ -183,6 +195,9 @@ public class ReceivingGUI {
                 stage.getScene().setRoot(root);
             }
         });
+        rVBox.setAlignment(Pos.CENTER);
+        rVBox.setPadding(new Insets(100));
+        rVBox.setSpacing(20);
         rVBox.getChildren().addAll(hb1, hb2, submit);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
@@ -253,15 +268,16 @@ public class ReceivingGUI {
 
         Label t = new Label();
         t.setText("Do you want to record a receiving? ");
-        t.setScaleX(1);
-        t.setScaleY(1);
-        t.setAlignment(Pos.CENTER);
+        t.setScaleX(2);
+        t.setScaleY(2);
         t.setPadding(new Insets(0, 0, 0, 0));
         t.setMinWidth(300);
+        t.setAlignment(Pos.CENTER);
         HBox title = new HBox();
         title.getChildren().add(t);
         title.setMaxWidth(300);
         title.setAlignment(Pos.CENTER);
+
 
         Button yes = new Button("YES");
         yes.setOnAction(new EventHandler<ActionEvent>() {
@@ -270,19 +286,21 @@ public class ReceivingGUI {
                 getReceiveingAmount(root, stage);
             }
         });
-        yes.setAlignment(Pos.CENTER);
         yes.setPadding(new Insets(10, 10, 10, 10));
         yes.setMinWidth(300);
 
 
         Button no = new Button("NO");
-        no.setAlignment(Pos.CENTER);
         no.setPadding(new Insets(10, 10, 10, 10));
         no.setMinWidth(300);
 
         HBox buttons = new HBox();
+        rVBox.setAlignment(Pos.CENTER);
         buttons.getChildren().addAll(yes, no);
-        rVBox.getChildren().addAll(t, buttons);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(10);
+        rVBox.getChildren().addAll(title, buttons);
+        rVBox.setSpacing(20);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
     }
