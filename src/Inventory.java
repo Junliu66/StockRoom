@@ -8,18 +8,15 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Inventory {
-    
+
     public static void inventoryList(){
         DBHandler testDB = new DBHandler();
         ResultSet result_part_id = testDB.select("stockroomdb.PARTS", "parts_id", new ArrayList<String>());
-
         ResultSet result1 = testDB.select("stockroomdb.PARTS", "part_number", new ArrayList<String>());
-        //ResultSet result2 = testDB.select("stockroomdb.PARTS", "part_description", new ArrayList<String>());
         ResultSet result3 = testDB.select("stockroomdb.STOCKROOM", "quantity", new ArrayList<String>());
         try{
             result_part_id.beforeFirst();
             result1.beforeFirst();
-            //result2.beforeFirst();
             result3.beforeFirst();
             ArrayList<Part> listOfInventories = new ArrayList<Part>();
 
