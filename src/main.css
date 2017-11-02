@@ -26,9 +26,11 @@
 	-fx-background-color: rgba(246,149,96,1);
 }
 .button:pressed{
-	-fx-background-color: rgba(147,127,143,1);
+	-fx-background-color: radial-gradient(radius 100%, #ee6588, #f69560);/*rgba(147,127,143,1);*/
+	/* -fx-background-color: radial-gradient(radius 100%, #ee6588 0%, #f69560 100%);/*rgba(147,127,143,1);*/ 
 }
 .button:focused{
+	-fx-background-color: rgba(147,127,143,1);
 	-fx-background-color: #f98849;
 	-fx-border-color: LightGrey;
 }

@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.scene.image.Image;
 
+import java.awt.*;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -98,7 +100,7 @@ public class MainMenu extends Application{
             }
         });
 
-        Button quit = createButton("Quit", "");
+        Button quit = createButton("Quit", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "exit.png").toString());
         quit.setText("Quit");
         quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -133,15 +135,17 @@ public class MainMenu extends Application{
         logo.setScaleY(0.5);
 //        vBox.setBackground(new Background(new BackgroundImage(logo, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0.5, true, Side.TOP, 0.0, true), null)));
         Text credits = new Text();
-        credits.setTextAlignment(TextAlignment.CENTER);
-//        credits.setFont(Font.font(20.0));
-        credits.setText("Created by:\nChunlei Li\nStefano Mauri\nChristian Wookey\nJunliu Zhang\nAndre Zhu");
+        credits.setTextAlignment(TextAlignment.RIGHT);
+        credits.setText("Team01-CS40A:\nChunlei Li\nStefano Mauri\nChristian Wookey\nJunliu Zhang\nAndre Zhu");
+        Text version = new Text();
+        version.setTextAlignment(TextAlignment.LEFT);
+        version.setText("Version 1.0\nPublish Date: 10/31/17\nInstructor: Bita Mazloom");
         GridPane creditsGrid = new GridPane();
-//        creditsGrid.setGridLinesVisible(true);
         GridPane.setHalignment(credits, HPos.CENTER);
         creditsGrid.setAlignment(Pos.CENTER);
         creditsGrid.add(logo, 1, 1, 1, 1);
-        creditsGrid.add(credits, 0, 3, 1, 1);
+        creditsGrid.add(credits, 2, 3, 1, 1);
+        creditsGrid.add(version, 0, 3, 1, 1);
         creditsGrid.setVgap(0.0);
         vBox.getChildren().add(creditsGrid);
     }

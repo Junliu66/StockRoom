@@ -138,7 +138,7 @@ public class Shipping {
                     SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
                     Shipping shipping = new Shipping();
                     shipping.shipOrder(orderID.intValue());
-                    tableView.getSelectionModel().select(getTableRow().getIndex());
+//                    tableView.getSelectionModel().select(getTableRow().getIndex());
                     mainMenu.displayShipped();
                 }
             });
