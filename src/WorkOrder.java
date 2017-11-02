@@ -842,6 +842,7 @@ public class WorkOrder {
                 try {
                     if (parts.isLast())
                     {
+                        stockroomDB.updateQuery("UPDATE stockroomdb.WORKORDERS SET status = 'KITTED', date_kitted = NOW() WHERE order_id = " + chosenOrderID + ";");
                         kitWorkOrderGUI(root, stage);
                     }
                     else
@@ -865,6 +866,7 @@ public class WorkOrder {
                 try {
                     if (parts.isLast())
                     {
+                        stockroomDB.updateQuery("UPDATE stockroomdb.WORKORDERS SET status = 'KITTED', date_kitted = NOW() WHERE order_id = " + chosenOrderID + ";");
                         kitWorkOrderGUI(root, stage);
                     }
                     else
@@ -897,6 +899,7 @@ public class WorkOrder {
                 try {
                     if (parts.isLast())
                     {
+                        stockroomDB.updateQuery("UPDATE stockroomdb.WORKORDERS SET status = 'KITTED', date_kitted = NOW() WHERE order_id = " + chosenOrderID + ";");
                         kitWorkOrderGUI(root, stage);
                     }
                     else
@@ -957,6 +960,7 @@ public class WorkOrder {
                         "SELECT parts_id, product_id, '" + orderID + "', (quantity * " + quantity + ") " +
                         "FROM stockroomdb.PRODUCT_BOM " +
                         "WHERE product_id = " + productIDint + ";");
+
                 Label confirmation = new Label ("NEW WORK ORDER ADDED TO DATABASE");
                 confirmation.setScaleX(1.5);
                 confirmation.setScaleY(1.5);
