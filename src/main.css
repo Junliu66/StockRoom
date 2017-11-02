@@ -4,7 +4,6 @@
  
 .fontStyle{
 	-fx-text-fill: White;
-	-fx-font-family: "Droid Sans";
 	-fx-font-size: 12;
 }
 .label{
@@ -12,7 +11,6 @@
 }
 
 .button{
-	-fx-font-family: "Droid Sans";
 	-fx-background-color: rgba(255,255,255,0.1);
 	-fx-background-insets: 3;
 	-fx-background-radius: 15;
@@ -90,7 +88,26 @@
 .table-cell{
 	-fx-text-fill: White;
 }
-
+#welcomepane{
+	-fx-background-color: rgba(255,255,255,0.1);
+	-fx-background-radius: 5;
+	-fx-border-color: White;
+	-fx-border-radius: 5;
+	-fx-background-insets: -8;
+	-fx-border-insets: -8;
+}
+#welcometext{
+	-fx-fill: White;
+	-fx-font-size: 18;
+}
+#welcometextheader{
+	-fx-fill: White;
+	-fx-font-weight: Bold;
+	-fx-font-size: 36;
+}
+.vbox{
+	-fx-alignment: top-center;
+}
 .header-panel {
 	-fx-alignment: top-center;
 }
@@ -123,15 +140,25 @@
 	-fx-background-insets: 2, 0, 0;
 	-fx-background-radius: 2em;
 }
-.mylistview .scroll-bar:horizontal .increment-button ,
-.mylistview .scroll-bar:horizontal .decrement-button {
+.scroll-bar:horizontal .increment-button ,
+.scroll-bar:horizontal .decrement-button {
     -fx-background-color:transparent;
 	-fx-background-radius: 0em;
 	-fx-padding:0 0 0 0;
 }
-.mylistview .scroll-bar:vertical .increment-button ,
-.mylistview .scroll-bar:vertical .decrement-button {
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .decrement-button {
     -fx-background-color:transparent;
 	-fx-background-radius: 0em;
 	-fx-padding:0 0 0 0;
+}
+.myDialog:header *.header-panel{
+	-fx-border-color: White;
+	-fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #ee6588 0%, #f69560 100%);
+	-fx-border-width: 0;
+}
+.myDialog {
+	-fx-border-color: White;
+	-fx-border-width: 1 1 1 1;
+	-fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #ee6588 0%, #f69560 100%);
 }
