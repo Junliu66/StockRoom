@@ -68,6 +68,7 @@ public class ReceivingGUI {
 
     private static void submitGUI(BorderPane root, Stage stage) {
         System.out.println("In the submitGui");
+        VBox rVBox = new VBox();
         rVBox.setAlignment(Pos.CENTER);
         Label antTitle = new Label("VIEW AMOUNT NEEDED");
         MainMenu mainMenu = new MainMenu();
@@ -113,8 +114,16 @@ public class ReceivingGUI {
                 ResultSet productName = stockroomDB.query("SELECT p.product_name FROM PRODUCTS AS p JOIN ORDER_ITEMS as oi ON p.product_id = oi.product_id WHERE " + partIDNumber + " = parts_id AND amount_needed > amount_filled;");
                 ResultSet quantityNeeded = stockroomDB.query("SELECT (amount_needed - amount_filled) AS amount FROM ORDER_ITEMS WHERE " + partIDNumber + " = parts_id AND amount_needed > amount_filled;");
                 VBox all = new VBox();
+                all.setPadding(new Insets(10, 50, 50, 150));
                 Label qttReceived = new Label(getFillPageHeader(partQuantityReceived, partIDNumber));
-                all.getChildren().add(qttReceived);
+                qttReceived.setAlignment(Pos.CENTER);
+                qttReceived.setScaleX(2);
+                qttReceived.setScaleY(2);
+                HBox labelRow = new HBox();
+                labelRow.getChildren().add(qttReceived);
+                labelRow.setAlignment(Pos.CENTER);
+                labelRow.setPadding(new Insets(30, 30, 60, 30));
+                all.getChildren().add(labelRow);
                 try {
                     orderID.beforeFirst();
                     productName.beforeFirst();
