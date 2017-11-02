@@ -24,7 +24,8 @@ public class WorkOrder {
     public void viewGUI(BorderPane root, Stage stage, TableView table) {
 
         VBox rVBox = new VBox();
-
+        MainMenu mainMenu  = new MainMenu();
+        mainMenu.getTable().setMaxWidth(Double.MAX_VALUE);
         Button view = new Button("View Existing Work Orders");
         view.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -114,10 +115,17 @@ public class WorkOrder {
 
         VBox rVBox = new VBox();
         Label woTitle = new Label ("VIEW WORK ORDERS");
+        woTitle.setScaleY(2.0);
+        woTitle.setScaleX(2.0);
+        woTitle.setPadding(new Insets(30));
+        rVBox.setAlignment(Pos.CENTER);
+
         MainMenu mainMenu = new MainMenu();
         ResultSet workOrders = stockroomDB.query("SELECT wo.order_id, p.product_name, wo.quantity, wo.status FROM stockroomdb.WORKORDERS AS wo JOIN stockroomdb.PRODUCTS AS p ON wo.product_id = p.product_id;");
 
+        rVBox.setAlignment(Pos.CENTER);
         rVBox.getChildren().addAll(woTitle, mainMenu.displayTable(workOrders));
+
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
     }
@@ -127,7 +135,7 @@ public class WorkOrder {
         Label woTitle = new Label ("CREATE WORK ORDERS");
         woTitle.setScaleX(2.0);
         woTitle.setScaleY(2.0);
-
+        woTitle.setPadding(new Insets(30));
         VBox titleBox = new VBox();
         titleBox.setPadding(new Insets(30));
         titleBox.setAlignment(Pos.CENTER);
@@ -139,6 +147,7 @@ public class WorkOrder {
         rVBox.getChildren().addAll(titleBox, productTable);
         TableColumn createButtons = new TableColumn("Select One");
         createButtons.setMinWidth(60.0);
+        rVBox.setAlignment(Pos.CENTER);
 
         createButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
             @Override public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
@@ -153,9 +162,14 @@ public class WorkOrder {
 
         stage.getScene().setRoot(root);
     }
+
     private void kitWorkOrderGUI(BorderPane root, Stage stage) {
         VBox rVBox = new VBox();
         Label woTitle = new Label ("KIT WORK ORDERS");
+        woTitle.setScaleX(2.0);
+        woTitle.setScaleY(2.0);
+        rVBox.setAlignment(Pos.CENTER);
+        woTitle.setPadding(new Insets(30));
         MainMenu mainMenu = new MainMenu();
         ResultSet workOrders = stockroomDB.query("SELECT wo.order_id, p.product_name, wo.quantity, wo.status FROM stockroomdb.WORKORDERS AS wo JOIN stockroomdb.PRODUCTS AS p ON wo.product_id = p.product_id WHERE status = 'CREATED';");
         VBox productTable = mainMenu.displayTable(workOrders);
@@ -177,9 +191,13 @@ public class WorkOrder {
     private void buildWorkOrderGUI(BorderPane root, Stage stage) {
         VBox rVBox = new VBox();
         Label woTitle = new Label ("BUILD WORK ORDERS");
+        woTitle.setScaleX(2.0);
+        woTitle.setScaleY(2.0);
+        woTitle.setPadding(new Insets(30));
         MainMenu mainMenu = new MainMenu();
         ResultSet workOrders = stockroomDB.query("SELECT wo.order_id, p.product_name, wo.quantity, wo.status FROM stockroomdb.WORKORDERS AS wo JOIN stockroomdb.PRODUCTS AS p ON wo.product_id = p.product_id WHERE status = 'KITTED';");
         VBox orderTable = mainMenu.displayTable(workOrders);
+        rVBox.setAlignment(Pos.CENTER);
         rVBox.getChildren().addAll(woTitle, orderTable);
         TableColumn buildButtons = new TableColumn("Select One");
         buildButtons.setMinWidth(60.0);
@@ -195,12 +213,21 @@ public class WorkOrder {
         stage.getScene().setRoot(root);
     }
 
+    /**
+     *
+     * @param root
+     * @param stage
+     */
     private void completeWorkOrderGUI(BorderPane root, Stage stage) {
         VBox rVBox = new VBox();
         Label woTitle = new Label ("COMPLETE WORK ORDERS");
+        woTitle.setScaleX(2.0);
+        woTitle.setScaleY(2.0);
+        woTitle.setPadding(new Insets(30));
         MainMenu mainMenu = new MainMenu();
         ResultSet workOrders = stockroomDB.query("SELECT wo.order_id, p.product_name, wo.quantity, wo.status FROM stockroomdb.WORKORDERS AS wo JOIN stockroomdb.PRODUCTS AS p ON wo.product_id = p.product_id WHERE status = 'BUILDING';");
         VBox orderTable = mainMenu.displayTable(workOrders);
+        rVBox.setAlignment(Pos.CENTER);
         rVBox.getChildren().addAll(woTitle, orderTable);
         TableColumn completeButtons = new TableColumn("Select One");
         completeButtons.setMinWidth(60.0);
