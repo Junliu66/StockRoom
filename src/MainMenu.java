@@ -30,7 +30,10 @@ public class MainMenu extends Application{
     public static void main(String[] args){
         launch(args);
     }
+    //Initializes javafx so that TableView can be created statically before launch(args) is called
     public static final JFXPanel fxPanel = new JFXPanel();
+
+    
     public static TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
