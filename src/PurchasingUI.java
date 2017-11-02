@@ -54,7 +54,8 @@ public class PurchasingUI {
         title.setAlignment(Pos.CENTER);
 
         rVBox.getChildren().addAll(title, missingQauntity, lowQuantity);
-        rVBox.setPadding(new Insets(100, 100, 100, 300));
+        rVBox.setPadding(new Insets(100));
+        rVBox.setAlignment(Pos.CENTER);
         rVBox.setSpacing(10);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
