@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.scene.image.Image;
@@ -42,7 +43,7 @@ public class MainMenu extends Application{
         //sets application title
         stage.setTitle("Stockroom Inventory App");
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        table.setSelectionModel(null);
+//        table.setSelectionModel(null);
 
         //Inventory
         Button inventory = createButton("View Inventory", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "Stockroom.png").toString());
@@ -140,16 +141,27 @@ public class MainMenu extends Application{
         logo.setScaleX(0.5);
         logo.setScaleY(0.5);
 //        vBox.setBackground(new Background(new BackgroundImage(logo, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0.5, true, Side.TOP, 0.0, true), null)));
-        Text credits = new Text();
-        credits.setTextAlignment(TextAlignment.RIGHT);
-        credits.setText("Team01-CS40A:\nChunlei Li\nStefano Mauri\nChristian Wookey\nJunliu Zhang\nAndre Zhu");
-        Text version = new Text();
-        version.setTextAlignment(TextAlignment.LEFT);
-        version.setText("Version 1.0\nPublish Date: 10/31/17\nInstructor: Bita Mazloom");
+        Text creditsText = new Text("Team01-CS40A:\nChunlei Li\nStefano Mauri\nChristian Wookey\nJunliu Zhang\nAndre Zhu");
+        creditsText.setTextAlignment(TextAlignment.RIGHT);
+        creditsText.setId("welcometext");
+        TextFlow credits = new TextFlow(creditsText);
+        credits.setId("welcomepane");
+        Text versionText = new Text();
+        versionText.setTextAlignment(TextAlignment.LEFT);
+        versionText.setId("welcometext");
+        versionText.setText("Version 1.0\nPublish Date: 11/02/17\nFoothill College\nInstructor: Bita Mazloom");
+        TextFlow version = new TextFlow(versionText);
+        version.setId("welcomepane");
+        Text welcomeText = new Text("Welcome to Stockroom App");
+        welcomeText.setTextAlignment(TextAlignment.LEFT);
+        welcomeText.setId("welcometextheader");
+
         GridPane creditsGrid = new GridPane();
 //        creditsGrid.setGridLinesVisible(true);
-        GridPane.setHalignment(credits, HPos.CENTER);
+        GridPane.setHalignment(credits, HPos.RIGHT);
+        GridPane.setHalignment(version, HPos.LEFT);
         creditsGrid.setAlignment(Pos.CENTER);
+        creditsGrid.add(welcomeText, 1, 0, 1, 1);
         creditsGrid.add(logo, 1, 1, 1, 1);
         creditsGrid.add(credits, 2, 3, 1, 1);
         creditsGrid.add(version, 0, 3, 1, 1);

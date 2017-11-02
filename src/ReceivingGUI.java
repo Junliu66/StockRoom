@@ -160,6 +160,10 @@ public class ReceivingGUI {
                                     fill.setDisable(true);
                                     if (partQuantityReceived <= 0) {
                                         Alert alert = new Alert(Alert.AlertType.WARNING);
+                                        DialogPane dialogPane = alert.getDialogPane();
+                                        dialogPane.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
+                                        dialogPane.getStyleClass().add("myDialog");
+
                                         alert.setContentText("The number of parts left is 0.");
                                         ButtonType receiveMore = new ButtonType("Receiving another part");
                                         alert.getButtonTypes().setAll(receiveMore);
