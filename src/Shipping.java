@@ -21,14 +21,20 @@ import java.sql.*;
 import java.util.*;
 
 /*
-Create a command line menu for Shipping that shows a list of the available completed work orders
-They can type the name (or select the number) of the completed work order, then be prompted to ship? y/n"
+Handles shipping of completed workorders.
 */
 public class Shipping {
+
+    /*
+    Runs displayShipping()
+     */
     public static void main(String[] args) {
         displayShipping();
     }
 
+    /*
+    Prints a command-line menu that allows the user to view and ship completed work orders.
+     */
     public static void displayShipping() {
         DBHandler stockroomdb = new DBHandler();
 
@@ -70,6 +76,10 @@ public class Shipping {
         stockroomdb.update("stockroomdb.WORKORDERS", updates, searchConditions);
     }
 
+    /**
+     * getCompletedWorkOrders
+     * @return a ResultSet with workorders that are marked COMPLETED or SHIPPED
+     */
     public static ResultSet getCompletedWorkOrders() {
         DBHandler stockroomdb = new DBHandler();
 
@@ -79,6 +89,10 @@ public class Shipping {
         return id_and_quantity;
     }
 
+    /**
+     * shipOrder: ships a workorder
+     * @param orderId: the orderId of the workorder to ship
+     */
     public void shipOrder(int orderId) {
         DBHandler stockroomdb = new DBHandler();
         HashMap<String, Object> updates = new HashMap<>();
@@ -90,6 +104,13 @@ public class Shipping {
         stockroomdb.update("stockroomdb.WORKORDERS", updates, searchConditions);
     }
 
+    /**
+     * viewGUI: display a GUI for the Shipping menu.
+     * @param root: the root BorderPane for the program
+     * @param stage: the active Stage in the program
+     * @param table: the active TableView in the program
+     * @param mainMenu:: the running MainMenu
+     */
     public void viewGUI(BorderPane root, Stage stage, TableView table, MainMenu mainMenu) {
         {
             ResultSet rs = getCompletedWorkOrders();
@@ -105,6 +126,7 @@ public class Shipping {
             });
 
             table.getColumns().add(shipButtons);
+            table.setMaxWidth(Double.MAX_VALUE);
 
             root.setCenter(shipVBox);
             stage.getScene().setRoot(root);
@@ -117,14 +139,15 @@ public class Shipping {
         final StackPane paddedButton = new StackPane();
         final DoubleProperty buttonY = new SimpleDoubleProperty();
 
+        /**
+         * Constructor for ShipCell
+         * @param mainMenu: the active MainMenu
+         * @param tableView: the active TableVie
+         */
         AddShipCell(final MainMenu mainMenu, final TableView tableView) {
             paddedButton.setPadding(new Insets(0))  ;
             paddedButton.getChildren().add(shipButton);
             shipButton.setText("Ship");
-            // change text color
-//            shipButton.setTextFill(Color.WHITE);
-            // change button color
-//            shipButton.setBackground(new Background(new BackgroundFill(Color.DARKRED, new CornerRadii(3.0), new Insets(0.0))));
             shipButton.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -132,18 +155,26 @@ public class Shipping {
                 }
             });
             shipButton.setOnAction(new EventHandler<ActionEvent>() {
+                /**
+                 * Handles the ShipButton action
+                 * @param event: the ActionEvent (a click)
+                 */
                 @Override
                 public void handle(ActionEvent event) {
                     TableData data = (TableData) tableView.getItems().get(getTableRow().getIndex());
                     SimpleIntegerProperty orderID = (SimpleIntegerProperty) data.getAt(1);
                     Shipping shipping = new Shipping();
                     shipping.shipOrder(orderID.intValue());
-//                    tableView.getSelectionModel().select(getTableRow().getIndex());
                     mainMenu.displayShipped();
                 }
             });
         }
 
+        /**
+         * Determines if the row should have a shipButton by checking
+         * @param item: the cell in
+         * @param empty: not used
+         */
         @Override
         protected void updateItem(Boolean item, boolean empty) {
             super.updateItem(item, empty);
