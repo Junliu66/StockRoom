@@ -67,7 +67,7 @@ public class PurchasingUI {
         VBox rVBox = new VBox();
         Label woTitle = new Label("VIEW PARTS ARE MISSING FROM WORK ORDERS");
         MainMenu mainMenu = new MainMenu();
-        ResultSet missingQuantity = stockroomDB.query("SELECT p.parts_id, p.part_description, p.vendor, s.quantity - (oi.amount_needed - oi.amount_filled) FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
+        ResultSet missingQuantity = stockroomDB.query("SELECT oi.order_id, p.parts_id, p.part_description, p.vendor, s.quantity - (oi.amount_needed - oi.amount_filled) FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id JOIN stockroomdb.ORDER_ITEMS AS oi ON s.parts_id = oi.parts_id WHERE s.quantity < (oi.amount_needed - oi.amount_filled);");
         rVBox.getChildren().addAll(woTitle, mainMenu.displayTable(missingQuantity));
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
