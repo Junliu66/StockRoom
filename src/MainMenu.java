@@ -46,6 +46,7 @@ public class MainMenu extends Application{
 
         //Inventory
         Button inventory = createButton("View Inventory", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "Stockroom.png").toString());
+        inventory.setMinWidth(125);
         inventory.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -54,6 +55,7 @@ public class MainMenu extends Application{
         });
 
         Button orders = createButton("Work Orders", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "workorders.png").toString());
+        orders.setMinWidth(125);
         orders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -63,6 +65,7 @@ public class MainMenu extends Application{
         });
 
         Button purchase = createButton("Purchase", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "purchasing.png").toString());
+        purchase.setMinWidth(125);
         purchase.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -72,6 +75,7 @@ public class MainMenu extends Application{
         });
 
         Button receiving = createButton("Received Orders", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "receving.png").toString());
+        receiving.setMinWidth(125);
         receiving.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -82,6 +86,7 @@ public class MainMenu extends Application{
         });
 
         Button shipping = createButton("Shipped Orders", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "shipping.png").toString());
+        shipping.setMinWidth(125);
         shipping.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -90,6 +95,7 @@ public class MainMenu extends Application{
         });
 
         Button overview = createButton("Overview", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "Customer.png").toString());
+        overview.setMinWidth(125);
         overview.setText("Overview");
         overview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -100,6 +106,7 @@ public class MainMenu extends Application{
         });
 
         Button quit = createButton("Quit", Paths.get((USE_WHITE_ICONS? "Icons\\white" : "Icons\\black"), "exit.png").toString());
+        quit.setMinWidth(125);
         quit.setText("Quit");
         quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
