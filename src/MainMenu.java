@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,7 +34,7 @@ public class MainMenu extends Application{
     //Initializes javafx so that TableView can be created statically before launch(args) is called
     public static final JFXPanel fxPanel = new JFXPanel();
 
-    
+
     public static TableView table = new TableView();
     private VBox vBox = new VBox();
     private Stage stage = new Stage();
@@ -199,7 +200,10 @@ public class MainMenu extends Application{
         DBHandler testDB = new DBHandler();
         ResultSet result_part_id = testDB.query("SELECT p.parts_id, p.part_number, p.part_description, p.vendor, s.quantity " +
                 "FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id;");
-        vBox = displayTable(result_part_id);
+        TextField filter = new TextField();
+
+        vBox = displayTable(result_part_id, filter);
+
         root.setCenter(vBox);
         stage.getScene().setRoot(root);
     }
@@ -233,6 +237,47 @@ public class MainMenu extends Application{
     }
 
     public static VBox displayTable(ResultSet queryResult){
+        FilteredList<TableData> sortedList = getTableData(queryResult);
+        table.setItems(sortedList);
+
+        VBox vBox = new VBox();
+        vBox.setSpacing(5);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPadding(new Insets(10,10,0,10));
+        vBox.setVgrow(table, Priority.ALWAYS);
+        vBox.getChildren().add(table);
+
+        return vBox;
+    }
+
+    public static VBox displayTable(ResultSet queryResult, TextField filter){
+        FilteredList<TableData> sortedList = getTableData(queryResult);
+        filter.textProperty().addListener((observable, oldValue, newValue) ->{
+            sortedList.setPredicate(search ->{
+                if(newValue == null || newValue.isEmpty()){
+                    return true;
+                }
+                String lowerCaseSearch = newValue.toLowerCase();
+
+                if(search.contains(lowerCaseSearch)){
+                    return true;
+                }
+                return false;
+            });
+        });
+        table.setItems(sortedList);
+
+        VBox vBox = new VBox();
+        vBox.setSpacing(5);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPadding(new Insets(10,10,0,10));
+        vBox.setVgrow(table, Priority.ALWAYS);
+        vBox.getChildren().addAll(filter, table);
+
+        return vBox;
+    }
+
+    public static FilteredList<TableData> getTableData(ResultSet queryResult){
         table.getColumns().clear();
         try{
             ResultSetMetaData dbData = queryResult.getMetaData();
@@ -300,19 +345,14 @@ public class MainMenu extends Application{
                 }
                 data.add(tableData);
             }
-            table.setItems(data);
+            //wrap ObservableList data with a filteredlist
+            FilteredList<TableData> sortedList = new FilteredList<TableData>(data, p->true);
+            return sortedList;
         }
         catch (java.sql.SQLException e){
             System.out.println(e);
         }
-
-        VBox vBox = new VBox();
-        vBox.setSpacing(5);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.setPadding(new Insets(10,10,0,10));
-        vBox.setVgrow(table, Priority.ALWAYS);
-        vBox.getChildren().add(table);
-
-        return vBox;
+        return null;
     }
+
 }

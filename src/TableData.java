@@ -46,4 +46,15 @@ public class TableData {
     public ObservableValue getAt(int i){
         return properties.get(i - 1);
     }
+
+    public boolean contains(String matchString){
+        for(int i = 0; i < properties.size(); i++){
+            ObservableValue property = properties.get(i);
+            String propString = property.toString();
+            if(propString.toLowerCase().contains(matchString)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
