@@ -45,6 +45,7 @@ public class MainMenu extends Application{
 
         //Inventory
         Button inventory = createButton("View Inventory", Paths.get("Icons", "Stockroom.png").toString());
+        inventory.setMinWidth(125);
         inventory.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -53,6 +54,7 @@ public class MainMenu extends Application{
         });
 
         Button orders = createButton("Work Orders", Paths.get("Icons", "Bill Materials.png").toString());
+        orders.setMinWidth(125);
         orders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -62,6 +64,7 @@ public class MainMenu extends Application{
         });
 
         Button purchase = createButton("Purchase", Paths.get("Icons", "purchasing.png").toString());
+        purchase.setMinWidth(125);
         purchase.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -70,7 +73,8 @@ public class MainMenu extends Application{
             }
         });
 
-        Button receiving = createButton("Received Orders", Paths.get("Icons", "receving.png").toString());
+        Button receiving = createButton("Received Parts", Paths.get("Icons", "receving.png").toString());
+        receiving.setMinWidth(125);
         receiving.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -80,7 +84,8 @@ public class MainMenu extends Application{
 
         });
 
-        Button shipping = createButton("Shipped Orders", Paths.get("Icons", "shipping.png").toString());
+        Button shipping = createButton("Ship Order", Paths.get("Icons", "shipping.png").toString());
+        shipping.setMinWidth(125);
         shipping.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -89,7 +94,7 @@ public class MainMenu extends Application{
         });
 
         Button overview = createButton("Overview", Paths.get("Icons", "Customer.png").toString());
-        overview.setText("Overview");
+        overview.setMinWidth(125);
         overview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -99,7 +104,6 @@ public class MainMenu extends Application{
         });
 
         Button quit = createButton("Quit", "");
-        quit.setText("Quit");
         quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -167,7 +171,8 @@ public class MainMenu extends Application{
 
     public void displayInventory(){
         DBHandler testDB = new DBHandler();
-        ResultSet result_part_id = testDB.select("stockroomdb.PARTS", "*", new ArrayList<String>());
+        ResultSet result_part_id = testDB.query("SELECT p.parts_id, p.part_number, p.part_description, p.vendor, s.quantity " +
+                "FROM stockroomdb.PARTS AS p JOIN stockroomdb.STOCKROOM AS s ON p.parts_id = s.parts_id;");
         vBox = displayTable(result_part_id);
         root.setCenter(vBox);
         stage.getScene().setRoot(root);

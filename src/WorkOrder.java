@@ -1,3 +1,4 @@
+import javafx.scene.paint.Color;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -10,12 +11,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Scanner;
-
+import java.util.*;
 
 public class WorkOrder {
 
@@ -33,7 +31,7 @@ public class WorkOrder {
             public void handle(ActionEvent event) {
 
                 viewWorkOrdersGUI(root, stage);
-                viewWorkOrders();
+                //viewWorkOrders();
             }
         });
         view.setPadding(new Insets(10, 10, 10, 10));
@@ -44,7 +42,7 @@ public class WorkOrder {
             @Override
             public void handle(ActionEvent event) {
                 createWorkOrderGUI(root, stage, new VBox());
-                createWorkOrder();
+                //createWorkOrder();
             }
         });
         create.setPadding(new Insets(10, 10, 10, 10));
@@ -55,7 +53,7 @@ public class WorkOrder {
             @Override
             public void handle(ActionEvent event) {
                 kitWorkOrderGUI(root, stage);
-                kitWorkOrder();
+                //kitWorkOrder();
             }
         });
         kit.setPadding(new Insets(10, 10, 10, 10));
@@ -87,8 +85,8 @@ public class WorkOrder {
         product.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                newProductBOMGUI(root, stage);
-                createWorkOrder();
+                newProductBOMGUI(root, stage, null, new HashMap<Integer, Integer>());
+                //createWorkOrder();
             }
         });
         product.setPadding(new Insets(10, 10, 10, 10));
@@ -217,13 +215,161 @@ public class WorkOrder {
         stage.getScene().setRoot(root);
     }
 
-    private void newProductBOMGUI(BorderPane root, Stage stage) {
+    private void newProductBOMGUI(BorderPane root, Stage stage, String name, HashMap<Integer, Integer> partAndQuantity) {
         VBox rVBox = new VBox();
-        Label woTitle = new Label ("CREATE NEW PRODUCT");
-        MainMenu mainMenu = new MainMenu();
-        ResultSet workOrders = stockroomDB.query("SELECT wo.order_id, p.product_name, wo.quantity, wo.status FROM stockroomdb.WORKORDERS AS wo JOIN stockroomdb.PRODUCTS AS p ON wo.product_id = p.product_id;");
+        Label newProductTitle = new Label ("CREATE NEW PRODUCT");
+        newProductTitle.setScaleX(2);
+        newProductTitle.setScaleY(2);
+        newProductTitle.setAlignment(Pos.CENTER);
+        newProductTitle.setPadding(new Insets(0,0, 20, 0));
+        HBox title = new HBox();
 
-        rVBox.getChildren().addAll(woTitle, mainMenu.displayTable(workOrders));
+        title.getChildren().add(newProductTitle);
+
+        title.setAlignment(Pos.CENTER);
+        VBox nameBox = new VBox();
+        VBox createProductBOM = new VBox();
+        HBox splitScreen = new HBox();
+        splitScreen.setSpacing(20);
+
+        if (name == null || name.isEmpty())
+        {
+            Label productTitle = new Label ("Enter your new product name:");
+            TextField productNameTF = new TextField();
+            Button enterNewName = new Button("Confirm Name");
+            enterNewName.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    newProductBOMGUI(root, stage, productNameTF.getText(), new HashMap<Integer, Integer>());
+                }
+            });
+            productTitle.setPrefWidth(300);
+            productTitle.setAlignment(Pos.CENTER);
+            productTitle.setPadding(new Insets(10));
+            productNameTF.setMaxWidth(300);
+            productNameTF.setAlignment(Pos.CENTER);
+            productNameTF.setPadding(new Insets(10));
+            enterNewName.setPrefWidth(300);
+            enterNewName.setAlignment(Pos.CENTER);
+            enterNewName.setPadding(new Insets(10));
+
+            nameBox.setSpacing(10);
+            nameBox.setAlignment(Pos.CENTER);
+
+            nameBox.maxWidth(300);
+            nameBox.getChildren().addAll(productTitle, productNameTF, enterNewName);
+        }
+        else {
+
+            Label bomPrompt = new Label ("Select the part ID and Quantity to add to your Product's Bill of Materials");
+            Label bomPrompt2 = new Label ("To add another part select ADD or select CREATE to add your current BOM to the server.\n");
+            Label productName = new Label ("Creating new BOM for [ " + name + " ]");
+            productName.setPadding(new Insets(30));
+
+            HBox promptBox = new HBox();
+            VBox partBox = new VBox();
+            VBox quantityBox = new VBox();
+
+            Label partPrompt = new Label ("Part ID:");
+            TextField partTF = new TextField();
+            partTF.setMaxWidth(100);
+            Button addButton = new Button("ADD PART");
+            Label spacer1 = new Label();
+            spacer1.setPadding(new Insets(30));
+            partBox.getChildren().addAll(partPrompt, partTF, spacer1, addButton);
+            partBox.setAlignment(Pos.CENTER);
+            partBox.setSpacing(10);
+
+            Label quantityPrompt = new Label("Quantity:");
+            TextField quantityTF = new TextField();
+            quantityTF.setMaxWidth(100);
+            Button createButton = new Button("CREATE BOM");
+            Label spacer2 = new Label();
+            spacer2.setPadding(new Insets(30));
+            quantityBox.getChildren().addAll(quantityPrompt, quantityTF, spacer2, createButton);
+            quantityBox.setAlignment(Pos.CENTER);
+            quantityBox.setSpacing(10);
+
+            addButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    partAndQuantity.put(Integer.parseInt(partTF.getText()), Integer.parseInt(quantityTF.getText()));
+                    newProductBOMGUI(root, stage, name, partAndQuantity);
+                }
+            });
+
+            createButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    stockroomDB.updateQuery("INSERT INTO stockroomdb.PRODUCTS (product_name, date_created) " +
+                            "VALUES ('" + name + "', NOW());");
+
+                    ResultSet newProductID = stockroomDB.query("SELECT LAST_INSERT_ID();");
+
+                    String productID = "";
+                    try {
+                        newProductID.first();
+                        productID += newProductID.getInt(1);
+                    }
+                    catch(SQLException e){
+                        e.printStackTrace();
+                    }
+
+                    Set set = partAndQuantity.entrySet();
+                    Iterator iterator = set.iterator();
+
+                    String query = "INSERT INTO stockroomdb.PRODUCT_BOM (product_id, parts_id, quantity) VALUES ";
+                    while(iterator.hasNext())
+                    {
+                        Map.Entry mapEntry = (Map.Entry)iterator.next();
+                        query += "("  + productID + ", " + mapEntry.getKey() + ", " + mapEntry.getValue() + ")";
+                        if (iterator.hasNext()) { query += ", "; }
+                    }
+                    query += ";";
+
+                    stockroomDB.updateQuery(query);
+                    newProductBOMGUI(root, stage, null, new HashMap<Integer, Integer>());
+                }
+            });
+
+            promptBox.getChildren().addAll(partBox, quantityBox);
+            promptBox.setAlignment(Pos.CENTER);
+            promptBox.setSpacing(40);
+
+            VBox currentBOM = new VBox();
+            currentBOM.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+            Set set = partAndQuantity.entrySet();
+            Iterator iterator = set.iterator();
+            Label bomTitle = new Label(name);
+            bomTitle.setPadding(new Insets(40));
+            bomTitle.setScaleX(1.5);
+            bomTitle.setScaleY(1.5);
+            bomTitle.setAlignment(Pos.CENTER);
+            bomTitle.setPrefWidth(400);
+
+            currentBOM.getChildren().add(bomTitle);
+
+            while(iterator.hasNext())
+            {
+                Map.Entry mapEntry = (Map.Entry)iterator.next();
+                Label partQuantity = new Label("Part ID = [ " + mapEntry.getKey() + " ] with quantity of [ " + mapEntry.getValue() + " ]" );
+                partQuantity.setPadding(new Insets(5,5,5,15));
+                currentBOM.getChildren().add(partQuantity);
+            }
+
+            createProductBOM.getChildren().addAll(bomPrompt, bomPrompt2, productName, promptBox);
+            createProductBOM.setAlignment(Pos.CENTER);
+
+            splitScreen.getChildren().addAll(createProductBOM, currentBOM);
+
+        }
+
+
+
+        rVBox.setPadding(new Insets(100, 100, 100, 100));
+
+        rVBox.setSpacing(10);
+        rVBox.getChildren().addAll(title, nameBox, splitScreen);
         root.setCenter(rVBox);
         stage.getScene().setRoot(root);
     }
@@ -659,7 +805,6 @@ public class WorkOrder {
                 setGraphic(null);
             }
         }
-
     }
 
     private void kittingGUI(BorderPane root, Stage stage, ResultSet parts, int chosenOrderID) {
@@ -672,7 +817,6 @@ public class WorkOrder {
         titleBox.setPadding(new Insets(30));
         titleBox.setAlignment(Pos.CENTER);
         titleBox.getChildren().add(woTitle);
-
 
         try {
             parts.next();
@@ -695,7 +839,20 @@ public class WorkOrder {
                 int parts_id = 0;
                 try { parts_id = parts.getInt(1); } catch (SQLException e) {e.printStackTrace();}
                 stockroomDB.updateQuery("UPDATE stockroomdb.ORDER_ITEMS SET amount_filled = amount_needed WHERE order_id = " + chosenOrderID + " AND parts_id = " + parts_id + ";");
-                kittingGUI(root, stage, parts, chosenOrderID);
+                try {
+                    if (parts.isLast())
+                    {
+                        kitWorkOrderGUI(root, stage);
+                    }
+                    else
+                    {
+                        kittingGUI(root, stage, parts, chosenOrderID);
+                    }
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
         fillFull.setPadding(new Insets(10, 10, 10, 10));
@@ -705,7 +862,20 @@ public class WorkOrder {
         fillEmpty.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                kittingGUI(root, stage, parts, chosenOrderID);
+                try {
+                    if (parts.isLast())
+                    {
+                        kitWorkOrderGUI(root, stage);
+                    }
+                    else
+                    {
+                        kittingGUI(root, stage, parts, chosenOrderID);
+                    }
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
         fillEmpty.setPadding(new Insets(10));
@@ -724,7 +894,20 @@ public class WorkOrder {
                 try { parts_id = parts.getInt(1); } catch (SQLException e) {e.printStackTrace();}
                 int amountToAdd = Integer.parseInt(amountToFill.getText());
                 stockroomDB.updateQuery("UPDATE stockroomdb.ORDER_ITEMS SET amount_filled = " + amountToAdd + " WHERE order_id = " + chosenOrderID + " AND parts_id = " + parts_id + ";");
-                kittingGUI(root, stage, parts, chosenOrderID);
+                try {
+                    if (parts.isLast())
+                    {
+                        kitWorkOrderGUI(root, stage);
+                    }
+                    else
+                    {
+                        kittingGUI(root, stage, parts, chosenOrderID);
+                    }
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
 
