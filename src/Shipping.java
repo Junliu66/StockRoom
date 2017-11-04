@@ -20,20 +20,16 @@ import java.net.URL;
 import java.sql.*;
 import java.util.*;
 
-/*
-Handles shipping of completed workorders.
-*/
+/**
+ * Handles shipping of completed workorders.
+ */
 public class Shipping {
-
-    /*
-    Runs displayShipping()
-     */
     public static void main(String[] args) {
         displayShipping();
     }
 
-    /*
-    Prints a command-line menu that allows the user to view and ship completed work orders.
+    /**
+     * Prints a command-line menu that allows the user to view and ship completed work orders.
      */
     public static void displayShipping() {
         DBHandler stockroomdb = new DBHandler();
@@ -77,7 +73,7 @@ public class Shipping {
     }
 
     /**
-     * getCompletedWorkOrders
+     * Gets the number of completed and shipped workorders.
      * @return a ResultSet with workorders that are marked COMPLETED or SHIPPED
      */
     public static ResultSet getCompletedWorkOrders() {
@@ -90,8 +86,8 @@ public class Shipping {
     }
 
     /**
-     * shipOrder: ships a workorder
-     * @param orderId: the orderId of the workorder to ship
+     * Ships a workorder
+     * @param orderId the orderId of the workorder to ship
      */
     public void shipOrder(int orderId) {
         DBHandler stockroomdb = new DBHandler();
@@ -106,10 +102,10 @@ public class Shipping {
 
     /**
      * viewGUI: display a GUI for the Shipping menu.
-     * @param root: the root BorderPane for the program
-     * @param stage: the active Stage in the program
-     * @param table: the active TableView in the program
-     * @param mainMenu:: the running MainMenu
+     * @param root the root BorderPane for the program
+     * @param stage the active Stage in the program
+     * @param table the active TableView in the program
+     * @param mainMenu the running MainMenu
      */
     public void viewGUI(BorderPane root, Stage stage, TableView table, MainMenu mainMenu) {
         {
@@ -171,9 +167,9 @@ public class Shipping {
         }
 
         /**
-         * Determines if the row should have a shipButton by checking
-         * @param item: the cell in
-         * @param empty: not used
+         * Determines if the row should have a shipButton by checking whether the row has an entry in date_shipped.
+         * @param item not used
+         * @param empty Whether the cell contains an item.
          */
         @Override
         protected void updateItem(Boolean item, boolean empty) {

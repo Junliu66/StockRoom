@@ -3,17 +3,20 @@ import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * DBHandler handles all requests to the SQL database
+ */
 public class DBHandler {
 
-
-    //TODO: Putting this here for now; in the future it will be saved under some config file or class
     String url = "jdbc:mysql://stockroomdb.crbhpfgmilql.us-west-2.rds.amazonaws.com:3306/stockroomdb";
     String username = "cs40a";
     String password = "DB5u5D4X5z6e";
 
     Connection connection;
 
-    //Constructor
+    /**
+     * Constructor. Uses class variables url, username, and password to connected to the database.
+     */
     public DBHandler(){
         //load the JDBC class
         try{
@@ -36,9 +39,14 @@ public class DBHandler {
         catch(Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Runs a formatted SQL UPDATE query on the database
+     * @param query a formatted SQL query
+     * @return: either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *         or (2) 0 for SQL statements that return nothing
+     */
     public int updateQuery(String query) {
         Statement stmt = null;
         int result = -1;
@@ -51,6 +59,12 @@ public class DBHandler {
         return result;
     }
 
+    /**
+     * Runs a formatted SQL query on the database
+     * @param query the formatted SQL query
+     * @return: a <code>ResultSet</code> object that contains the data produced
+     *         by the given query; never <code>null</code>
+     */
     public ResultSet query(String query) {
         Statement stmt = null;
         ResultSet result = null;
@@ -64,9 +78,9 @@ public class DBHandler {
     }
 
     /**
-     * helper function for selecting a table without conditions
-     * @param table: name of table to select
-     * @param selection: what to return
+     * Helper function for selecting a table without conditions
+     * @param table name of table to select
+     * @param selection what to return
      * @return a ResultSet if the fetch was successful, else null
      */
     public ResultSet select(String table, String selection) {
@@ -74,11 +88,12 @@ public class DBHandler {
     }
 
     /**
-     *
-     * @param table: name of the table
-     * @param selection: what to return
-     * @param conditions: conditionals (i.e. 'id=1')
-     * @return a ResultSet if the fetch was successful, else null
+     * Runs a selection query on the database.
+     * @param table name of the table
+     * @param selection what to return
+     * @param conditions conditionals (i.e. 'id=1')
+     * @return a <code>ResultSet</code> object that contains the data produced
+     *         by the given query; never <code>null</code>
      */
     public ResultSet select(String table, String selection, ArrayList<String> conditions){
         String query = "select " + selection + " from " + table;
@@ -95,6 +110,12 @@ public class DBHandler {
         return select(query);
     }
 
+    /**
+     * Performs a query on the database.
+     * @param query a fully-formatted SQL query String
+     * @return a <code>ResultSet</code> object that contains the data produced
+     *         by the given query; never <code>null</code>
+     */
     public ResultSet executeQuery(String query){
         Statement stmt = null;
         ResultSet result = null;
@@ -103,15 +124,15 @@ public class DBHandler {
             result = stmt.executeQuery(query);
         }
         catch(SQLException e){
-            //TODO: handle SQLExceptions
+            e.printStackTrace();
         }
 
         return result;
     }
 
     /**
-     * Function for making selections of the database
-     * @param query an SQL-formatted selection string
+     * Makes selections of the database.
+     * @param query an fully-formatted selection string
      * @return an SQL ResultSet
      */
     public ResultSet select(String query){
@@ -122,7 +143,7 @@ public class DBHandler {
             result = stmt.executeQuery(query);
         }
         catch(SQLException e){
-            //TODO: handle SQLException
+            e.printStackTrace();
         }
 
         return result;
@@ -130,9 +151,10 @@ public class DBHandler {
 
     /**
      * Adjusts a part quantity by a given amount in the STOCKROOM database
-     * @param partId: the ID of the part, integer
-     * @param adjustment: the amount the quantity should be adjusted, signed integer
-     * @return 0 if no error
+     * @param partId the ID of the part, integer
+     * @param adjustment the amount the quantity should be adjusted, signed integer
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *         or (2) 0 for SQL statements that return nothing
      */
     public int adjustPartQuantity(int partId, int adjustment)
     {
@@ -148,16 +170,16 @@ public class DBHandler {
         }
         catch (SQLException e)
         {
-            //TODO: handle SQLException
             e.printStackTrace();
             return -1;
         }
     }
     /**
-     * set the quantity of a part by an amount
-     * @param partId: id of the part in the STOCKROOM database
-     * @param quantity: quantity to set
-     * @return 0 if no error
+     * Set the quantity of a part by an amount
+     * @param partId id of the part in the STOCKROOM database
+     * @param quantity quantity to set
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *         or (2) 0 for SQL statements that return nothing
      */
     public int setPartQuantity(int partId, int quantity)
     {
@@ -175,9 +197,9 @@ public class DBHandler {
     }
 
     /**
-     *
-     * @param tableName: name of new table
-     * @param dataList: ArrayList of sql-formatted strings; ie {"FirstName CHAR(100)", "LastName CHAR(50)"}
+     * Creates a table.
+     * @param tableName name of new table
+     * @param dataList ArrayList of sql-formatted strings; ie {"FirstName CHAR(100)", "LastName CHAR(50)"}
      * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
      *         or (2) 0 for SQL statements that return nothing
      */
@@ -196,12 +218,13 @@ public class DBHandler {
 
 
     /**
-     *
-     * @param tableName: the name of the new table
-     * @param updates: a HashMap of the updates to be performed, where the column in the key, and the new value is the value
-     * @param searchConditions: an ArrayList of Object arrays of size 3. Each Object array's first two indices contain Strings representing first the column identifier to compare and second, the SQL comparator.
+     * Creates a valid SQL UPDATE String and applies it to the database.
+     * @param tableName the name of the table
+     * @param updates a HashMap of the updates to be performed, where the column in the key, and the new value is the value
+     * @param searchConditions an ArrayList of Object arrays of size 3. Each Object array's first two indices contain Strings representing first the column identifier to compare and second, the SQL comparator.
      *                        The third index contains the value to search for. This could be a String, a double, on an int.
-     * @return
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *         or (2) 0 for SQL statements that return nothing
      */
     public int update(String tableName, HashMap<String, Object> updates, ArrayList<Object[]> searchConditions) {
         String query = "UPDATE " + tableName + " SET ";
@@ -240,9 +263,10 @@ public class DBHandler {
     }
 
     /**
-     * update calls a properly-formatted update SQL query
-     * @param query
-     * @return
+     * Calls a properly-formatted update SQL query.
+     * @param query a fully-formatted SQL query
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *         or (2) 0 for SQL statements that return nothing
      */
     private int update(String query) {
         Statement stmt = null;
@@ -259,7 +283,7 @@ public class DBHandler {
     }
 
     /**
-     * sanitizes String values from SQL queries by adding escape chars when necessary
+     * Sanitizes String values from SQL queries by adding escape chars when necessary.
      * @param snippet the snippet to be sanitized
      * @return the sanitized snippet
      */
@@ -280,15 +304,11 @@ public class DBHandler {
         return snippet;
     }
 
-//    public int insert(String tableName, ArrayList<String> values) {
-//        return insert(tableName, new ArrayList<String>(), values);
-//    }
-
     /**
-     * insert: allows adding a row to a table
-     * @param tableName: name of the table to add a row to
-     * @param columns: columns to be added (optional)
-     * @param values: values to add
+     * Allows adding a row to a table
+     * @param tableName name of the table to add a row to
+     * @param columns columns to be added (optional)
+     * @param values values to add
      * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
      *         or (2) 0 for SQL statements that return nothing
      */
@@ -335,7 +355,7 @@ public class DBHandler {
     }
 
     /**
-     * private helper method for public method insert
+     * Private helper method for public method insert.
      * @param query: an SQL-formatted INSERT INTO string
      * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
      *         or (2) 0 for SQL statements that return nothing
