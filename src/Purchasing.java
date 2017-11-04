@@ -7,10 +7,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Created by zhangJunliu on 10/10/17.
+ * purchasing shows the parts are out of stock and parts are
+ * in low quantity so that user can handle purchasing of
+ * these items
  */
 public class Purchasing {
 
+    /**
+     * Prints a command-line menu that allows the user to view the parts are out of stock and
+     * parts are in low quantity
+     */
     public static void purchasing() {
 
         System.out.println("=============================");
@@ -33,6 +39,9 @@ public class Purchasing {
         }
     }
 
+    /**
+     * Print out the parts are out of stock according to the amount filed and needed
+     */
     public static void outOfStock() {
 
         DBHandler testDB = new DBHandler();
@@ -62,6 +71,9 @@ public class Purchasing {
 
     }
 
+    /**
+     * print out part are in low quantity according to the low quantity settings
+     */
     public static void lowQuantity() {
 
         DBHandler testDB = new DBHandler();

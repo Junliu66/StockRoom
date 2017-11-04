@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 
 
 /**
- * Created by zhangJunliu on 10/28/17.
+ * Graphic User Interface of Overview
  */
 public class OverviewUI {
     DBHandler stockroomDB = new DBHandler();
@@ -75,7 +75,11 @@ public class OverviewUI {
 
     }
 
-    //display completed orders in Overview
+    /**
+     * display completed orders in Overview
+     * @param root the root BorderPane for the program
+     * @param stage the active Stage in the program
+     */
     public void displayCompletedOrders(BorderPane root, Stage stage) {
         VBox rVBox = new VBox();
         Label woTitle = new Label("VIEW COMPLETED ORDERS");
@@ -86,7 +90,11 @@ public class OverviewUI {
         stage.getScene().setRoot(root);
     }
 
-    //display building orders in Overview
+    /**
+     * display building orders in Overview
+     * @param root  the root BorderPane for the program
+     * @param stage the active Stage in the program
+     */
     public void displayBuildingOrders(BorderPane root, Stage stage) {
         VBox rVBox = new VBox();
         Label woTitle = new Label("VIEW BUILDING ORDERS");
@@ -98,7 +106,11 @@ public class OverviewUI {
 
     }
 
-    //display outofstock in Overview
+    /**
+     * display items are missing in the work orders
+     * @param root the root BorderPane for the program
+     * @param stage the active Stage in the program
+     */
     public void displayOutOfStock(BorderPane root, Stage stage) {
         VBox rVBox = new VBox();
         Label woTitle = new Label("VIEW PARTS ARE MISSING FROM WORK ORDERS");

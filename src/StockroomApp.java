@@ -70,7 +70,7 @@ public class StockroomApp {
     // methods we need to work on
     private static void viewInventory() {
         System.out.print("Here is the Invetory of the Sotckroom: \n> ");
-        Inventory.inventoryList();
+        Inventory.inventory();
 
     }
 

@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Created by zhangJunliu on 10/19/17.
+ * Overview of the stockroom, showing the completed and building orders, and
+ * the parts are missing from work orders
  */
+
 public class Overview {
 
 
+    /**
+     * Prints a command-line menu that allows the user to view the completed and building orders, and
+     * the parts are missing from work orders.
+     */
     public static void overView() {
         System.out.println("=============================");
         System.out.println("======== Over View ========");
@@ -34,6 +40,9 @@ public class Overview {
         }
     }
 
+    /**
+     * Print out the order id, product name, and date completed of completed orders
+     */
     public static void orderCompleted() {
 
         DBHandler testDB = new DBHandler();
@@ -62,35 +71,40 @@ public class Overview {
 
     }
 
+    /**
+     * Print out the order id, product name, and building date of building orders
+     */
+    public static void buildingOrders() {
 
-        public static void buildingOrders() {
+        ArrayList<Part> buildingOrderList = new ArrayList<Part>();
+        DBHandler testDB = new DBHandler();
+        // ResultSet update = testDB.query("UPDATE stockroomdb.WORKORDERS SET status = 'COMPLETED', date_completed = NOW() WHERE order_id = 6");
+        ResultSet table2_order_id = testDB.query("SELECT order_id FROM stockroomdb.WORKORDERS WHERE status = 'BUILDING';");
+        ResultSet table2_product_name = testDB.query("SELECT p.product_name FROM stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id WHERE status = 'BUILDING';");
+        ResultSet table2_date_building = testDB.query("SELECT date_building FROM stockroomdb.WORKORDERS WHERE status = 'BUILDING';");
 
-            ArrayList<Part> buildingOrderList = new ArrayList<Part>();
-            DBHandler testDB = new DBHandler();
-           // ResultSet update = testDB.query("UPDATE stockroomdb.WORKORDERS SET status = 'COMPLETED', date_completed = NOW() WHERE order_id = 6");
-            ResultSet table2_order_id = testDB.query("SELECT order_id FROM stockroomdb.WORKORDERS WHERE status = 'BUILDING';");
-            ResultSet table2_product_name = testDB.query("SELECT p.product_name FROM stockroomdb.PRODUCTS AS p JOIN stockroomdb.WORKORDERS AS wo ON p.product_id = wo.product_id WHERE status = 'BUILDING';");
-            ResultSet table2_date_building = testDB.query("SELECT date_building FROM stockroomdb.WORKORDERS WHERE status = 'BUILDING';");
+        try {
+            table2_order_id.beforeFirst();
+            table2_product_name.beforeFirst();
+            table2_date_building.beforeFirst();
 
-            try {
-                table2_order_id.beforeFirst();
-                table2_product_name.beforeFirst();
-                table2_date_building.beforeFirst();
+            System.out.println("=====================================================================================");
+            System.out.printf("||%-10s |%-40s |%-19s||", "Order ID", "              PRODUCT NAME", "       Date Building       ");
+            System.out.println("\n=====================================================================================");
 
-                System.out.println("=====================================================================================");
-                System.out.printf("||%-10s |%-40s |%-19s||", "Order ID", "              PRODUCT NAME", "       Date Building       ");
-                System.out.println("\n=====================================================================================");
+            while (table2_order_id.next() && table2_product_name.next() && table2_date_building.next()) {
 
-                while (table2_order_id.next() && table2_product_name.next() && table2_date_building.next()) {
-
-                    System.out.printf("|%-11d |%-40s |%20tc|\n", table2_order_id.getInt(1), table2_product_name.getString(1), table2_date_building.getTimestamp(1));
-                }
-                System.out.println("=====================================================================================");
-
-            } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.printf("|%-11d |%-40s |%20tc|\n", table2_order_id.getInt(1), table2_product_name.getString(1), table2_date_building.getTimestamp(1));
             }
+            System.out.println("=====================================================================================");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
+
+
+
 }
 
 
