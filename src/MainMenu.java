@@ -49,7 +49,7 @@ public class MainMenu extends Application{
         //sets application title
         stage.setTitle("Stockroom Inventory App");
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-//        table.setSelectionModel(null);
+        table.setSelectionModel(table.getSelectionModel());
 
         //Inventory
         Button inventory = createButton("View Inventory", Paths.get("Icons", (USE_WHITE_ICONS? "white" : "black"), "Stockroom.png").toString());
