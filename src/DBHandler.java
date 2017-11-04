@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * DBHandler handles all requests to the SQL database
+ * Handles all requests to the SQL database
  */
 public class DBHandler {
 
@@ -15,7 +15,7 @@ public class DBHandler {
     Connection connection;
 
     /**
-     * Constructor. Uses class variables url, username, and password to connected to the database.
+     * Uses class variables url, username, and password to connected to the database.
      */
     public DBHandler(){
         //load the JDBC class

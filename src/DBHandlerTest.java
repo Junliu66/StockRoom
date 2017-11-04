@@ -3,14 +3,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Used to test DBHandler.java during development
+ */
 public class DBHandlerTest {
 
+    /**
+     * main method, runs tests for the database
+     * @param args not used
+     */
     public static void main(String[] args){
         DBHandler testDB = new DBHandler();
-        // TODO: create table test
-        // TODO: select test
-        // TODO: update test
-        // TODO: insert test
 
 //        ResultSet result = testDB.select("stockroomdb.PARTS", "part_number");
 //        try{
@@ -65,7 +68,7 @@ public class DBHandlerTest {
 //        testDB.insert("testTable", null, values);
 //        testDB.adjustPartQuantity(11, -5);
 
-        Receiving receivingTest = new Receiving();
-        receivingTest.displayReceiving();
+//        Receiving receivingTest = new Receiving();
+//        receivingTest.displayReceiving();
     }
 }
