@@ -12,7 +12,9 @@ import javafx.stage.Stage;
 
 import java.sql.ResultSet;
 /**
- * Created by zhangJunliu on 10/30/17.
+ * purchasing user interface shows the parts are out of stock
+ * and parts are in low quantity so that user can handle purchasing
+ * of these items
  */
 public class PurchasingUI {
     DBHandler stockroomDB = new DBHandler();
@@ -62,7 +64,11 @@ public class PurchasingUI {
 
     }
 
-    //display completed orders in Overview
+    /**
+     * display parts that are out of stock according to the amount filed and needed
+     * @param root the root BorderPane for the program
+     * @param stage the active Stage in the program
+     */
     public void outOfStock(BorderPane root, Stage stage) {
         VBox rVBox = new VBox();
         Label woTitle = new Label("VIEW PARTS ARE MISSING FROM WORK ORDERS");
@@ -73,7 +79,11 @@ public class PurchasingUI {
         stage.getScene().setRoot(root);
     }
 
-    //display building orders in Overview
+    /**
+     * display parts that are in low quantity according to the low quantity settings
+     * @param root the root BorderPane for the program
+     * @param stage the active Stage in the program
+     */
     public void lowQuantity(BorderPane root, Stage stage) {
         VBox rVBox = new VBox();
         Label woTitle = new Label("VIEW PARTS ARE IN LOW QUANTITY");
