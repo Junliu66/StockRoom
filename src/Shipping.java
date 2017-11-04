@@ -113,7 +113,7 @@ public class Shipping {
             VBox shipVBox = mainMenu.displayTable(rs);
 
             TableColumn shipButtons = new TableColumn("Ship");
-            shipButtons.setSortable(false);
+//            shipButtons.setSortable(false);
             shipButtons.setCellFactory(new Callback<TableColumn<Object, Boolean>, TableCell<Object, Boolean>>() {
                 @Override
                 public TableCell<Object, Boolean> call(TableColumn<Object, Boolean> param) {
