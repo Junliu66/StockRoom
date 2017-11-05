@@ -27,9 +27,8 @@ public class ReceivingGUI {
 
     /**
      * Create the title of recording receiving function with the start button
-     *
-     * @param root
-     * @param stage
+     * @param root the root of the scene
+     * @param stage the active Stage
      */
     public void viewGUI(BorderPane root, Stage stage) {
         boardRoot = root;
@@ -119,9 +118,8 @@ public class ReceivingGUI {
 
     /**
      * Ask user to enter parts id and the quantity they received into the text field created in GUI with submit button
-     *
-     * @param root
-     * @param stage
+     * @param root the root of the scene
+     * @param stage the active Stage
      */
     public void getReceivingAmount(BorderPane root, Stage stage) {
         System.out.println("Entering received parts");
@@ -252,9 +250,8 @@ public class ReceivingGUI {
     /**
      * Display the table to show how many parts needed to fill into the kit after submitted the data that user entered.
      * The table will include the order ID, product name the quantity needed to fill.
-     *
-     * @param root
-     * @param stage
+     * @param root the root of the scene
+     * @param stage the active Stage
      */
     private static void submitGUI(BorderPane root, Stage stage) {
         System.out.println("In the submitGui");
@@ -270,8 +267,7 @@ public class ReceivingGUI {
 
     /**
      * Get the order and unique based on partId from database
-     *
-     * @param partId
+     * @param partId the partId being filled
      * @return the ResultSet from mysql
      */
     private static ResultSet getOrders(String partId) {
@@ -283,9 +279,8 @@ public class ReceivingGUI {
 
     /**
      * Set up the table title to string
-     *
-     * @param partQuantityReceived
-     * @param partIDNumber
+     * @param partQuantityReceived the quantity of parts being received
+     * @param partIDNumber the partId in the database
      * @return Generate a formatted String
      */
     private String getFillPageHeader(int partQuantityReceived, String partIDNumber) {
@@ -294,10 +289,9 @@ public class ReceivingGUI {
 
     /**
      * Fill the items into kits whenever items have enough or not
-     *
-     * @param partQuantityReceived
-     * @param quantityNeededInt
-     * @param uid
+     * @param partQuantityReceived the quantity that is being received
+     * @param quantityNeededInt the quantity needed
+     * @param uid the kit to fill
      * @return the number of parts left
      * @throws SQLException
      */
@@ -331,12 +325,11 @@ public class ReceivingGUI {
 
     /**
      * Create the fill button to allow user to fill the parts to the kit.
-     *
-     * @param orderId
-     * @param productName
-     * @param quantityNeeded
-     * @param fill
-     * @return
+     * @param orderId the Id of the kit
+     * @param productName the name of the product
+     * @param quantityNeeded the quantity of the part needed in the order
+     * @param fill the button to fill the order
+     * @return an HBox displaying the kit's information and a button to fill the kit
      */
     private HBox generateVBox(String orderId, String productName, String quantityNeeded, Button fill) {
         Label orderIdLabel = new Label(orderId);
@@ -352,9 +345,8 @@ public class ReceivingGUI {
 
     /**
      * Add leftover received items to the stockroom data base.
-     *
-     * @param partId
-     * @param left
+     * @param partId the part being filled
+     * @param left the amount leftover after filling kits
      */
     private void addLeftOverToStockroom(int partId, int left) {
         if (partQuantityReceived > 0) {

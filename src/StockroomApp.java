@@ -1,6 +1,8 @@
 import java.util.Scanner;
 
 /**
+ * This class is deprecated. It has been superseded by MainMenu.java
+ *
  * Creates an object of Stockroom. User can:
  * Stockroom assistant can View Inventory;
  * Engineering can view/create work orders;
